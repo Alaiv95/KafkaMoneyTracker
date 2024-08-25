@@ -9,4 +9,6 @@ public interface IMoneyTrackerDbContext
     DbSet<Budget> Budgets { get; set; }
     DbSet<Category> Categories { get; set; }
     DbSet<User> Users { get; set; }
+
+    Task<int> SaveChangesAsync(CancellationToken token);
 }
