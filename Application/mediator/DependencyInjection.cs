@@ -1,4 +1,4 @@
-﻿using Application.mediator.tempCommands;
+﻿using Application.budget.commands;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Application.mediator;
@@ -7,10 +7,13 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddMediator(this IServiceCollection collection)
     {
-        collection.AddSingleton<IMediator>(_ =>
+        collection.AddSingleton<CreateBudgetCommandHandler>();
+        collection.AddSingleton<IMediator>(provider =>
         {
             IMediator mediator = new Mediator();
-            mediator.RegisterCommand(typeof(TempCommand), new TempCommandHandler());
+            var createBudgetCommandHandler = provider.GetRequiredService<CreateBudgetCommandHandler>();
+
+            mediator.RegisterCommand(typeof(CreateBudgetCommand), createBudgetCommandHandler);
 
             return mediator;
         });
