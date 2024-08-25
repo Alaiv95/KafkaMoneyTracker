@@ -1,3 +1,4 @@
+using Application;
 using Infrastructure;
 
 namespace WebApi;
@@ -7,9 +8,9 @@ public class Program
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
-        
+
         ConfigureServices(builder.Services, builder.Configuration);
-        
+
         var app = builder.Build();
 
         using (var scope = app.Services.CreateScope())
@@ -26,16 +27,18 @@ public class Program
                 Console.WriteLine(e.Message);
             }
         }
-        
+
         var env = builder.Environment;
         ConfigureApp(app, env);
     }
 
     private static void ConfigureServices(IServiceCollection collection, IConfiguration configuration)
     {
-        collection.AddPersistence(configuration);
+        collection
+            .AddPersistence(configuration)
+            .AddMediator();
     }
-    
+
     private static void ConfigureApp(WebApplication app, IWebHostEnvironment env)
     {
         app.MapGet("/", () => "Hello World!");
