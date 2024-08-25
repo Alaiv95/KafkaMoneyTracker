@@ -1,7 +1,7 @@
-﻿using Application.tempCommands;
+﻿using Application.mediator.tempCommands;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Application;
+namespace Application.mediator;
 
 public static class DependencyInjection
 {

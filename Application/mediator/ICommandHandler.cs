@@ -1,4 +1,4 @@
-﻿namespace Application;
+﻿namespace Application.mediator;
 
 public interface ICommandHandler<in TRequest, TResponse>
 {

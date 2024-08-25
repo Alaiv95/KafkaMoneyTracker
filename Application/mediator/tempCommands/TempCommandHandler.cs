@@ -1,4 +1,4 @@
-﻿namespace Application.tempCommands;
+﻿namespace Application.mediator.tempCommands;
 
 public class TempCommandHandler : ICommandHandler<TempCommand, string>
 {
