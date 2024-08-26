@@ -4,7 +4,7 @@ namespace Application.mediator;
 
 public class Mediator : IMediator
 {
-    public IDictionary<Type, Object> _commands = new Dictionary<Type, Object>();
+    private IDictionary<Type, Object> _commands = new Dictionary<Type, Object>();
 
     public void RegisterCommand<TCommand, TResponse>(Type commandName, ICommandHandler<TCommand, TResponse> handler)
         where TCommand : ICommand
