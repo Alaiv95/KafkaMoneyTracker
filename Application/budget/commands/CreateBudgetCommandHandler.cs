@@ -1,14 +1,12 @@
 ﻿using Application.exceptions;
 using Application.mediator;
 using Domain;
-using Infrastructure;
 using Infrastructure.Repositories;
 
 namespace Application.budget.commands;
 
 public class CreateBudgetCommandHandler : ICommandHandler<CreateBudgetCommand, Guid>
 {
-    private readonly IMoneyTrackerDbContext _dbContext;
     private readonly IBudgetRepository _budgetRepository;
     private readonly IGenericRepository<User> _userRepository;
     private readonly IGenericRepository<Category> _categoryRepository;
@@ -16,13 +14,11 @@ public class CreateBudgetCommandHandler : ICommandHandler<CreateBudgetCommand, G
 
     public CreateBudgetCommandHandler
         (
-            IMoneyTrackerDbContext dbContext,
             IBudgetRepository budgetRepository,
             IGenericRepository<User> userRepository,
             IGenericRepository<Category> categoryRepository
         )
     {
-        _dbContext = dbContext;
         _budgetRepository = budgetRepository;
         _userRepository = userRepository;
         _categoryRepository = categoryRepository;
