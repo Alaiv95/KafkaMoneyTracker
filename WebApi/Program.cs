@@ -1,5 +1,6 @@
 using Application.mediator;
 using Infrastructure;
+using WebApi.Extentions;
 
 namespace WebApi;
 
@@ -32,16 +33,27 @@ public class Program
         ConfigureApp(app, env);
     }
 
-    private static void ConfigureServices(IServiceCollection collection, IConfiguration configuration)
+    private static void ConfigureServices(IServiceCollection services, IConfiguration configuration)
     {
-        collection
+        services
             .AddPersistence(configuration)
             .AddMediator();
+        services.AddControllers();
+        services.AddSwaggerGen();
     }
 
     private static void ConfigureApp(WebApplication app, IWebHostEnvironment env)
     {
-        app.MapGet("/", () => "Hello World!");
+        app.UseCustomExceptionHandler();
+        app.UseSwagger();
+        app.UseSwaggerUI(C =>
+        {
+            C.RoutePrefix = String.Empty;
+            C.SwaggerEndpoint("swagger/v1/swagger.json", "Money Tracker Api");
+        });
+        app.UseRouting();
+       
+        app.UseEndpoints(endpoints => endpoints.MapControllers());
         app.Run();
     }
 }

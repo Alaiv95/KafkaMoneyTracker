@@ -1,4 +1,5 @@
-﻿using Application.mediator;
+﻿using Application.exceptions;
+using Application.mediator;
 using Domain;
 using Infrastructure;
 
@@ -11,6 +12,13 @@ public class CreateBudgetCommandHandler : ICommandHandler<CreateBudgetCommand, G
     public CreateBudgetCommandHandler(IMoneyTrackerDbContext dbContext) => _dbContext = dbContext;
     public async Task<Guid> Handle(CreateBudgetCommand command)
     {
+        var isBudgetOfChosenCategoryExists = await CheckCategoryBudgetExistsAsync(command.UserId, command.CategoryId);
+
+        if (isBudgetOfChosenCategoryExists)
+        {
+            throw new BudgetForCategoryAlreadyExistsException(command.CategoryId.ToString());
+        }
+
         var budget = new Budget
         {
             Id = Guid.NewGuid(),
@@ -24,9 +32,24 @@ public class CreateBudgetCommandHandler : ICommandHandler<CreateBudgetCommand, G
             UpdatedAt = null
         };
 
+        
+
         await _dbContext.Budgets.AddAsync(budget);
         await _dbContext.SaveChangesAsync(default);
 
         return budget.Id;
+    }
+
+    private async Task<bool> CheckCategoryBudgetExistsAsync(Guid userId, Guid categoryId)
+    {
+        var budgets = _dbContext.Budgets.Where(budget =>
+            budget.UserId == userId &&
+            budget.CategoryId == categoryId &&
+            budget.PeriodEnd >= DateTime.Now
+        ).ToList();
+
+        var a = 2;
+
+        return budgets.Any();
     }
 }

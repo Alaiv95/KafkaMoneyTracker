@@ -7,8 +7,8 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddMediator(this IServiceCollection collection)
     {
-        collection.AddSingleton<CreateBudgetCommandHandler>();
-        collection.AddSingleton<IMediator>(provider =>
+        collection.AddScoped<CreateBudgetCommandHandler>();
+        collection.AddScoped<IMediator>(provider =>
         {
             IMediator mediator = new Mediator();
             var createBudgetCommandHandler = provider.GetRequiredService<CreateBudgetCommandHandler>();
