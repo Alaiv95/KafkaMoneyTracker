@@ -1,5 +1,6 @@
 using Application.mediator;
 using Infrastructure;
+using Infrastructure.Repositories;
 using WebApi.Extentions;
 
 namespace WebApi;

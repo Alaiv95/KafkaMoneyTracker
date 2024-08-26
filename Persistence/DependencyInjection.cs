@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Infrastructure.Repositories;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -12,6 +13,8 @@ public static class DependencyInjection
 
         collection.AddDbContext<MoneyTrackerDbContext>(options => options.UseSqlite(dbConnection));
         collection.AddScoped<IMoneyTrackerDbContext>(provider => provider.GetRequiredService<MoneyTrackerDbContext>());
+        collection.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+        collection.AddScoped<IBudgetRepository, BudgetRepository>();
 
         return collection;
     }

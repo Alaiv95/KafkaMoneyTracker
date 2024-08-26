@@ -2,28 +2,45 @@
 using Application.mediator;
 using Domain;
 using Infrastructure;
-using Microsoft.EntityFrameworkCore;
+using Infrastructure.Repositories;
 
 namespace Application.budget.commands;
 
 public class CreateBudgetCommandHandler : ICommandHandler<CreateBudgetCommand, Guid>
 {
     private readonly IMoneyTrackerDbContext _dbContext;
+    private readonly IBudgetRepository _budgetRepository;
+    private readonly IGenericRepository<User> _userRepository;
+    private readonly IGenericRepository<Category> _categoryRepository;
 
-    public CreateBudgetCommandHandler(IMoneyTrackerDbContext dbContext) => _dbContext = dbContext;
+
+    public CreateBudgetCommandHandler
+        (
+            IMoneyTrackerDbContext dbContext,
+            IBudgetRepository budgetRepository,
+            IGenericRepository<User> userRepository,
+            IGenericRepository<Category> categoryRepository
+        )
+    {
+        _dbContext = dbContext;
+        _budgetRepository = budgetRepository;
+        _userRepository = userRepository;
+        _categoryRepository = categoryRepository;
+    }
 
     public async Task<Guid> Handle(CreateBudgetCommand command)
     {
-        // TODO - create repositories and move db actions there
-        var entitiesNotFound = await VerifyCategoryAndUserExistsAsync(command.UserId, command.CategoryId);
-        var isBudgetOfChosenCategoryExists = await CheckCategoryBudgetExistsAsync(command.UserId, command.CategoryId);
+        var user = await _userRepository.GetByIdAsync(command.UserId);
+        var category = await _categoryRepository.GetByIdAsync(command.CategoryId);
 
-        if (entitiesNotFound)
+        if (user is null || category is null)
         {
-            throw new NotFoundException(command.UserId + ", " + command.CategoryId);
+            throw new NotFoundException($"user {command.UserId} or category {command.CategoryId}");
         }
 
-        if (isBudgetOfChosenCategoryExists)
+        var activeBudget = await _budgetRepository.GetActiveBudgetByUserAndCategory(command.UserId, command.CategoryId);
+
+        if (activeBudget != null)
         {
             throw new BudgetForCategoryAlreadyExistsException(command.CategoryId.ToString());
         }
@@ -41,40 +58,8 @@ public class CreateBudgetCommandHandler : ICommandHandler<CreateBudgetCommand, G
             UpdatedAt = null
         };
 
-        await _dbContext.Budgets.AddAsync(budget);
-        await _dbContext.SaveChangesAsync(default);
+        await _budgetRepository.AddAsync(budget);
 
         return budget.Id;
-    }
-
-    private async Task<bool> VerifyCategoryAndUserExistsAsync(Guid userId, Guid categoryId)
-    {
-        var errorIds = new HashSet<Guid>();
-
-        var user = await _dbContext.Users.FindAsync(userId);
-        var category = await _dbContext.Categories.FindAsync(categoryId);
-
-        if (user is null)
-        {
-            errorIds.Add(userId);
-        }
-        
-        if (category is null)
-        {
-            errorIds.Add(categoryId);
-        }
-
-        return errorIds.Any();
-    }
-
-    private async Task<bool> CheckCategoryBudgetExistsAsync(Guid userId, Guid categoryId)
-    {
-        var budgets = await _dbContext.Budgets.Where(budget =>
-            budget.UserId == userId &&
-            budget.CategoryId == categoryId &&
-            budget.PeriodEnd >= DateTime.Now
-        ).ToListAsync();
-
-        return budgets.Any();
     }
 }
