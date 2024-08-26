@@ -1,6 +1,6 @@
 ﻿using Application.exceptions;
 using Application.mediator;
-using Domain;
+using Domain.Models;
 using Infrastructure.Repositories;
 
 namespace Application.budget.commands;

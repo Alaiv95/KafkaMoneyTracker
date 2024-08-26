@@ -1,6 +1,6 @@
 ﻿using Application.budget.commands;
 using Application.exceptions;
-using Domain;
+using Domain.Models;
 using FluentAssertions;
 using Infrastructure.Repositories;
 using Moq;
