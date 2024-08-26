@@ -1,5 +1,5 @@
 ﻿namespace Application.mediator;
 
-public interface ICommand
+public interface IRequest
 {
 }

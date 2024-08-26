@@ -1,5 +1,6 @@
 ﻿using Domain.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace Infrastructure.Repositories;
 
@@ -16,5 +17,10 @@ public class BudgetRepository : GenericRepository<Budget>, IBudgetRepository
                  budget.CategoryId == categoryId &&
                  budget.PeriodEnd >= DateTime.Now
              );
+    }
+
+    public async Task<List<Budget>> SearchAsync(Expression<Func<Budget, bool>> predicate)
+    {
+        return await _dbSet.Where(p => p.Id == Guid.NewGuid()).ToListAsync();
     }
 }

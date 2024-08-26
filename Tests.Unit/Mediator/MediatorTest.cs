@@ -41,7 +41,7 @@ public class MediatorTest
     {
         // Arrange
         var mediator = new Mediator();
-        var handler = new Mock<ICommandHandler<CreateBudgetCommand, Guid>>();
+        var handler = new Mock<IRequestHandler<CreateBudgetCommand, Guid>>();
         var result = Guid.NewGuid();
 
 

@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using ICommand = Application.mediator.ICommand;
+using IRequest = Application.mediator.IRequest;
 
 namespace Application.budget.commands;
 
-public class CreateBudgetCommand : ICommand
+public class CreateBudgetCommand : IRequest
 {
     [Range(1.0, Double.MaxValue)]
     public Double BudgetLimit { get; set; }

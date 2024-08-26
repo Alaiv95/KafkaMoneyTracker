@@ -5,7 +5,7 @@ using Infrastructure.Repositories;
 
 namespace Application.budget.commands;
 
-public class CreateBudgetCommandHandler : ICommandHandler<CreateBudgetCommand, Guid>
+public class CreateBudgetCommandHandler : IRequestHandler<CreateBudgetCommand, Guid>
 {
     private readonly IBudgetRepository _budgetRepository;
     private readonly IGenericRepository<User> _userRepository;
