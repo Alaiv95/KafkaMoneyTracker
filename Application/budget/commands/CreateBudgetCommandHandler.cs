@@ -1,5 +1,5 @@
 ﻿using Application.exceptions;
-using Application.mediator;
+using Application.mediator.interfaces;
 using Domain.Models;
 using Infrastructure.Repositories;
 

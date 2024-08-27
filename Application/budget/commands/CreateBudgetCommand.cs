@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using IRequest = Application.mediator.IRequest;
+using IRequest = Application.mediator.interfaces.IRequest;
 
 namespace Application.budget.commands;
 

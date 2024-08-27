@@ -1,6 +1,6 @@
 ﻿using Application.exceptions;
 using Application.mappers;
-using Application.mediator;
+using Application.mediator.interfaces;
 using Application.specs;
 using Infrastructure.Repositories;
 

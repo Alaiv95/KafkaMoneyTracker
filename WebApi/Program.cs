@@ -43,8 +43,8 @@ public class Program
         // custom
         services
             .AddPersistence(configuration)
-            .AddApplication()
-            .AddMediator();
+            .AddApplication();
+            
     }
 
     private static void ConfigureApp(WebApplication app, IWebHostEnvironment env)

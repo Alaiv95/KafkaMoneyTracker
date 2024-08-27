@@ -1,4 +1,4 @@
-﻿namespace Application.mediator;
+﻿namespace Application.mediator.interfaces;
 
 public interface IRequestHandler<in TRequest, TResponse>
 {

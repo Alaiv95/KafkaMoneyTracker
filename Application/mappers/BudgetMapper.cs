@@ -12,6 +12,7 @@ public class BudgetMapper
             BudgetLimit = entity.BudgetLimit,
             CategoryId = entity.CategoryId,
             DurationInDays = entity.DurationInDays,
+            CreatedAt = entity.CreatedAt,
         };
     }
 }

@@ -1,10 +1,16 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <TargetFramework>net7.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
     </PropertyGroup>
+
+    <ItemGroup>
+      <Compile Remove="mediator\Новая папка\**" />
+      <EmbeddedResource Remove="mediator\Новая папка\**" />
+      <None Remove="mediator\Новая папка\**" />
+    </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\Persistence\Persistence.csproj" />

@@ -1,4 +1,5 @@
 ﻿using Application.exceptions;
+using Application.mediator.interfaces;
 
 namespace Application.mediator;
 
@@ -6,7 +7,7 @@ public class Mediator : IMediator
 {
     private IDictionary<Type, Object> _commands = new Dictionary<Type, Object>();
 
-    public void RegisterCommand<TCommand, TResponse>(Type commandName, IRequestHandler<TCommand, TResponse> handler)
+    public void Register<TCommand, TResponse>(Type commandName, IRequestHandler<TCommand, TResponse> handler)
         where TCommand : IRequest
     {
         var isCommandAdded = _commands.ContainsKey(commandName);
@@ -19,7 +20,7 @@ public class Mediator : IMediator
         _commands[commandName] = handler;
     }
 
-    public async Task<TResponse> HandleCommand<TCommand, TResponse>(TCommand command)
+    public async Task<TResponse> HandleRequest<TCommand, TResponse>(TCommand command)
         where TCommand : IRequest
     {
         var commandName = command.GetType();

@@ -6,13 +6,7 @@ using Domain.Models;
 using FluentAssertions;
 using Infrastructure.Repositories;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace Tests.Unit.Queries;
 
@@ -114,7 +108,7 @@ public class GetBudgetListQueryHandlerTests
     }
 
     [Test]
-    public async Task GetBudgets_InvalidDates_Fail()
+    public async Task GetBudgets_InvalidDates_Throws()
     {
         // Arrange
         _query = new GetBudgetListQuery()

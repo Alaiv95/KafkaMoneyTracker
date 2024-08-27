@@ -1,6 +1,7 @@
 ﻿using Application.budget.commands;
 using Application.exceptions;
 using Application.mediator;
+using Application.mediator.interfaces;
 using Domain.Models;
 using FluentAssertions;
 using Infrastructure.Repositories;
@@ -29,11 +30,11 @@ public class MediatorTest
         // Arrange
         var mediator = new Mediator();
         var handler = new CreateBudgetCommandHandler(_budgetRepository.Object, _userRepository.Object, _categoryRepository.Object);
-        mediator.RegisterCommand(typeof(CreateBudgetCommand), handler);
+        mediator.Register(typeof(CreateBudgetCommand), handler);
 
         // Act
         // Assert
-        Assert.Throws<CommandAlreadyRegisteredException>(() => mediator.RegisterCommand(typeof(CreateBudgetCommand), handler));
+        Assert.Throws<CommandAlreadyRegisteredException>(() => mediator.Register(typeof(CreateBudgetCommand), handler));
     }
 
     [Test]
@@ -49,7 +50,7 @@ public class MediatorTest
             .Setup(handler => handler.Handle(It.IsAny<CreateBudgetCommand>()))
             .ReturnsAsync(() => result);
 
-        mediator.RegisterCommand(typeof(CreateBudgetCommand), handler.Object);
+        mediator.Register(typeof(CreateBudgetCommand), handler.Object);
 
         var c = new CreateBudgetCommand
         {
@@ -61,7 +62,7 @@ public class MediatorTest
 
         // Act
 
-        var res = await mediator.HandleCommand<CreateBudgetCommand, Guid>(c);
+        var res = await mediator.HandleRequest<CreateBudgetCommand, Guid>(c);
 
         // Assert
         result.Should().NotBeEmpty();
@@ -83,6 +84,6 @@ public class MediatorTest
 
         // Act
         // Assert
-        Assert.ThrowsAsync<CommandNotRegisteredException>(() => mediator.HandleCommand<CreateBudgetCommand, Guid>(c));
+        Assert.ThrowsAsync<CommandNotRegisteredException>(() => mediator.HandleRequest<CreateBudgetCommand, Guid>(c));
     }
 }
