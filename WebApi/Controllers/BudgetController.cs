@@ -6,10 +6,10 @@ using Application.mediatorHandlers.budget.commands;
 using Application.mediatorHandlers.budget.queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Swashbuckle.AspNetCore.Annotations;
 using WebApi.Extentions;
 
 namespace WebApi.Controllers;
+
 [Route("api/budget/")]
 [ApiController]
 public class BudgetController : ControllerBase
@@ -31,8 +31,8 @@ public class BudgetController : ControllerBase
     /// <response code="400">Bad Request</response>
     [Authorize]
     [HttpPost]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(Guid), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<Guid>> AddBudget([FromBody] BudgetCreateDto dto)
     {
         var userId = HttpContext.GetUserIdFromToken();
@@ -52,9 +52,9 @@ public class BudgetController : ControllerBase
     /// <response code="400">Bad Request</response>
     [Authorize]
     [HttpGet("search")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(GetBudgetListVm), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<GetBudgetListVm>> SearchBudgets([FromQuery] GetBudgetListDto dto)
     {
         var userId = HttpContext.GetUserIdFromToken();

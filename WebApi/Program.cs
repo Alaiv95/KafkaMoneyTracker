@@ -39,7 +39,13 @@ public class Program
         services.Configure<JwtOptions>(configuration.GetSection(nameof(JwtOptions)));
         services.AddBearerApiAuth(configuration);
         services.AddControllers();
-        services.AddSwaggerGen();
+        services.AddSwaggerGen(options =>
+        {
+            var xmlFile = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
+            var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+
+            options.IncludeXmlComments(xmlPath);
+        });
         services
             .AddInfrastructure()
             .AddPersistence(configuration)
