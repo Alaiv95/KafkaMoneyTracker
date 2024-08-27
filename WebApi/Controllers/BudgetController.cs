@@ -52,15 +52,15 @@ public class BudgetController : ControllerBase
     /// <response code="400">Bad Request</response>
     [Authorize]
     [HttpGet("search")]
-    [ProducesResponseType(typeof(GetBudgetListVm), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(BudgetListVm), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<GetBudgetListVm>> SearchBudgets([FromQuery] GetBudgetListDto dto)
+    public async Task<ActionResult<BudgetListVm>> SearchBudgets([FromQuery] GetBudgetListDto dto)
     {
         var userId = HttpContext.GetUserIdFromToken();
 
         var getBudgetQuery = _budgetMapper.DtoToQuery(dto, userId);
-        var budgetList = await _mediator.HandleRequest<GetBudgetListQuery, GetBudgetListVm>(getBudgetQuery);
+        var budgetList = await _mediator.HandleRequest<GetBudgetListQuery, BudgetListVm>(getBudgetQuery);
 
         return (budgetList == null || !budgetList.Budgets.Any()) ? NoContent() : Ok(budgetList);
     }

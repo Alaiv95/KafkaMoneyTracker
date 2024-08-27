@@ -82,7 +82,7 @@ public class GetBudgetListQueryHandlerTests
         var result = await queryHandler.Handle(_query);
 
         // Assert
-        result.Should().BeOfType<GetBudgetListVm>();
+        result.Should().BeOfType<BudgetListVm>();
         result.Budgets.Should().BeEquivalentTo(expectedResult);
     }
 
@@ -91,7 +91,7 @@ public class GetBudgetListQueryHandlerTests
     {
         // Arrange
         var budgetList = new List<Budget>();
-        var expectedResult = new List<BudgetLookUpDto>();
+        var expectedResult = new List<BudgetLookUpVm>();
 
         _repository
           .Setup(repository => repository.SearchAsync(It.IsAny<Expression<Func<Budget, bool>>>()))
@@ -103,7 +103,7 @@ public class GetBudgetListQueryHandlerTests
         var result = await queryHandler.Handle(_query);
 
         // Assert
-        result.Should().BeOfType<GetBudgetListVm>();
+        result.Should().BeOfType<BudgetListVm>();
         result.Budgets.Should().BeEquivalentTo(expectedResult);
     }
 

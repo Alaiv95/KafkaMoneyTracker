@@ -1,6 +1,6 @@
 ﻿namespace Application.mediatorHandlers.budget.queries;
 
-public class BudgetLookUpDto
+public class BudgetLookUpVm
 {
     public double BudgetLimit { get; set; }
 

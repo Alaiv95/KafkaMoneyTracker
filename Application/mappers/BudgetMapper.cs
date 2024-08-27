@@ -7,9 +7,9 @@ namespace Application.mappers;
 
 public class BudgetMapper
 {
-    public BudgetLookUpDto EntityToDto(Budget entity)
+    public BudgetLookUpVm EntityToDto(Budget entity)
     {
-        return new BudgetLookUpDto
+        return new BudgetLookUpVm
         {
             BudgetLimit = entity.BudgetLimit,
             CategoryId = entity.CategoryId,
