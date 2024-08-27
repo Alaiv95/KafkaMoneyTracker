@@ -1,8 +1,8 @@
-﻿namespace Application.budget.queries;
+﻿namespace Application.mediatorHandlers.budget.queries;
 
 public class BudgetLookUpDto
 {
-    public Double BudgetLimit { get; set; }
+    public double BudgetLimit { get; set; }
 
     public int DurationInDays { get; set; }
 

@@ -70,22 +70,22 @@ namespace Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("8a6c823c-b100-44d6-b0b4-7890667c54bc"),
+                            Id = new Guid("e96b1a49-ac5f-4b9b-be2d-879c5f448d66"),
                             CategoryType = 3
                         },
                         new
                         {
-                            Id = new Guid("84fb085f-aaae-4ee8-83d5-0e8d1d0a7df2"),
+                            Id = new Guid("974221c3-a7c7-43d8-9cbb-8cbbcee37e1c"),
                             CategoryType = 0
                         },
                         new
                         {
-                            Id = new Guid("ea9bed65-5628-4226-a42a-828b206ac840"),
+                            Id = new Guid("e22ac127-8b2a-4af2-a6f2-9594a761d576"),
                             CategoryType = 2
                         },
                         new
                         {
-                            Id = new Guid("fa5f0be9-4de5-4e91-b5ee-178c18626e3e"),
+                            Id = new Guid("73648b88-3006-46bb-a940-9b3866f188ee"),
                             CategoryType = 1
                         });
                 });
@@ -131,7 +131,11 @@ namespace Infrastructure.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Login")
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PasswordHash")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
@@ -140,6 +144,8 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Email");
+
                     b.HasIndex("Id");
 
                     b.ToTable("Users");
@@ -147,9 +153,10 @@ namespace Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("b3b0ddc0-bb8d-4974-aeca-52db3cb1dfc2"),
-                            CreatedAt = new DateTime(2024, 8, 27, 16, 23, 16, 915, DateTimeKind.Local).AddTicks(3186),
-                            Login = "Admin"
+                            Id = new Guid("cc33597e-710a-496d-8f20-91d3d7b5f896"),
+                            CreatedAt = new DateTime(2024, 8, 27, 18, 47, 31, 987, DateTimeKind.Local).AddTicks(7052),
+                            Email = "Admin",
+                            PasswordHash = "AdminHash"
                         });
                 });
 

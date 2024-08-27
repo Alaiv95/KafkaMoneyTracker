@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class UserUpdate3 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -30,7 +30,8 @@ namespace Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Login = table.Column<string>(type: "TEXT", nullable: false),
+                    Email = table.Column<string>(type: "TEXT", nullable: false),
+                    PasswordHash = table.Column<string>(type: "TEXT", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "TEXT", nullable: true)
                 },
@@ -101,16 +102,16 @@ namespace Infrastructure.Migrations
                 columns: new[] { "Id", "CategoryType" },
                 values: new object[,]
                 {
-                    { new Guid("84fb085f-aaae-4ee8-83d5-0e8d1d0a7df2"), 0 },
-                    { new Guid("8a6c823c-b100-44d6-b0b4-7890667c54bc"), 3 },
-                    { new Guid("ea9bed65-5628-4226-a42a-828b206ac840"), 2 },
-                    { new Guid("fa5f0be9-4de5-4e91-b5ee-178c18626e3e"), 1 }
+                    { new Guid("73648b88-3006-46bb-a940-9b3866f188ee"), 1 },
+                    { new Guid("974221c3-a7c7-43d8-9cbb-8cbbcee37e1c"), 0 },
+                    { new Guid("e22ac127-8b2a-4af2-a6f2-9594a761d576"), 2 },
+                    { new Guid("e96b1a49-ac5f-4b9b-be2d-879c5f448d66"), 3 }
                 });
 
             migrationBuilder.InsertData(
                 table: "Users",
-                columns: new[] { "Id", "CreatedAt", "Login", "UpdatedAt" },
-                values: new object[] { new Guid("b3b0ddc0-bb8d-4974-aeca-52db3cb1dfc2"), new DateTime(2024, 8, 27, 16, 23, 16, 915, DateTimeKind.Local).AddTicks(3186), "Admin", null });
+                columns: new[] { "Id", "CreatedAt", "Email", "PasswordHash", "UpdatedAt" },
+                values: new object[] { new Guid("cc33597e-710a-496d-8f20-91d3d7b5f896"), new DateTime(2024, 8, 27, 18, 47, 31, 987, DateTimeKind.Local).AddTicks(7052), "Admin", "AdminHash", null });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Budgets_CategoryId",
@@ -146,6 +147,11 @@ namespace Infrastructure.Migrations
                 name: "IX_Transactions_UserId",
                 table: "Transactions",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_Email",
+                table: "Users",
+                column: "Email");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_Id",

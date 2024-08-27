@@ -15,6 +15,7 @@ public static class DependencyInjection
         collection.AddScoped<IMoneyTrackerDbContext>(provider => provider.GetRequiredService<MoneyTrackerDbContext>());
         collection.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
         collection.AddScoped<IBudgetRepository, BudgetRepository>();
+        collection.AddScoped<IAuthRepository, AuthRepository>();
 
         return collection;
     }

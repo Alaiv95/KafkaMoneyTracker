@@ -1,10 +1,10 @@
-﻿using Application.budget.commands;
-using Application.budget.queries;
-using Application.mappers;
+﻿using Application.mappers;
 using Application.mediator.interfaces;
 using Application.mediator;
 using Application.specs;
 using Microsoft.Extensions.DependencyInjection;
+using Application.mediatorHandlers.budget.commands;
+using Application.mediatorHandlers.budget.queries;
 
 namespace Application;
 

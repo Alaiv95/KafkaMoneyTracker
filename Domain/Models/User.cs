@@ -2,7 +2,10 @@
 
 public class User : BaseEntity
 {
-    public string Login { get; set; }
+    public string Email { get; set; }
+
+    public string PasswordHash { get; set; }
+
     public ICollection<Transaction> Transactions { get; set; }
 
     public ICollection<Budget> Budgets { get; set; }

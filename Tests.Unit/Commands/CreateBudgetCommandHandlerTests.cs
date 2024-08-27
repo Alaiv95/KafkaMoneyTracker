@@ -1,5 +1,5 @@
-﻿using Application.budget.commands;
-using Application.exceptions;
+﻿using Application.exceptions;
+using Application.mediatorHandlers.budget.commands;
 using Application.specs;
 using Domain.Models;
 using FluentAssertions;

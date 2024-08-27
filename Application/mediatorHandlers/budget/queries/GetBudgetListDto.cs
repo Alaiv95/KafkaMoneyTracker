@@ -1,4 +1,4 @@
-﻿namespace Application.budget.queries;
+﻿namespace Application.mediatorHandlers.budget.queries;
 
 public class GetBudgetListDto
 {

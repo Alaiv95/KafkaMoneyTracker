@@ -1,18 +1,24 @@
 ﻿namespace WebApi.Controllers;
 
-using Application.budget.commands;
-using Application.budget.queries;
+using Application.Dtos;
+using Application.mappers;
 using Application.mediator.interfaces;
+using Application.mediatorHandlers.budget.commands;
+using Application.mediatorHandlers.budget.queries;
 using Microsoft.AspNetCore.Mvc;
-using WebApi.Dtos;
 
 [Route("api/budget/")]
 [ApiController]
 public class BudgetController : ControllerBase
 {
     private readonly IMediator _mediator;
+    private readonly BudgetMapper _budgetMapper;
 
-    public BudgetController(IMediator mediator) => _mediator = mediator;
+    public BudgetController(IMediator mediator, BudgetMapper budgetMapper)
+    {
+        _mediator = mediator;
+        _budgetMapper = budgetMapper;
+    }
 
     /// <summary>
     /// Create the Budget for category during chosen period
@@ -25,7 +31,7 @@ public class BudgetController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<Guid>> AddBudget([FromBody] BudgetCreateDto dto)
     {
-        var createBudgetCommand = dto.ToCommand();
+        var createBudgetCommand = _budgetMapper.DtoToCommand(dto);
         var createdBudgetId = await _mediator.HandleRequest<CreateBudgetCommand, Guid>(createBudgetCommand);
 
         return Ok(createdBudgetId);
@@ -36,6 +42,7 @@ public class BudgetController : ControllerBase
     /// </summary>
     /// <returns>Returns GetBudgetListDto</returns>
     /// <response code="200">Success</response>
+    /// <response code="204">No Content</response>
     /// <response code="400">Bad Request</response>
     [HttpGet("search")]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -44,6 +51,6 @@ public class BudgetController : ControllerBase
     {
         var budgetList = await _mediator.HandleRequest<GetBudgetListQuery, GetBudgetListDto>(query);
 
-        return budgetList == null ? NoContent() : Ok(budgetList);
+        return (budgetList == null || budgetList.Budgets.Any()) ? NoContent() : Ok(budgetList);
     }
 }

@@ -1,7 +1,7 @@
-﻿using Application.budget.commands;
-using Application.exceptions;
+﻿using Application.exceptions;
 using Application.mediator;
 using Application.mediator.interfaces;
+using Application.mediatorHandlers.budget.commands;
 using Application.specs;
 using Domain.Models;
 using FluentAssertions;

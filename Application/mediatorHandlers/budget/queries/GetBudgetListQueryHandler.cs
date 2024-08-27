@@ -4,7 +4,7 @@ using Application.mediator.interfaces;
 using Application.specs;
 using Infrastructure.Repositories;
 
-namespace Application.budget.queries;
+namespace Application.mediatorHandlers.budget.queries;
 
 public class GetBudgetListQueryHandler : IRequestHandler<GetBudgetListQuery, GetBudgetListDto>
 {
@@ -28,7 +28,7 @@ public class GetBudgetListQueryHandler : IRequestHandler<GetBudgetListQuery, Get
 
         var budgetList = await _budgetRepository.SearchAsync(_budgetSpecs.Build(query));
         var budgetLookupList = budgetList.Select(_budgetMapper.EntityToDto).ToList();
-        
+
         return new GetBudgetListDto { Budgets = budgetLookupList };
     }
 }

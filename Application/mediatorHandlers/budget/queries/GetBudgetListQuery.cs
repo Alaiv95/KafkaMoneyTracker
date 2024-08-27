@@ -1,7 +1,7 @@
 ﻿using Application.mediator.interfaces;
 using System.ComponentModel.DataAnnotations;
 
-namespace Application.budget.queries;
+namespace Application.mediatorHandlers.budget.queries;
 
 public class GetBudgetListQuery : IRequest
 {

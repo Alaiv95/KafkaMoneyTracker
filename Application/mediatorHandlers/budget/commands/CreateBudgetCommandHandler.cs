@@ -1,12 +1,11 @@
-﻿using Application.budget.queries;
-using Application.exceptions;
+﻿using Application.exceptions;
 using Application.mediator.interfaces;
+using Application.mediatorHandlers.budget.queries;
 using Application.specs;
 using Domain.Models;
 using Infrastructure.Repositories;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
-namespace Application.budget.commands;
+namespace Application.mediatorHandlers.budget.commands;
 
 public class CreateBudgetCommandHandler : IRequestHandler<CreateBudgetCommand, Guid>
 {
@@ -75,5 +74,5 @@ public class CreateBudgetCommandHandler : IRequestHandler<CreateBudgetCommand, G
 
         return budgetList.Any();
     }
-    
+
 }
