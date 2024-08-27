@@ -2,6 +2,7 @@
 using Application.exceptions;
 using Application.mediator;
 using Application.mediator.interfaces;
+using Application.specs;
 using Domain.Models;
 using FluentAssertions;
 using Infrastructure.Repositories;
@@ -15,6 +16,7 @@ public class MediatorTest
     private Mock<IGenericRepository<User>> _userRepository;
     private Mock<IGenericRepository<Category>> _categoryRepository;
     private CreateBudgetCommand _command;
+    private BudgetSpecs _spec;
 
     [SetUp]
     public void Setup()
@@ -22,6 +24,7 @@ public class MediatorTest
         _budgetRepository = new Mock<IBudgetRepository>();
         _userRepository = new Mock<IGenericRepository<User>>();
         _categoryRepository = new Mock<IGenericRepository<Category>>();
+        _spec = new BudgetSpecs();
     }
 
     [Test]
@@ -29,7 +32,7 @@ public class MediatorTest
     {
         // Arrange
         var mediator = new Mediator();
-        var handler = new CreateBudgetCommandHandler(_budgetRepository.Object, _userRepository.Object, _categoryRepository.Object);
+        var handler = new CreateBudgetCommandHandler(_budgetRepository.Object, _userRepository.Object, _categoryRepository.Object, _spec);
         mediator.Register(typeof(CreateBudgetCommand), handler);
 
         // Act

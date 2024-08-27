@@ -10,14 +10,6 @@ public class BudgetRepository : GenericRepository<Budget>, IBudgetRepository
     {
     }
 
-    public async Task<Budget?> GetActiveBudgetByUserAndCategory(Guid userId, Guid categoryId)
-    {
-        return await _dbSet.FirstOrDefaultAsync(budget =>
-                 budget.UserId == userId &&
-                 budget.CategoryId == categoryId
-             );
-    }
-
     public async Task<List<Budget>> SearchAsync(Expression<Func<Budget, bool>> predicate)
     {
         return await _dbSet.Where(predicate).ToListAsync();

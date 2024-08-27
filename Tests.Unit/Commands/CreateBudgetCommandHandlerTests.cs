@@ -1,9 +1,11 @@
 ﻿using Application.budget.commands;
 using Application.exceptions;
+using Application.specs;
 using Domain.Models;
 using FluentAssertions;
 using Infrastructure.Repositories;
 using Moq;
+using System.Linq.Expressions;
 
 namespace Tests.Unit.Commands;
 
@@ -13,6 +15,7 @@ public class CreateBudgetCommandHandlerTests
     private Mock<IGenericRepository<User>> _userRepository;
     private Mock<IGenericRepository<Category>> _categoryRepository;
     private CreateBudgetCommand _command;
+    private BudgetSpecs _spec;
 
     [SetUp]
     public void Setup()
@@ -20,6 +23,7 @@ public class CreateBudgetCommandHandlerTests
         _budgetRepository = new Mock<IBudgetRepository>();
         _userRepository = new Mock<IGenericRepository<User>>();
         _categoryRepository = new Mock<IGenericRepository<Category>>();
+        _spec = new BudgetSpecs();
 
         _command = new CreateBudgetCommand
         {
@@ -43,10 +47,10 @@ public class CreateBudgetCommandHandlerTests
             .ReturnsAsync(() => new Category());
 
         _budgetRepository
-            .Setup(repository => repository.GetActiveBudgetByUserAndCategory(It.IsAny<Guid>(), It.IsAny<Guid>()))
-            .ReturnsAsync(() => null);
+            .Setup(repository => repository.SearchAsync(It.IsAny<Expression<Func<Budget, bool>>>()))
+            .ReturnsAsync(() => new List<Budget>());
 
-        var handler = new CreateBudgetCommandHandler(_budgetRepository.Object, _userRepository.Object, _categoryRepository.Object);
+        var handler = new CreateBudgetCommandHandler(_budgetRepository.Object, _userRepository.Object, _categoryRepository.Object, _spec);
 
         // Act
         var result = await handler.Handle(_command);
@@ -68,10 +72,10 @@ public class CreateBudgetCommandHandlerTests
             .ReturnsAsync(() => new Category());
 
         _budgetRepository
-            .Setup(repository => repository.GetActiveBudgetByUserAndCategory(It.IsAny<Guid>(), It.IsAny<Guid>()))
-            .ReturnsAsync(() => null);
+            .Setup(repository => repository.SearchAsync(It.IsAny<Expression<Func<Budget, bool>>>()))
+            .ReturnsAsync(() => new List<Budget>());
 
-        var handler = new CreateBudgetCommandHandler(_budgetRepository.Object, _userRepository.Object, _categoryRepository.Object);
+        var handler = new CreateBudgetCommandHandler(_budgetRepository.Object, _userRepository.Object, _categoryRepository.Object, _spec);
 
         // Act
         // Assert
@@ -91,10 +95,10 @@ public class CreateBudgetCommandHandlerTests
             .ReturnsAsync(() => null);
 
         _budgetRepository
-            .Setup(repository => repository.GetActiveBudgetByUserAndCategory(It.IsAny<Guid>(), It.IsAny<Guid>()))
-            .ReturnsAsync(() => null);
+            .Setup(repository => repository.SearchAsync(It.IsAny<Expression<Func<Budget, bool>>>()))
+            .ReturnsAsync(() => new List<Budget>());
 
-        var handler = new CreateBudgetCommandHandler(_budgetRepository.Object, _userRepository.Object, _categoryRepository.Object);
+        var handler = new CreateBudgetCommandHandler(_budgetRepository.Object, _userRepository.Object, _categoryRepository.Object, _spec);
 
         // Act
         // Assert
@@ -114,10 +118,10 @@ public class CreateBudgetCommandHandlerTests
             .ReturnsAsync(() => new Category());
 
         _budgetRepository
-            .Setup(repository => repository.GetActiveBudgetByUserAndCategory(It.IsAny<Guid>(), It.IsAny<Guid>()))
-            .ReturnsAsync(() => new Budget());
+            .Setup(repository => repository.SearchAsync(It.IsAny<Expression<Func<Budget, bool>>>()))
+            .ReturnsAsync(() => new List<Budget>() { new Budget()});
 
-        var handler = new CreateBudgetCommandHandler(_budgetRepository.Object, _userRepository.Object, _categoryRepository.Object);
+        var handler = new CreateBudgetCommandHandler(_budgetRepository.Object, _userRepository.Object, _categoryRepository.Object, _spec);
 
         // Act
         // Assert
