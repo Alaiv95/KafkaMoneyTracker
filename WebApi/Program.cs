@@ -1,7 +1,6 @@
 using Application;
-using Application.mediator;
 using Infrastructure;
-using Infrastructure.Repositories;
+using Infrastructure.authentication;
 using WebApi.Extentions;
 
 namespace WebApi;
@@ -37,14 +36,14 @@ public class Program
 
     private static void ConfigureServices(IServiceCollection services, IConfiguration configuration)
     {
+        services.Configure<JwtOptions>(configuration.GetSection(nameof(JwtOptions)));
+        services.AddBearerApiAuth(configuration);
         services.AddControllers();
         services.AddSwaggerGen();
-
-        // custom
         services
+            .AddInfrastructure()
             .AddPersistence(configuration)
             .AddApplication();
-            
     }
 
     private static void ConfigureApp(WebApplication app, IWebHostEnvironment env)
@@ -57,6 +56,8 @@ public class Program
             C.SwaggerEndpoint("swagger/v1/swagger.json", "Money Tracker Api");
         });
         app.UseRouting();
+        app.UseAuthentication();
+        app.UseAuthorization();
        
         app.UseEndpoints(endpoints => endpoints.MapControllers());
         app.Run();

@@ -82,7 +82,7 @@ public class GetBudgetListQueryHandlerTests
         var result = await queryHandler.Handle(_query);
 
         // Assert
-        result.Should().BeOfType<GetBudgetListDto>();
+        result.Should().BeOfType<GetBudgetListVm>();
         result.Budgets.Should().BeEquivalentTo(expectedResult);
     }
 
@@ -103,7 +103,7 @@ public class GetBudgetListQueryHandlerTests
         var result = await queryHandler.Handle(_query);
 
         // Assert
-        result.Should().BeOfType<GetBudgetListDto>();
+        result.Should().BeOfType<GetBudgetListVm>();
         result.Budgets.Should().BeEquivalentTo(expectedResult);
     }
 

@@ -6,7 +6,7 @@ using Infrastructure.Repositories;
 
 namespace Application.mediatorHandlers.budget.queries;
 
-public class GetBudgetListQueryHandler : IRequestHandler<GetBudgetListQuery, GetBudgetListDto>
+public class GetBudgetListQueryHandler : IRequestHandler<GetBudgetListQuery, GetBudgetListVm>
 {
     private readonly IBudgetRepository _budgetRepository;
     private readonly BudgetSpecs _budgetSpecs;
@@ -19,7 +19,7 @@ public class GetBudgetListQueryHandler : IRequestHandler<GetBudgetListQuery, Get
         _budgetMapper = budgetMapper;
     }
 
-    public async Task<GetBudgetListDto> Handle(GetBudgetListQuery query)
+    public async Task<GetBudgetListVm> Handle(GetBudgetListQuery query)
     {
         if (query.DateFrom > query.DateTo)
         {
@@ -29,6 +29,6 @@ public class GetBudgetListQueryHandler : IRequestHandler<GetBudgetListQuery, Get
         var budgetList = await _budgetRepository.SearchAsync(_budgetSpecs.Build(query));
         var budgetLookupList = budgetList.Select(_budgetMapper.EntityToDto).ToList();
 
-        return new GetBudgetListDto { Budgets = budgetLookupList };
+        return new GetBudgetListVm { Budgets = budgetLookupList };
     }
 }

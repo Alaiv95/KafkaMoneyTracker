@@ -12,7 +12,8 @@ public class BudgetSpecs : ISpec<Budget, GetBudgetListQuery>
     {
         return WithUserId(filter.UserId)
             .Also(WithDateLtOrEt(filter.DateFrom))
-            .Also(WithDateGtOrEt(filter.DateTo));
+            .Also(WithDateGtOrEt(filter.DateTo))
+            .Also(WithCategoryId(filter.CategoryId));
     }
     
     Expression<Func<Budget, bool>> WithUserId(Guid userId)
@@ -28,5 +29,10 @@ public class BudgetSpecs : ISpec<Budget, GetBudgetListQuery>
     Expression<Func<Budget, bool>> WithDateGtOrEt(DateTime? dateTo)
     {
         return (budget) => (dateTo != null && dateTo.HasValue) ? dateTo >= budget.CreatedAt : true;
+    }
+
+    Expression<Func<Budget, bool>> WithCategoryId(Guid? categoryId)
+    {
+        return (budget) => (categoryId != null && categoryId != Guid.Empty) ? budget.CategoryId == categoryId : true;
     }
 }

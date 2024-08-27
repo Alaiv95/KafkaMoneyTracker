@@ -11,6 +11,4 @@ public class BudgetCreateDto
     public int DurationInDays { get; set; }
 
     public Guid CategoryId { get; set; }
-
-    public Guid UserId { get; set; }
 }

@@ -35,7 +35,7 @@ public class CreateBudgetCommandHandler : IRequestHandler<CreateBudgetCommand, G
 
         if (user is null || category is null)
         {
-            throw new NotFoundException($"user {command.UserId} or category {command.CategoryId}");
+            throw new NotFoundException($"user {command.UserId} or category {command.CategoryId} not found");
         }
 
         var isBudgetExists = await IsActiveBudgetOfCategoryExistsAsync(command.UserId, command.CategoryId);

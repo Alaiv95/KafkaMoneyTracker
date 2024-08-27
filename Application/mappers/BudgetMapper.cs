@@ -18,14 +18,25 @@ public class BudgetMapper
         };
     }
 
-    public CreateBudgetCommand DtoToCommand(BudgetCreateDto dto)
+    public CreateBudgetCommand DtoToCommand(BudgetCreateDto dto, Guid userId)
     {
         return new CreateBudgetCommand
         {
             BudgetLimit = dto.BudgetLimit,
             DurationInDays = dto.DurationInDays,
             CategoryId = dto.CategoryId,
-            UserId = dto.UserId
+            UserId = userId
+        };
+    }
+
+    public GetBudgetListQuery DtoToQuery(GetBudgetListDto dto, Guid userId)
+    {
+        return new GetBudgetListQuery
+        {
+            DateFrom = dto.DateFrom,
+            DateTo = dto.DateTo,
+            CategoryId = dto.CategoryId,
+            UserId = userId
         };
     }
 }
