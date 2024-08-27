@@ -53,6 +53,7 @@ public class BudgetController : ControllerBase
     [Authorize]
     [HttpGet("search")]
     [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<GetBudgetListVm>> SearchBudgets([FromQuery] GetBudgetListDto dto)
     {
