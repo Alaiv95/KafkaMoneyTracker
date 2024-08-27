@@ -1,3 +1,4 @@
+using Application;
 using Application.mediator;
 using Infrastructure;
 using Infrastructure.Repositories;
@@ -36,11 +37,14 @@ public class Program
 
     private static void ConfigureServices(IServiceCollection services, IConfiguration configuration)
     {
-        services
-            .AddPersistence(configuration)
-            .AddMediator();
         services.AddControllers();
         services.AddSwaggerGen();
+
+        // custom
+        services
+            .AddPersistence(configuration)
+            .AddApplication()
+            .AddMediator();
     }
 
     private static void ConfigureApp(WebApplication app, IWebHostEnvironment env)

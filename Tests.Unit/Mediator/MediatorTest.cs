@@ -56,8 +56,7 @@ public class MediatorTest
             UserId = Guid.NewGuid(),
             CategoryId = Guid.NewGuid(),
             BudgetLimit = 100.23,
-            PeriodStart = DateTime.Now,
-            PeriodEnd = DateTime.Now.AddDays(1),
+            DurationInDays = 30
         };
 
         // Act
@@ -79,8 +78,7 @@ public class MediatorTest
             UserId = Guid.NewGuid(),
             CategoryId = Guid.NewGuid(),
             BudgetLimit = 100.23,
-            PeriodStart = DateTime.Now,
-            PeriodEnd = DateTime.Now.AddDays(1),
+            DurationInDays= 30
         };
 
         // Act

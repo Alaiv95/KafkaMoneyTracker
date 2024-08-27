@@ -8,9 +8,8 @@ public class BudgetCreateDto
     [Range(1.0, Double.MaxValue)]
     public Double BudgetLimit { get; set; }
 
-    public DateTime PeriodStart { get; set; }
-
-    public DateTime PeriodEnd { get; set; }
+    [Range(1, 365)]
+    public int DurationInDays { get; set; }
 
     public Guid CategoryId { get; set; }
 
@@ -21,8 +20,7 @@ public class BudgetCreateDto
         return new CreateBudgetCommand
         {
             BudgetLimit = BudgetLimit,
-            PeriodStart = PeriodStart,
-            PeriodEnd = PeriodEnd,
+            DurationInDays = DurationInDays,
             CategoryId = CategoryId,
             UserId = UserId
         };

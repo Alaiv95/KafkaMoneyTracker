@@ -14,13 +14,12 @@ public class BudgetRepository : GenericRepository<Budget>, IBudgetRepository
     {
         return await _dbSet.FirstOrDefaultAsync(budget =>
                  budget.UserId == userId &&
-                 budget.CategoryId == categoryId &&
-                 budget.PeriodEnd >= DateTime.Now
+                 budget.CategoryId == categoryId
              );
     }
 
     public async Task<List<Budget>> SearchAsync(Expression<Func<Budget, bool>> predicate)
     {
-        return await _dbSet.Where(p => p.Id == Guid.NewGuid()).ToListAsync();
+        return await _dbSet.Where(predicate).ToListAsync();
     }
 }

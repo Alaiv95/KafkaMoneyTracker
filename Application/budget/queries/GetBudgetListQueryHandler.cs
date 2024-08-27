@@ -1,42 +1,34 @@
-﻿using Application.mediator;
-using Domain.Models;
+﻿using Application.exceptions;
+using Application.mappers;
+using Application.mediator;
+using Application.specs;
 using Infrastructure.Repositories;
-using System.Linq.Expressions;
 
 namespace Application.budget.queries;
 
 public class GetBudgetListQueryHandler : IRequestHandler<GetBudgetListQuery, GetBudgetListDto>
 {
     private readonly IBudgetRepository _budgetRepository;
+    private readonly BudgetSpecs _budgetSpecs;
+    private readonly BudgetMapper _budgetMapper;
 
-    public GetBudgetListQueryHandler(IBudgetRepository budgetRepository)
+    public GetBudgetListQueryHandler(IBudgetRepository budgetRepository, BudgetSpecs budgetSpecs, BudgetMapper budgetMapper)
     {
         _budgetRepository = budgetRepository;
+        _budgetSpecs = budgetSpecs;
+        _budgetMapper = budgetMapper;
     }
 
-    public async Task<GetBudgetListDto> Handle(GetBudgetListQuery command)
+    public async Task<GetBudgetListDto> Handle(GetBudgetListQuery query)
     {
-        var budgetList = await _budgetRepository.SearchAsync(TempSpec(command));
-        var budgetLookupList = budgetList.Select(EntityToLookUpDto).ToList();
+        if (query.DateFrom > query.DateTo)
+        {
+            throw new DateFromCantBeLessThenDateToException($"DateFrom {query.DateFrom} can't be less then DateTo {query.DateTo}");
+        }
+
+        var budgetList = await _budgetRepository.SearchAsync(_budgetSpecs.Build(query));
+        var budgetLookupList = budgetList.Select(_budgetMapper.EntityToDto).ToList();
         
         return new GetBudgetListDto { Budgets = budgetLookupList };
-    }
-
-    private Expression<Func<Budget, bool>> TempSpec(GetBudgetListQuery queryFilter)
-    {
-        return (budget) => budget.UserId == queryFilter.UserId && 
-            ((budget.PeriodStart >= queryFilter.DateFrom && budget.PeriodStart <= queryFilter.DateTo) || 
-            (budget.PeriodEnd <= queryFilter.DateTo && budget.PeriodEnd >= queryFilter.DateFrom));
-    }
-
-    private BudgetLookUpDto EntityToLookUpDto(Budget entity)
-    {
-        return new BudgetLookUpDto
-        {
-            BudgetLimit = entity.BudgetLimit,
-            CategoryId = entity.CategoryId,
-            PeriodEnd = entity.PeriodEnd,
-            PeriodStart = entity.PeriodStart,
-        };
     }
 }

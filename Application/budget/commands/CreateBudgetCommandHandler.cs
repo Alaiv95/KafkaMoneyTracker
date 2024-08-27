@@ -47,9 +47,7 @@ public class CreateBudgetCommandHandler : IRequestHandler<CreateBudgetCommand, G
             UserId = command.UserId,
             CategoryId = command.CategoryId,
             BudgetLimit = command.BudgetLimit,
-            CurrentBudget = 1,
-            PeriodStart = command.PeriodStart,
-            PeriodEnd = command.PeriodEnd,
+            DurationInDays = command.DurationInDays,
             CreatedAt = DateTime.Now,
             UpdatedAt = null
         };

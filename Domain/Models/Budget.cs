@@ -4,11 +4,7 @@ public class Budget : BaseEntity
 {
     public double BudgetLimit { get; set; }
 
-    public double? CurrentBudget { get; set; }
-
-    public DateTime PeriodStart { get; set; }
-
-    public DateTime PeriodEnd { get; set; }
+    public int DurationInDays { get; set; }
 
     public Category Category { get; set; }
 
