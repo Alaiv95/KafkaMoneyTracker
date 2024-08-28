@@ -2,7 +2,7 @@
 
 namespace Application.mediatorHandlers.auth;
 
-public class RegisterUserCommand : IRequest
+public class RegisterUserCommand : IRequest<bool>
 {
     public string Email { get; set; }
 

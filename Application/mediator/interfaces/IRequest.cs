@@ -1,5 +1,5 @@
 ﻿namespace Application.mediator.interfaces;
 
-public interface IRequest
+public interface IRequest<TResponse>
 {
 }

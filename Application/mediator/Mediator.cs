@@ -5,11 +5,12 @@ namespace Application.mediator;
 
 public class Mediator : IMediator
 {
-    private IDictionary<Type, Object> _commands = new Dictionary<Type, Object>();
+    private IDictionary<Type, object> _commands = new Dictionary<Type, object>();
 
-    public void Register<TCommand, TResponse>(Type commandName, IRequestHandler<TCommand, TResponse> handler)
-        where TCommand : IRequest
+    public void Register<TRequest, TResponse>(IRequestHandler<TRequest, TResponse> handler)
+        where TRequest : IRequest<TResponse>
     {
+        var commandName = typeof(TRequest);
         var isCommandAdded = _commands.ContainsKey(commandName);
 
         if (isCommandAdded)
@@ -20,10 +21,9 @@ public class Mediator : IMediator
         _commands[commandName] = handler;
     }
 
-    public async Task<TResponse> HandleRequest<TCommand, TResponse>(TCommand command)
-        where TCommand : IRequest
+    public async Task<TResponse> HandleRequest<TRequest, TResponse>(TRequest command) where TRequest : IRequest<TResponse>
     {
-        var commandName = command.GetType();
+        var commandName = typeof(TRequest);
         var isCommandAdded = _commands.TryGetValue(commandName, out var commandHandlerObject);
 
         if (!isCommandAdded)
@@ -31,7 +31,7 @@ public class Mediator : IMediator
             throw new CommandNotRegisteredException(commandName.ToString());
         }
 
-        if (commandHandlerObject is not IRequestHandler<TCommand, TResponse> commandHandler)
+        if (commandHandlerObject is not IRequestHandler<TRequest, TResponse> commandHandler)
         {
             throw new ApplicationException($"{commandName} is not valid.");
         }

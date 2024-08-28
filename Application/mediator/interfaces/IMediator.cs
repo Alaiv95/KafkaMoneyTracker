@@ -3,9 +3,8 @@
 public interface IMediator
 {
     public void Register<TCommand, TResponse>(
-        Type commandName, IRequestHandler<TCommand, TResponse> handler)
-        where TCommand : IRequest;
+        IRequestHandler<TCommand, TResponse> handler)
+        where TCommand : IRequest<TResponse>;
 
-    public Task<TResponse> HandleRequest<TCommand, TResponse>(TCommand command)
-        where TCommand : IRequest;
+    public Task<TResponse> HandleRequest<TRequest, TResponse>(TRequest command) where TRequest : IRequest<TResponse>;
 }

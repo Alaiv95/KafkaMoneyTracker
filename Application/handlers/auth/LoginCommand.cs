@@ -2,7 +2,7 @@
 
 namespace Application.mediatorHandlers.auth;
 
-public class LoginCommand : IRequest
+public class LoginCommand : IRequest<string>
 {
     public string Email { get; set; }
 

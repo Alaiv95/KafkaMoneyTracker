@@ -21,10 +21,10 @@ public static class DependencyInjection
             var registerHandler = provider.GetRequiredService<RegisterUserCommandHandler>();
             var loginHandler = provider.GetRequiredService<LoginCommandHandler>();
 
-            mediator.Register(typeof(CreateBudgetCommand), createBudgetCommandHandler);
-            mediator.Register(typeof(GetBudgetListQuery), getBudgetQueryHandler);
-            mediator.Register(typeof(RegisterUserCommand), registerHandler);
-            mediator.Register(typeof(LoginCommand), loginHandler);
+            mediator.Register(createBudgetCommandHandler);
+            mediator.Register(getBudgetQueryHandler);
+            mediator.Register(registerHandler);
+            mediator.Register(loginHandler);
 
             return mediator;
         });

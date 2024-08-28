@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Application.mediatorHandlers.budget.queries;
 
-public class GetBudgetListQuery : IRequest
+public class GetBudgetListQuery : IRequest<BudgetListVm>
 {
     [Required]
     public Guid UserId { get; set; }

@@ -33,11 +33,11 @@ public class MediatorTest
         // Arrange
         var mediator = new Mediator();
         var handler = new CreateBudgetCommandHandler(_budgetRepository.Object, _userRepository.Object, _categoryRepository.Object, _spec);
-        mediator.Register(typeof(CreateBudgetCommand), handler);
+        mediator.Register(handler);
 
         // Act
         // Assert
-        Assert.Throws<CommandAlreadyRegisteredException>(() => mediator.Register(typeof(CreateBudgetCommand), handler));
+        Assert.Throws<CommandAlreadyRegisteredException>(() => mediator.Register(handler));
     }
 
     [Test]
@@ -53,7 +53,7 @@ public class MediatorTest
             .Setup(handler => handler.Handle(It.IsAny<CreateBudgetCommand>()))
             .ReturnsAsync(() => result);
 
-        mediator.Register(typeof(CreateBudgetCommand), handler.Object);
+        mediator.Register(handler.Object);
 
         var c = new CreateBudgetCommand
         {
