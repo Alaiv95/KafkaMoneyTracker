@@ -1,72 +1,48 @@
-﻿using Confluent.Kafka;
+﻿using Application.handlers.budget.queries;
+using Application.kafka.consumers;
+using Application.mediator.interfaces;
 using Domain.Models;
 using Infrastructure.Repositories;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using System.Text.Json;
 
 namespace Application.kafka.consumer;
 
-public class TransactionsConsumer : BackgroundService
+public class TransactionsConsumer : ConsumerBackgroundService
 {
-    private ConsumerConfig _config;
-    private IServiceScopeFactory _scopeFactory;
-    private JsonSerializerOptions _options;
+    public TransactionsConsumer(IOptions<KafkaOptions> options, IServiceScopeFactory scopeFactory) 
+        : base(options, scopeFactory) { }
 
-    public TransactionsConsumer(
-        IOptions<KafkaOptions> options,
-        IServiceScopeFactory scopeFactory
-    )
+    protected override string GetTopic() => TopicConstants.TransactionTopc;
+
+    protected override async Task HandleMessage(string messageValue)
     {
-        _scopeFactory = scopeFactory;
-        _options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-        _config = new ConsumerConfig
+        try
         {
-            GroupId = options.Value.GroupId,
-            BootstrapServers = options.Value.BootstrapServers,
-            AutoOffsetReset = AutoOffsetReset.Earliest
-        };
-    }
+            using var scope = _scopeFactory.CreateScope();
+            var transactionRepository = scope.ServiceProvider.GetRequiredService<IGenericRepository<Transaction>>();
+            var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
 
-    protected override Task ExecuteAsync(CancellationToken stoppingToken)
-    {
-        return Task.Run(() =>
-        {
-            _ = ConsumeAsync(TopicConstants.TransactionTopc, stoppingToken);
-        }, stoppingToken);
-    }
+            var transaction = JsonSerializer.Deserialize<Transaction>(messageValue, _options);
 
-    private async Task ConsumeAsync(string topic, CancellationToken stoppingToken = default)
-    {
-        using var consumer = new ConsumerBuilder<string, string>(_config).Build();
-
-        consumer.Subscribe(topic);
-
-        while (!stoppingToken.IsCancellationRequested) 
-        {
-            var consumeResult = consumer.Consume(stoppingToken);
-
-            try
+            if (transaction != null)
             {
-                using var scope = _scopeFactory.CreateScope();
-                var transactionRepository = scope.ServiceProvider.GetRequiredService<IGenericRepository<Transaction>>();
-                var budgetRepository = scope.ServiceProvider.GetRequiredService<IBudgetRepository>();
+                await transactionRepository.AddAsync(transaction);
 
-                var transaction = JsonSerializer.Deserialize<Transaction>(consumeResult.Message.Value, _options);
-
-                if (transaction != null)
+                var checkBudgetCommand = new CheckSpentBudgetQuery
                 {
-                    await transactionRepository.AddAsync(transaction);
-                }
-            } 
-            catch (Exception ex)
-            {
-                //TODO add serilog
-                Console.WriteLine(ex.Message);
+                    UserId = transaction.UserId,
+                    CategoryId = transaction.CategoryId,
+                };
+
+                await mediator.HandleRequest(checkBudgetCommand);
             }
         }
-
-        consumer.Close();
+        catch (Exception ex)
+        {
+            //TODO add serilog
+            Console.WriteLine(ex.Message);
+        }
     }
 }

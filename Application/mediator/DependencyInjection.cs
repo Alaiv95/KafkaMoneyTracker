@@ -7,6 +7,7 @@ using Application.mediatorHandlers.budget.commands;
 using Application.mediatorHandlers.budget.queries;
 using Application.mediatorHandlers.auth;
 using Application.handlers.transactions;
+using Application.handlers.budget.queries;
 
 namespace Application.mediator;
 
@@ -22,12 +23,14 @@ public static class DependencyInjection
             var registerHandler = provider.GetRequiredService<RegisterUserCommandHandler>();
             var loginHandler = provider.GetRequiredService<LoginCommandHandler>();
             var transactionCreateHandler = provider.GetRequiredService<CreateTransactionCommandHandler>();
+            var checkBudgetQueryHandler = provider.GetRequiredService<CheckSpentBudgetQueryHandler>();
 
             mediator.Register(createBudgetCommandHandler);
             mediator.Register(getBudgetQueryHandler);
             mediator.Register(registerHandler);
             mediator.Register(loginHandler);
             mediator.Register(transactionCreateHandler);
+            mediator.Register(checkBudgetQueryHandler);
 
             return mediator;
         });

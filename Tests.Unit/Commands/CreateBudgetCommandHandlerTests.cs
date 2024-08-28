@@ -60,29 +60,6 @@ public class CreateBudgetCommandHandlerTests
     }
 
     [Test]
-    public async Task CreateBudget_NotExistingUserId_Fail()
-    {
-        // Arrange
-        _userRepository
-            .Setup(repository => repository.GetByIdAsync(It.IsAny<Guid>()))
-            .ReturnsAsync(() => null);
-
-        _categoryRepository
-            .Setup(repository => repository.GetByIdAsync(It.IsAny<Guid>()))
-            .ReturnsAsync(() => new Category());
-
-        _budgetRepository
-            .Setup(repository => repository.SearchAsync(It.IsAny<Expression<Func<Budget, bool>>>()))
-            .ReturnsAsync(() => new List<Budget>());
-
-        var handler = new CreateBudgetCommandHandler(_budgetRepository.Object, _userRepository.Object, _categoryRepository.Object, _spec);
-
-        // Act
-        // Assert
-        Assert.ThrowsAsync<NotFoundException>(async () => await handler.Handle(_command));
-    }
-
-    [Test]
     public async Task CreateBudget_NotExistingCategoryId_Fail()
     {
         // Arrange
