@@ -38,7 +38,7 @@ public class BudgetController : ControllerBase
         var userId = HttpContext.GetUserIdFromToken();
 
         var createBudgetCommand = _budgetMapper.DtoToCommand(dto, userId);
-        var createdBudgetId = await _mediator.HandleRequest<CreateBudgetCommand, Guid>(createBudgetCommand);
+        var createdBudgetId = await _mediator.HandleRequest(createBudgetCommand);
 
         return Ok(createdBudgetId);
     }
@@ -60,7 +60,7 @@ public class BudgetController : ControllerBase
         var userId = HttpContext.GetUserIdFromToken();
 
         var getBudgetQuery = _budgetMapper.DtoToQuery(dto, userId);
-        var budgetList = await _mediator.HandleRequest<GetBudgetListQuery, BudgetListVm>(getBudgetQuery);
+        var budgetList = await _mediator.HandleRequest(getBudgetQuery);
 
         return (budgetList == null || !budgetList.Budgets.Any()) ? NoContent() : Ok(budgetList);
     }

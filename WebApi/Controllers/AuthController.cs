@@ -33,7 +33,7 @@ public class AuthController : ControllerBase
     public async Task<ActionResult<bool>> Register([FromBody] AuthDto dto)
     {
         var registerUserCommand = _authMapper.DtoToRegisterUserCommand(dto);
-        var result = await _mediator.HandleRequest<RegisterUserCommand, bool>(registerUserCommand);
+        var result = await _mediator.HandleRequest(registerUserCommand);
 
         return Ok(result);
     }
@@ -52,7 +52,7 @@ public class AuthController : ControllerBase
     public async Task<ActionResult<string>> Login([FromBody] AuthDto dto)
     { 
         var loginUserCommand = _authMapper.DtoToLoginCommand(dto);
-        var result = await _mediator.HandleRequest<LoginCommand, string>(loginUserCommand);
+        var result = await _mediator.HandleRequest(loginUserCommand);
 
         return Ok(result);
     }

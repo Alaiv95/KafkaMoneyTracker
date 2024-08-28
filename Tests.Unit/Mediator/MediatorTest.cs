@@ -65,7 +65,7 @@ public class MediatorTest
 
         // Act
 
-        var res = await mediator.HandleRequest<CreateBudgetCommand, Guid>(c);
+        var res = await mediator.HandleRequest(c);
 
         // Assert
         result.Should().NotBeEmpty();
@@ -87,6 +87,6 @@ public class MediatorTest
 
         // Act
         // Assert
-        Assert.ThrowsAsync<CommandNotRegisteredException>(() => mediator.HandleRequest<CreateBudgetCommand, Guid>(c));
+        Assert.ThrowsAsync<CommandNotRegisteredException>(() => mediator.HandleRequest(c));
     }
 }

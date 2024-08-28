@@ -6,5 +6,5 @@ public interface IMediator
         IRequestHandler<TCommand, TResponse> handler)
         where TCommand : IRequest<TResponse>;
 
-    public Task<TResponse> HandleRequest<TRequest, TResponse>(TRequest command) where TRequest : IRequest<TResponse>;
+    public Task<TResponse> HandleRequest<TResponse>(IRequest<TResponse> command);
 }
