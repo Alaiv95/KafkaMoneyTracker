@@ -10,7 +10,6 @@ namespace Application.mediatorHandlers.budget.commands;
 public class CreateBudgetCommandHandler : IRequestHandler<CreateBudgetCommand, Guid>
 {
     private readonly IBudgetRepository _budgetRepository;
-    private readonly IGenericRepository<User> _userRepository;
     private readonly IGenericRepository<Category> _categoryRepository;
     private readonly BudgetSpecs _budgetSpecs;
 
@@ -23,19 +22,17 @@ public class CreateBudgetCommandHandler : IRequestHandler<CreateBudgetCommand, G
         )
     {
         _budgetRepository = budgetRepository;
-        _userRepository = userRepository;
         _categoryRepository = categoryRepository;
         _budgetSpecs = budgetSpecs;
     }
 
     public async Task<Guid> Handle(CreateBudgetCommand command)
     {
-        var user = await _userRepository.GetByIdAsync(command.UserId);
         var category = await _categoryRepository.GetByIdAsync(command.CategoryId);
 
-        if (user is null || category is null)
+        if (category is null)
         {
-            throw new NotFoundException($"user {command.UserId} or category {command.CategoryId} not found");
+            throw new NotFoundException($"category {command.CategoryId} not found");
         }
 
         var isBudgetExists = await IsActiveBudgetOfCategoryExistsAsync(command.UserId, command.CategoryId);

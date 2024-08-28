@@ -1,10 +1,7 @@
 ﻿using Application.Dtos;
 using Application.mappers;
 using Application.mediator.interfaces;
-using Application.mediatorHandlers.auth;
-using Application.mediatorHandlers.budget.commands;
 using Microsoft.AspNetCore.Mvc;
-using WebApi.Extentions;
 
 namespace WebApi.Controllers;
 

@@ -8,5 +8,6 @@ public class AuthDto
     public string Email { get; set; }
 
     [Required]
+    [MinLength(4)]
     public string Password { get; set; }
 }

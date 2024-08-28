@@ -2,7 +2,6 @@
 using Application.Dtos;
 using Application.mappers;
 using Application.mediator.interfaces;
-using Application.mediatorHandlers.budget.commands;
 using Application.mediatorHandlers.budget.queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

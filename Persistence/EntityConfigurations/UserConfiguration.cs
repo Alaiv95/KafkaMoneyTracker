@@ -11,14 +11,5 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.HasKey(budget => budget.Id);
         builder.HasIndex(budget => budget.Id);
         builder.HasIndex(user => user.Email);
-
-        builder.HasData(new User
-        {
-            Id = Guid.NewGuid(),
-            Email = "Admin",
-            PasswordHash = "AdminHash",
-            CreatedAt = DateTime.Now,
-            UpdatedAt = null
-        });
     }
 }

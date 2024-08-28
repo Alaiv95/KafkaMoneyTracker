@@ -1,4 +1,5 @@
 ﻿using Application.exceptions;
+using Application.kafka.producer;
 using Application.mediator.interfaces;
 using Domain.Models;
 using Infrastructure.authentication;
@@ -10,11 +11,13 @@ public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, b
 {
     private readonly IAuthRepository _authRepository;
     private readonly IPasswordHasher _passwordHasher;
+    private readonly IEventsProducer _eventsProducer;
 
-    public RegisterUserCommandHandler(IAuthRepository authRepository, IPasswordHasher passwordHasher)
+    public RegisterUserCommandHandler(IAuthRepository authRepository, IPasswordHasher passwordHasher, IEventsProducer eventsProducer)
     {
         _authRepository = authRepository;
         _passwordHasher = passwordHasher;
+        _eventsProducer = eventsProducer;
     }
 
     public async Task<bool> Handle(RegisterUserCommand command)
@@ -30,8 +33,11 @@ public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, b
 
         var user = new User
         {
+            Id = Guid.NewGuid(),
             Email = command.Email,
             PasswordHash = hashedPassword,
+            CreatedAt = DateTime.UtcNow,
+            UpdatedAt = null
         };
 
         await _authRepository.AddUserAsync(user);

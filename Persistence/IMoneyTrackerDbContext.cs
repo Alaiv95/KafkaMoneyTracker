@@ -1,7 +1,5 @@
 ﻿using Domain.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
-using System.Diagnostics.CodeAnalysis;
 
 namespace Infrastructure;
 

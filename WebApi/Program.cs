@@ -1,4 +1,5 @@
 using Application;
+using Application.kafka;
 using Infrastructure;
 using Infrastructure.authentication;
 using WebApi.Extentions;
@@ -37,6 +38,7 @@ public class Program
     private static void ConfigureServices(IServiceCollection services, IConfiguration configuration)
     {
         services.Configure<JwtOptions>(configuration.GetSection(nameof(JwtOptions)));
+        services.Configure<KafkaOptions>(configuration.GetSection(nameof(KafkaOptions)));
         services.AddBearerApiAuth(configuration);
         services.AddControllers();
         services.AddSwaggerGen(options =>
