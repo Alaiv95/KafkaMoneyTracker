@@ -11,9 +11,9 @@ public class BudgetSpecs : ISpec<Budget, GetBudgetListQuery>
     public Expression<Func<Budget, bool>> Build(GetBudgetListQuery filter)
     {
         return WithUserId(filter.UserId)
-            .Also(WithDateLtOrEt(filter.DateFrom))
-            .Also(WithDateGtOrEt(filter.DateTo))
-            .Also(WithCategoryId(filter.CategoryId));
+            .And(WithDateLtOrEt(filter.DateFrom))
+            .And(WithDateGtOrEt(filter.DateTo))
+            .And(WithCategoryId(filter.CategoryId));
     }
     
     Expression<Func<Budget, bool>> WithUserId(Guid userId)

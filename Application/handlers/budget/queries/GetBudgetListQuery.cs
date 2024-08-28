@@ -12,5 +12,5 @@ public class GetBudgetListQuery : IRequest
 
     public DateTime? DateTo { get; set; }
 
-    public Guid CategoryId { get; set; }
+    public Guid? CategoryId { get; set; }
 }

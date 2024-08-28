@@ -29,7 +29,7 @@ public class BudgetMapper
         };
     }
 
-    public GetBudgetListQuery DtoToQuery(GetBudgetListDto dto, Guid userId)
+    public GetBudgetListQuery DtoToQuery(BudgetGetListDto dto, Guid userId)
     {
         return new GetBudgetListQuery
         {
