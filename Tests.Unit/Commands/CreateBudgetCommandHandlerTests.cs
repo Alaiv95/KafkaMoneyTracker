@@ -96,7 +96,7 @@ public class CreateBudgetCommandHandlerTests
 
         _budgetRepository
             .Setup(repository => repository.SearchAsync(It.IsAny<Expression<Func<Budget, bool>>>()))
-            .ReturnsAsync(() => new List<Budget>() { new Budget()});
+            .ReturnsAsync(() => new List<Budget>() { new Budget() });
 
         var handler = new CreateBudgetCommandHandler(_budgetRepository.Object, _userRepository.Object, _categoryRepository.Object, _spec);
 
