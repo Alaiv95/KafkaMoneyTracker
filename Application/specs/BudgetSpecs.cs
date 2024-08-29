@@ -1,7 +1,7 @@
 ﻿using Domain.Models;
 using System.Linq.Expressions;
 using Application.extentions;
-using Application.mediatorHandlers.budget.queries;
+using Application.handlers.budget.queries.GetBudgetList;
 
 
 namespace Application.specs;

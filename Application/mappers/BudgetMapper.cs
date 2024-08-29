@@ -1,7 +1,6 @@
 ﻿using Application.Dtos;
-using Application.handlers.budget.queries.models;
-using Application.mediatorHandlers.budget.commands;
-using Application.mediatorHandlers.budget.queries;
+using Application.handlers.budget.commands.CreateBudget;
+using Application.handlers.budget.queries.GetBudgetList;
 using Domain.Models;
 
 namespace Application.mappers;

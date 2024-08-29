@@ -1,7 +1,7 @@
 ﻿using Application.mediator.interfaces;
 using System.ComponentModel.DataAnnotations;
 
-namespace Application.mediatorHandlers.budget.commands;
+namespace Application.handlers.budget.commands.CreateBudget;
 
 public class CreateBudgetCommand : IRequest<Guid>
 {

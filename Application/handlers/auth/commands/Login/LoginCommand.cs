@@ -1,6 +1,6 @@
 ﻿using Application.mediator.interfaces;
 
-namespace Application.mediatorHandlers.auth;
+namespace Application.handlers.auth.commands.Login;
 
 public class LoginCommand : IRequest<string>
 {

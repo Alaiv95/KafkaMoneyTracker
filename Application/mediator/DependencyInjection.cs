@@ -3,11 +3,12 @@ using Application.mediator.interfaces;
 using Application.mediator;
 using Application.specs;
 using Microsoft.Extensions.DependencyInjection;
-using Application.mediatorHandlers.budget.commands;
-using Application.mediatorHandlers.budget.queries;
-using Application.mediatorHandlers.auth;
-using Application.handlers.transactions;
-using Application.handlers.budget.queries;
+using Application.handlers.budget.commands.CreateBudget;
+using Application.handlers.budget.queries.CheckSpentBudget;
+using Application.handlers.budget.queries.GetBudgetList;
+using Application.handlers.auth.commands.Login;
+using Application.handlers.auth.commands.Register;
+using Application.handlers.transactions.commands.CreateTransaction;
 
 namespace Application.mediator;
 

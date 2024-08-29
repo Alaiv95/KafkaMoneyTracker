@@ -1,6 +1,6 @@
 ﻿using Application.mediator.interfaces;
 
-namespace Application.mediatorHandlers.auth;
+namespace Application.handlers.auth.commands.Register;
 
 public class RegisterUserCommand : IRequest<bool>
 {

@@ -5,7 +5,7 @@ using Domain.Models;
 using Infrastructure.authentication;
 using Infrastructure.Repositories;
 
-namespace Application.mediatorHandlers.auth;
+namespace Application.handlers.auth.commands.Register;
 
 public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, bool>
 {

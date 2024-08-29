@@ -7,7 +7,7 @@ using Domain.Models;
 using Infrastructure.Repositories;
 using System.Text.Json;
 
-namespace Application.handlers.transactions;
+namespace Application.handlers.transactions.commands.CreateTransaction;
 public class CreateTransactionCommandHandler : IRequestHandler<CreateTransactionCommand, bool>
 {
     private readonly IGenericRepository<Category> _categoryRepository;

@@ -1,5 +1,6 @@
 ﻿using Application.Dtos;
-using Application.mediatorHandlers.auth;
+using Application.handlers.auth.commands.Login;
+using Application.handlers.auth.commands.Register;
 
 namespace Application.mappers;
 

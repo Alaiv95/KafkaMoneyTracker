@@ -1,16 +1,15 @@
 ﻿using Application.Dtos;
-using Application.handlers.budget.queries.models;
+using Application.handlers.budget.queries.GetBudgetList;
 using Application.kafka;
 using Application.kafka.producer;
 using Application.mediator.interfaces;
-using Application.mediatorHandlers.budget.queries;
 using Application.specs;
 using Confluent.Kafka;
 using Domain.Models;
 using Infrastructure.Repositories;
 using System.Text.Json;
 
-namespace Application.handlers.budget.queries;
+namespace Application.handlers.budget.queries.CheckSpentBudget;
 
 public class CheckSpentBudgetQueryHandler : IRequestHandler<CheckSpentBudgetQuery, bool>
 {
@@ -77,7 +76,7 @@ public class CheckSpentBudgetQueryHandler : IRequestHandler<CheckSpentBudgetQuer
     private bool IsBudgetForCategoryExceeded(Budget budget, double moneySpent)
     {
         var transactionLimit = budget.BudgetLimit;
-        
+
         return Math.Abs(moneySpent) > transactionLimit;
     }
 

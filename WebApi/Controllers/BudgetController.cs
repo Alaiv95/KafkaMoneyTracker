@@ -1,6 +1,5 @@
-﻿
-using Application.Dtos;
-using Application.handlers.budget.queries.models;
+﻿using Application.Dtos;
+using Application.handlers.budget.queries.GetBudgetList;
 using Application.mappers;
 using Application.mediator.interfaces;
 using Microsoft.AspNetCore.Authorization;

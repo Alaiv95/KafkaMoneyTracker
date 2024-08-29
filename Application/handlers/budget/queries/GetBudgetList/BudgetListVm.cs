@@ -1,4 +1,4 @@
-﻿namespace Application.handlers.budget.queries.models;
+﻿namespace Application.handlers.budget.queries.GetBudgetList;
 
 public class BudgetListVm
 {

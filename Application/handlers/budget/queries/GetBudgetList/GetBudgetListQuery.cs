@@ -1,8 +1,7 @@
-﻿using Application.handlers.budget.queries.models;
-using Application.mediator.interfaces;
+﻿using Application.mediator.interfaces;
 using System.ComponentModel.DataAnnotations;
 
-namespace Application.mediatorHandlers.budget.queries;
+namespace Application.handlers.budget.queries.GetBudgetList;
 
 public class GetBudgetListQuery : IRequest<BudgetListVm>
 {

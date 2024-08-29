@@ -1,6 +1,6 @@
 ﻿using Application.mediator.interfaces;
 
-namespace Application.handlers.budget.queries;
+namespace Application.handlers.budget.queries.CheckSpentBudget;
 
 public class CheckSpentBudgetQuery : IRequest<bool>
 {

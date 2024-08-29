@@ -1,6 +1,6 @@
 ﻿using Application.mediator.interfaces;
 
-namespace Application.handlers.transactions;
+namespace Application.handlers.transactions.commands.CreateTransaction;
 
 public class CreateTransactionCommand : IRequest<bool>
 {

@@ -1,6 +1,6 @@
 ﻿using Domain.Enums;
 
-namespace Application.handlers.budget.queries.models;
+namespace Application.handlers.budget.queries.CheckSpentBudget;
 
 public class BudgetExceededDto
 {

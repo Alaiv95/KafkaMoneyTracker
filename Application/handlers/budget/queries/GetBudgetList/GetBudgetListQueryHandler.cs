@@ -1,11 +1,10 @@
 ﻿using Application.exceptions;
-using Application.handlers.budget.queries.models;
 using Application.mappers;
 using Application.mediator.interfaces;
 using Application.specs;
 using Infrastructure.Repositories;
 
-namespace Application.mediatorHandlers.budget.queries;
+namespace Application.handlers.budget.queries.GetBudgetList;
 
 public class GetBudgetListQueryHandler : IRequestHandler<GetBudgetListQuery, BudgetListVm>
 {

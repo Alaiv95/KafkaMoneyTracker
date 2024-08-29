@@ -3,7 +3,7 @@ using Infrastructure.Repositories;
 using Application.exceptions;
 using Infrastructure.authentication;
 
-namespace Application.mediatorHandlers.auth;
+namespace Application.handlers.auth.commands.Login;
 
 public class LoginCommandHandler : IRequestHandler<LoginCommand, string>
 {

@@ -1,5 +1,5 @@
 ﻿using Application.exceptions;
-using Application.handlers.budget.queries.models;
+using Application.handlers.budget.queries.CheckSpentBudget;
 using Application.kafka.consumers;
 using Application.MailClient;
 using Application.mediator.interfaces;

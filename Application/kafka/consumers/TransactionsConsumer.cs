@@ -1,4 +1,4 @@
-﻿using Application.handlers.budget.queries;
+﻿using Application.handlers.budget.queries.CheckSpentBudget;
 using Application.kafka.consumers;
 using Application.mediator.interfaces;
 using Domain.Models;

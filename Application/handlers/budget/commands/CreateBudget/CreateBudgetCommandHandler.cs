@@ -1,11 +1,11 @@
 ﻿using Application.exceptions;
+using Application.handlers.budget.queries.GetBudgetList;
 using Application.mediator.interfaces;
-using Application.mediatorHandlers.budget.queries;
 using Application.specs;
 using Domain.Models;
 using Infrastructure.Repositories;
 
-namespace Application.mediatorHandlers.budget.commands;
+namespace Application.handlers.budget.commands.CreateBudget;
 
 public class CreateBudgetCommandHandler : IRequestHandler<CreateBudgetCommand, Guid>
 {

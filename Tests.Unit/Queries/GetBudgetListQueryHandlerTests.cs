@@ -1,7 +1,6 @@
 ﻿using Application.exceptions;
-using Application.handlers.budget.queries.models;
+using Application.handlers.budget.queries.GetBudgetList;
 using Application.mappers;
-using Application.mediatorHandlers.budget.queries;
 using Application.specs;
 using Domain.Models;
 using FluentAssertions;
