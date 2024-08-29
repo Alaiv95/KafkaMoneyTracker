@@ -1,8 +1,8 @@
 ﻿
 using Application.Dtos;
+using Application.handlers.budget.queries.models;
 using Application.mappers;
 using Application.mediator.interfaces;
-using Application.mediatorHandlers.budget.queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Extentions;

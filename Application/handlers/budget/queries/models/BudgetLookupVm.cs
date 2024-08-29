@@ -1,4 +1,4 @@
-﻿namespace Application.mediatorHandlers.budget.queries;
+﻿namespace Application.handlers.budget.queries.models;
 
 public class BudgetLookUpVm
 {

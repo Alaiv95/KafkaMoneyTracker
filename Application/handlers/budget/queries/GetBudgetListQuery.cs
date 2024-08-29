@@ -1,4 +1,5 @@
-﻿using Application.mediator.interfaces;
+﻿using Application.handlers.budget.queries.models;
+using Application.mediator.interfaces;
 using System.ComponentModel.DataAnnotations;
 
 namespace Application.mediatorHandlers.budget.queries;

@@ -24,4 +24,11 @@ public class AuthRepository : IAuthRepository
 
         return user;
     }
+
+    public async Task<User?> GetByIdAsync(Guid id)
+    {
+        var user = await _context.Users.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
+
+        return user;
+    }
 }

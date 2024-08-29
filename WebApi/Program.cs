@@ -1,5 +1,6 @@
 using Application;
 using Application.kafka;
+using Application.MailClient;
 using Infrastructure;
 using Infrastructure.authentication;
 using WebApi.Extentions;
@@ -39,6 +40,8 @@ public class Program
     {
         services.Configure<JwtOptions>(configuration.GetSection(nameof(JwtOptions)));
         services.Configure<KafkaOptions>(configuration.GetSection(nameof(KafkaOptions)));
+        services.Configure<MailOptions>(configuration.GetSection(nameof(MailOptions)));
+
         services.AddBearerApiAuth(configuration);
         services.AddControllers();
         services.AddSwaggerGen(options =>

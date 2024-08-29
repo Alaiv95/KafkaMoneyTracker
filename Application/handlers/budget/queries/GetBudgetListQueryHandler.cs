@@ -1,4 +1,5 @@
 ﻿using Application.exceptions;
+using Application.handlers.budget.queries.models;
 using Application.mappers;
 using Application.mediator.interfaces;
 using Application.specs;

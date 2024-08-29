@@ -9,6 +9,7 @@ using Application.kafka.producer;
 using Application.kafka.consumer;
 using Application.handlers.transactions;
 using Application.handlers.budget.queries;
+using Application.MailClient;
 
 namespace Application;
 
@@ -33,6 +34,7 @@ public static class DependencyInjection
         services.AddScoped<IEventsProducer, EventsProducer>();
         services.AddHostedService<TransactionsConsumer>();
         services.AddHostedService<BudgetExceededConsumer>();
+        services.AddScoped<IMailClient, SmtpMailClient>();
 
         services.AddMediator();
 

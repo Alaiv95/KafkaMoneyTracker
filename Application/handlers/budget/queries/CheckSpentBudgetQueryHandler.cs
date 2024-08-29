@@ -1,4 +1,5 @@
 ﻿using Application.Dtos;
+using Application.handlers.budget.queries.models;
 using Application.kafka;
 using Application.kafka.producer;
 using Application.mediator.interfaces;
@@ -34,36 +35,55 @@ public class CheckSpentBudgetQueryHandler : IRequestHandler<CheckSpentBudgetQuer
         _transactionSpec = transactionSpecs;
     }
 
-    public async Task<bool> Handle(CheckSpentBudgetQuery command)
+    public async Task<bool> Handle(CheckSpentBudgetQuery query)
     {
-        var budget = await GetActiveBudget(command);
+        var budget = await GetActiveBudget(query);
 
         if (budget is null)
         {
             return false;
         }
 
-        var transactions = await GetTransactionsFromBudgetPeriod(budget, command);
-        var isExceeded = IsBudgetForCategoryExceeded(budget, transactions);
+        var transactions = await GetTransactionsFromBudgetPeriod(budget, query);
+        var spentAmount = GetSpentAmount(transactions);
+        var isExceeded = IsBudgetForCategoryExceeded(budget, spentAmount);
 
         if (isExceeded)
         {
-            await _eventsProducer.Produce(TopicConstants.BudgetExceededTopic, new Message<string, string>
-            {
-                Key = $"{command.UserId.ToString()}{command.CategoryId.ToString()}",
-                Value = JsonSerializer.Serialize(transactions)
-            });
+            await ProduceMessage(query, budget, spentAmount);
         }
 
         return isExceeded;
     }
 
-    private bool IsBudgetForCategoryExceeded(Budget budget, List<Transaction> transactions)
+    private async Task ProduceMessage(CheckSpentBudgetQuery query, Budget budget, double spentAmount)
+    {
+        var messageData = new BudgetExceededDto
+        {
+            BudgetLimit = budget.BudgetLimit,
+            BudgetPeriod = $"{budget.CreatedAt} - {budget.CreatedAt.AddDays(budget.DurationInDays)}",
+            Category = budget.CategoryId.ToString(),
+            SpentAmount = spentAmount,
+            UserId = query.UserId
+        };
+
+        await _eventsProducer.Produce(TopicConstants.BudgetExceededTopic, new Message<string, string>
+        {
+            Key = $"{query.UserId.ToString()}{query.CategoryId.ToString()}",
+            Value = JsonSerializer.Serialize(messageData)
+        });
+    }
+
+    private bool IsBudgetForCategoryExceeded(Budget budget, double moneySpent)
     {
         var transactionLimit = budget.BudgetLimit;
-        var moneySpent = transactions.Where(t => t.Amount < 0).Sum(t=> t.Amount);
         
         return Math.Abs(moneySpent) > transactionLimit;
+    }
+
+    private double GetSpentAmount(List<Transaction> transactions)
+    {
+        return transactions.Where(t => t.Amount < 0).Sum(t => t.Amount);
     }
 
     private async Task<Budget?> GetActiveBudget(CheckSpentBudgetQuery command)
