@@ -15,13 +15,11 @@ public class TransactionsController : ControllerBase
 {
     private readonly IMediator _mediator;
     private readonly TransactionMapper _transactionMapper;
-    private readonly IMailClient _mailClient;
 
-    public TransactionsController(IMediator mediator, TransactionMapper transactionMapper, IMailClient mailClient)
+    public TransactionsController(IMediator mediator, TransactionMapper transactionMapper)
     {
         _mediator = mediator;
         _transactionMapper = transactionMapper;
-        _mailClient = mailClient;
     }
 
     /// <summary>

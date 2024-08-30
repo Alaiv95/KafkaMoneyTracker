@@ -1,17 +1,10 @@
 ﻿using Application.exceptions;
-using Application.handlers.budget.commands.CreateBudget;
 using Application.handlers.transactions.commands.CreateTransaction;
 using Application.kafka.producer;
-using Application.specs;
 using Domain.Models;
 using FluentAssertions;
 using Infrastructure.Repositories;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Tests.Unit.Commands;
 

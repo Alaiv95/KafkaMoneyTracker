@@ -23,16 +23,16 @@ public class BudgetSpecs : ISpec<Budget, GetBudgetListQuery>
 
     Expression<Func<Budget, bool>> WithDateLtOrEt(DateTime? dateFrom)
     {
-        return (budget) => (dateFrom != null && dateFrom.HasValue) ? dateFrom <= budget.CreatedAt.AddDays(budget.DurationInDays) : true;
+        return (budget) => (dateFrom == null) || dateFrom <= budget.CreatedAt.AddDays(budget.DurationInDays);
     }
 
     Expression<Func<Budget, bool>> WithDateGtOrEt(DateTime? dateTo)
     {
-        return (budget) => (dateTo != null && dateTo.HasValue) ? dateTo >= budget.CreatedAt : true;
+        return (budget) => (dateTo == null) || dateTo >= budget.CreatedAt;
     }
 
     Expression<Func<Budget, bool>> WithCategoryId(Guid? categoryId)
     {
-        return (budget) => (categoryId != null && categoryId != Guid.Empty) ? budget.CategoryId == categoryId : true;
+        return (budget) => (categoryId == null || categoryId == Guid.Empty) || budget.CategoryId == categoryId;
     }
 }

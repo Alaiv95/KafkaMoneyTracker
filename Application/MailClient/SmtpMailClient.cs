@@ -8,21 +8,21 @@ namespace Application.MailClient;
 
 public class SmtpMailClient : IMailClient
 {
-    private IOptions<MailOptions> _options;
+    private readonly IOptions<MailOptions> _options;
 
     public SmtpMailClient(IOptions<MailOptions> options) => _options = options;
 
     public async Task SendMailAsync(MailData data)
     {
-        data.From = data.From ?? _options.Value.Email;
-        data.DisplayName = data.DisplayName ?? _options.Value.DisplayName;
+        data.From ??= _options.Value.Email;
+        data.DisplayName ??= _options.Value.DisplayName;
 
         using (var smtpClient = new SmtpClient())
         {
             try
             {
                 await smtpClient.ConnectAsync(_options.Value.Host, _options.Value.Port, SecureSocketOptions.SslOnConnect);
-                smtpClient.Authenticate(_options.Value.Email, _options.Value.Password);
+                await smtpClient.AuthenticateAsync(_options.Value.Email, _options.Value.Password);
                 await smtpClient.SendAsync(ConfigureMessage(data));
             } 
             catch (Exception ex)
@@ -43,8 +43,10 @@ public class SmtpMailClient : IMailClient
         mailMessage.To.Add(new MailboxAddress(data.UserDisplayName, data.To));
         mailMessage.Subject = data.Subject;
 
-        var body = new BodyBuilder();
-        body.HtmlBody = data.Body;
+        var body = new BodyBuilder
+        {
+            HtmlBody = data.Body
+        };
         mailMessage.Body = body.ToMessageBody();
 
         return mailMessage;

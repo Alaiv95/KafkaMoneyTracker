@@ -8,11 +8,11 @@ namespace Application.kafka.consumers;
 
 public abstract class ConsumerBackgroundService : BackgroundService
 {
-    protected ConsumerConfig _config;
+    private ConsumerConfig _config;
     protected IServiceScopeFactory _scopeFactory;
     protected JsonSerializerOptions _options;
 
-    public ConsumerBackgroundService(
+    protected ConsumerBackgroundService(
         IOptions<KafkaOptions> options,
         IServiceScopeFactory scopeFactory
     )
@@ -35,7 +35,7 @@ public abstract class ConsumerBackgroundService : BackgroundService
         }, stoppingToken);
     }
 
-    protected async Task ConsumeAsync(string topic, CancellationToken stoppingToken = default)
+    private async Task ConsumeAsync(string topic, CancellationToken stoppingToken = default)
     {
         using var consumer = new ConsumerBuilder<string, string>(_config).Build();
 
