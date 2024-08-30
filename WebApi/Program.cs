@@ -42,6 +42,15 @@ public class Program
         services.Configure<KafkaOptions>(configuration.GetSection(nameof(KafkaOptions)));
         services.Configure<MailOptions>(configuration.GetSection(nameof(MailOptions)));
 
+        services.PostConfigure<KafkaOptions>(options =>
+        {
+            var bootstrapServers = Environment.GetEnvironmentVariable("KAFKA_BOOTSTRAP_SERVERS");
+            if (!string.IsNullOrEmpty(bootstrapServers))
+            {
+                options.BootstrapServers = bootstrapServers;
+            }
+        });
+        
         services.AddBearerApiAuth(configuration);
         services.AddControllers();
         services.AddSwaggerGen(options =>
