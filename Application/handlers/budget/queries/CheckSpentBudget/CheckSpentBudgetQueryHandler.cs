@@ -112,6 +112,8 @@ public class CheckSpentBudgetQueryHandler : IRequestHandler<CheckSpentBudgetQuer
             DateTo = dateTo,
         };
 
-        return await _transactionRepository.SearchAsync(_transactionSpec.Build(filter));
+        var transactions = await _transactionRepository.SearchAsync(_transactionSpec.Build(filter));
+
+        return transactions.Where(t => t.IsActive).ToList();
     }
 }

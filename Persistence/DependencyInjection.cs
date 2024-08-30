@@ -17,6 +17,7 @@ public static class DependencyInjection
         collection.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
         collection.AddScoped<IBudgetRepository, BudgetRepository>();
         collection.AddScoped<IAuthRepository, AuthRepository>();
+        collection.AddScoped<ITransactionRepository, TransactionRepository>();
 
         return collection;
     }

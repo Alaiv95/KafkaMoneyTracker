@@ -38,7 +38,8 @@ public class CreateTransactionCommandHandler : IRequestHandler<CreateTransaction
             CategoryId = command.CategoryId,
             UserId = command.UserId,
             CreatedAt = DateTime.UtcNow,
-            UpdatedAt = null
+            UpdatedAt = null,
+            IsActive = true
         };
 
         await _eventsProducer.Produce(TopicConstants.TransactionTopc, new Message<string, string>

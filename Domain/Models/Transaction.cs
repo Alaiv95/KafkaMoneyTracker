@@ -7,6 +7,8 @@ public class Transaction : BaseEntity
     public User User { get; set; }
 
     public double Amount { get; set; }
+    
+    public bool IsActive { get; set; }
 
     public Guid CategoryId { get; set; }
 

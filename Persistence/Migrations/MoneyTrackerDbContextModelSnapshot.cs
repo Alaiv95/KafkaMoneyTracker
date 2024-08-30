@@ -70,22 +70,22 @@ namespace Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("e96b1a49-ac5f-4b9b-be2d-879c5f448d66"),
+                            Id = new Guid("47b31ca8-8816-42ee-8843-10d10a0f1555"),
                             CategoryType = 3
                         },
                         new
                         {
-                            Id = new Guid("974221c3-a7c7-43d8-9cbb-8cbbcee37e1c"),
+                            Id = new Guid("6f1a3b79-27a0-48d4-b9c7-62099fde3ee0"),
                             CategoryType = 0
                         },
                         new
                         {
-                            Id = new Guid("e22ac127-8b2a-4af2-a6f2-9594a761d576"),
+                            Id = new Guid("f1ce6039-cdf1-4814-8f56-db9679192fcc"),
                             CategoryType = 2
                         },
                         new
                         {
-                            Id = new Guid("73648b88-3006-46bb-a940-9b3866f188ee"),
+                            Id = new Guid("b8eb0f8e-a4c4-4841-9756-da7161317006"),
                             CategoryType = 1
                         });
                 });
@@ -104,6 +104,9 @@ namespace Infrastructure.Migrations
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("TEXT");
@@ -149,15 +152,6 @@ namespace Infrastructure.Migrations
                     b.HasIndex("Id");
 
                     b.ToTable("Users");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("cc33597e-710a-496d-8f20-91d3d7b5f896"),
-                            CreatedAt = new DateTime(2024, 8, 27, 18, 47, 31, 987, DateTimeKind.Local).AddTicks(7052),
-                            Email = "Admin",
-                            PasswordHash = "AdminHash"
-                        });
                 });
 
             modelBuilder.Entity("Domain.Models.Budget", b =>

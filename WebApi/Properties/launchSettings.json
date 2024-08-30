@@ -14,8 +14,7 @@
       "launchBrowser": true,
       "applicationUrl": "http://localhost:5008",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development",
-        "KAFKA_BOOTSTRAP_SERVERS": "kafka:9092"
+        "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
     "https": {
