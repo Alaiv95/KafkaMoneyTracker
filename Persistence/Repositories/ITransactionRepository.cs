@@ -6,5 +6,7 @@ namespace Infrastructure.Repositories;
 
 public interface ITransactionRepository : IGenericRepository<Transaction>
 {
-    public Task<List<Transaction>> DeactivateTransactionsAsync(Dictionary<Guid, Guid> transactionIds);
+    Task UpdateRangeAsync(List<Transaction> transactions);
+
+    Task<List<Transaction>> GetByIdsAsync(Dictionary<Guid, Guid> itemIds);
 }

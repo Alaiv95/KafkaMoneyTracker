@@ -106,6 +106,7 @@ public class CheckSpenBudgetListQueryHandlerTests
                 CreatedAt = DateTime.Now,
                 Id = Guid.NewGuid(),
                 UserId = Guid.NewGuid(),
+                IsActive = true
             }
         };
 

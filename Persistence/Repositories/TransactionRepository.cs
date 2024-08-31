@@ -8,17 +8,15 @@ public class TransactionRepository : GenericRepository<Transaction>, ITransactio
     public TransactionRepository(IMoneyTrackerDbContext context) 
         : base(context) { }
 
-    public async Task<List<Transaction>> DeactivateTransactionsAsync(Dictionary<Guid, Guid> transactionIds)
+    public async Task UpdateRangeAsync(List<Transaction> transactions)
     {
-        var transactions = await _dbSet
-            .Where(t => transactionIds.ContainsKey(t.Id))
-            .ToListAsync();
-        
-        transactions.ForEach(t => t.IsActive = false);
-        
         _dbSet.UpdateRange(transactions);
         await _context.SaveChangesAsync(default);
+    }
 
-        return transactions;
+    public async Task<List<Transaction>> GetByIdsAsync(Dictionary<Guid, Guid> itemIds)
+    {
+        return await _dbSet.Where(t => itemIds.ContainsKey(t.Id)).ToListAsync();
     }
 }
+

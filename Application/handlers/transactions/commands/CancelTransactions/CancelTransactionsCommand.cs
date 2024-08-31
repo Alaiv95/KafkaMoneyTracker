@@ -1,9 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Application.Dtos;
 using Application.mediator.interfaces;
 
 namespace Application.handlers.transactions.commands.CancelTransactions;
 
-public class CancelTransactionsCommand : IRequest<List<Guid>>
+public class CancelTransactionsCommand : IRequest<List<TransactionLookupDto>>
 {
-    public List<Guid> TransactionIds { get; set; }
+    public List<Guid>? TransactionIds { get; set; }
 }
