@@ -21,13 +21,14 @@ public class CancelTransactionCommandHandlerTests
     public async Task CancelTransactions_WithData_Success()
     {
         // Arrange
+        var userId = Guid.NewGuid();
         var transactionsResponse = new List<Transaction>
         {
             new()
             {
                 Amount = 100,
                 CategoryId = Guid.NewGuid(),
-                UserId = Guid.NewGuid(),
+                UserId = userId,
                 Id = Guid.NewGuid(),
                 IsActive = true,
                 CreatedAt = DateTime.Now
@@ -36,6 +37,15 @@ public class CancelTransactionCommandHandlerTests
             {
                 Amount = 200,
                 CategoryId = Guid.NewGuid(),
+                UserId = userId,
+                Id = Guid.NewGuid(),
+                IsActive = true,
+                CreatedAt = DateTime.Now
+            },
+            new()
+            {
+                Amount = 300,
+                CategoryId = Guid.NewGuid(),
                 UserId = Guid.NewGuid(),
                 Id = Guid.NewGuid(),
                 IsActive = true,
@@ -43,16 +53,19 @@ public class CancelTransactionCommandHandlerTests
             },
         };
 
-        var expectedResult = transactionsResponse.Select(t =>
-            new TransactionLookupDto
-            {
-                CategoryId = t.CategoryId,
-                IsActive = false,
-                Amount = t.Amount
-            });
+        var expectedResult = transactionsResponse
+            .Where(t => t.UserId == userId)
+            .Select(t =>
+                new TransactionLookupDto
+                {
+                    CategoryId = t.CategoryId,
+                    IsActive = false,
+                    Amount = t.Amount
+                });
 
         var command = new CancelTransactionsCommand
         {
+            UserId = userId,
             TransactionIds = new List<Guid>
             {
                 Guid.NewGuid(),

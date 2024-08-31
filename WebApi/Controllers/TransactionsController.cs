@@ -36,9 +36,29 @@ public class TransactionsController : ControllerBase
     {
         var userId = HttpContext.GetUserIdFromToken();
 
-        var createTransactionCommand = _transactionMapper.DtoToCommand(dto, userId);
+        var createTransactionCommand = _transactionMapper.DtoToCreateCommand(dto, userId);
         var result = await _mediator.HandleRequest(createTransactionCommand);
 
+        return Ok(result);
+    }
+    
+    /// <summary>
+    /// Cancel transactions of current user, transaction ids of other users are ignored
+    /// </summary>
+    /// <returns>Return canceled transactions of current user</returns>
+    /// <response code="200">Success</response>
+    /// <response code="400">Bad Request</response>
+    [Authorize]
+    [HttpPut("cancel_by-ids")]
+    [ProducesResponseType(typeof(List<TransactionLookupDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<TransactionLookupDto>> CancelTransactions([FromBody] BaseItemListDto dto)
+    {
+        var userId = HttpContext.GetUserIdFromToken();
+
+        var cancelTransactionCommand = _transactionMapper.DtoToCancelCommand(dto, userId);
+        var result = await _mediator.HandleRequest(cancelTransactionCommand);
+    
         return Ok(result);
     }
 }

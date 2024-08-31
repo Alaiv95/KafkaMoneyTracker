@@ -19,18 +19,20 @@ public class CancelTransactionsCommandHandler : IRequestHandler<CancelTransactio
             return new List<TransactionLookupDto>();
         }
 
-        var transactionsDict = command.TransactionIds.ToDictionary(k => k, v => v);
-
+        var transactionsDict = command.TransactionIds!.ToDictionary(k => k, v => v);
         var transactions = await _transactionRepository.GetByIdsAsync(transactionsDict);
-
-        foreach (var transaction in transactions)
+        var currentUserTransactions = transactions
+            .Where(t => t.UserId == command.UserId)
+            .ToList();
+        
+        foreach (var transaction in currentUserTransactions)
         {
             transaction.IsActive = false;
         }
         
-        await _transactionRepository.UpdateRangeAsync(transactions);
+        await _transactionRepository.UpdateRangeAsync(currentUserTransactions);
 
-        return transactions.Select(t => new TransactionLookupDto
+        return currentUserTransactions.Select(t => new TransactionLookupDto
         {
             CategoryId = t.CategoryId,
             IsActive = t.IsActive,
