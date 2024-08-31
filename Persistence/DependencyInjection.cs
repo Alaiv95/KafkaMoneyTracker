@@ -1,8 +1,8 @@
-﻿using Infrastructure.Repositories;
+﻿using Infrastructure.redis;
+using Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System.Transactions;
 
 namespace Infrastructure;
 
@@ -16,8 +16,11 @@ public static class DependencyInjection
         collection.AddScoped<IMoneyTrackerDbContext>(provider => provider.GetRequiredService<MoneyTrackerDbContext>());
         collection.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
         collection.AddScoped<IBudgetRepository, BudgetRepository>();
-        collection.AddScoped<IAuthRepository, AuthRepository>();
+        collection.AddScoped<AuthRepository>();
+        collection.AddScoped<IAuthRepository, AuthCachedRepository>();
         collection.AddScoped<ITransactionRepository, TransactionRepository>();
+        collection.AddScoped<ICategoryRepository, CachedCategoryRepository>();
+        collection.AddScoped<ICacheClient, RedisCacheClient>();
 
         return collection;
     }

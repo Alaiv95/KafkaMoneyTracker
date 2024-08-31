@@ -38,6 +38,14 @@ public class Program
 
     private static void ConfigureServices(IServiceCollection services, IConfiguration configuration)
     {
+        var redisHost = Environment.GetEnvironmentVariable("REDIS_HOST");
+        var redisName = Environment.GetEnvironmentVariable("REDIS_NAME");
+        
+        services.AddStackExchangeRedisCache(options => {
+            options.Configuration = redisHost ?? "localhost";
+            options.InstanceName = redisName ?? "local";
+        });
+        
         services.Configure<JwtOptions>(configuration.GetSection(nameof(JwtOptions)));
         services.Configure<KafkaOptions>(configuration.GetSection(nameof(KafkaOptions)));
         services.Configure<MailOptions>(configuration.GetSection(nameof(MailOptions)));

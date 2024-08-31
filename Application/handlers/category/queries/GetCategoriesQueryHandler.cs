@@ -7,9 +7,9 @@ namespace Application.handlers.category.queries;
 
 public class GetCategoriesQueryHandler : IRequestHandler<GetCategoriesQuery, List<CategoryLookupDto>>
 {
-    private readonly IGenericRepository<Category> _repository;
+    private readonly ICategoryRepository _repository;
     
-    public GetCategoriesQueryHandler(IGenericRepository<Category> repository) => _repository = repository;
+    public GetCategoriesQueryHandler(ICategoryRepository repository) => _repository = repository;
     
     public async Task<List<CategoryLookupDto>> Handle(GetCategoriesQuery command)
     {

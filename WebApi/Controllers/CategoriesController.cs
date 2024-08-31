@@ -3,6 +3,7 @@ using Application.handlers.category.queries;
 using Application.mediator.interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Distributed;
 
 namespace WebApi.Controllers;
 
@@ -11,10 +12,12 @@ namespace WebApi.Controllers;
 public class CategoriesController : ControllerBase
 {
     private readonly IMediator _mediator;
+    private readonly IDistributedCache _cache;
 
-    public CategoriesController(IMediator mediator)
+    public CategoriesController(IMediator mediator, IDistributedCache distributedCache)
     {
         _mediator = mediator;
+        _cache = distributedCache;
     }
 
     /// <summary>
@@ -32,6 +35,7 @@ public class CategoriesController : ControllerBase
         {
             IncludeCustom = dto.IncludeCustom
         };
+        
         var categories = await _mediator.HandleRequest(getCategoriesQuery);
 
         return Ok(categories);
