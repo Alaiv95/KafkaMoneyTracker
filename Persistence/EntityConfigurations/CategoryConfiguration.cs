@@ -18,21 +18,29 @@ public class CategoryConfiguration : IEntityTypeConfiguration<Category>
             {
                 Id = Guid.NewGuid(),
                 CategoryType = CategoryType.Entertainment,
+                CategoryName = CategoryType.Entertainment.ToString(),
+                IsCustom = false
             },
             new Category
             {
                 Id = Guid.NewGuid(),
                 CategoryType = CategoryType.Food,
+                CategoryName = CategoryType.Food.ToString(),
+                IsCustom = false
             },
             new Category
             {
                 Id = Guid.NewGuid(),
                 CategoryType = CategoryType.Salary,
+                CategoryName = CategoryType.Salary.ToString(),
+                IsCustom = false
             },
             new Category
             {
                 Id = Guid.NewGuid(),
                 CategoryType = CategoryType.Transport,
+                CategoryName = CategoryType.Transport.ToString(),
+                IsCustom = false
             }
         );
     }

@@ -25,6 +25,11 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
     {
         return await _dbSet.FindAsync(id);
     }
+    
+    public async Task<IEnumerable<TEntity>> GetAllAsync()
+    {
+        return await _dbSet.ToListAsync();
+    }
 
     public async Task<List<TEntity>> SearchAsync(Expression<Func<TEntity, bool>> predicate)
     {

@@ -42,7 +42,7 @@ public class BudgetController : ControllerBase
     }
 
     /// <summary>
-    /// Create the Budget for category during chosen period
+    /// Get list of filtered budgets
     /// </summary>
     /// <returns>Returns GetBudgetListDto</returns>
     /// <response code="200">Success</response>

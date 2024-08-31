@@ -23,7 +23,7 @@ public class TransactionsController : ControllerBase
     }
 
     /// <summary>
-    /// Initiate transaction for chosen category
+    /// Initiate transaction for chosen category. If limit of budget exceeded, email message is sent to user
     /// </summary>
     /// <returns>Return boolean true if transaction initiated</returns>
     /// <response code="200">Success</response>
@@ -52,7 +52,7 @@ public class TransactionsController : ControllerBase
     [HttpGet("search")]
     [ProducesResponseType(typeof(List<TransactionLookupExtendedDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<TransactionLookupDto>> SearchTransactions([FromBody] BaseFilterSearchDto dto)
+    public async Task<ActionResult<TransactionLookupDto>> SearchTransactions([FromQuery] BaseFilterSearchDto dto)
     {
         var userId = HttpContext.GetUserIdFromToken();
 

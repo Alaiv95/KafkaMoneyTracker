@@ -10,6 +10,7 @@ using Application.handlers.budget.queries.CheckSpentBudget;
 using Application.handlers.budget.queries.GetBudgetList;
 using Application.handlers.auth.commands.Login;
 using Application.handlers.auth.commands.Register;
+using Application.handlers.category.queries;
 using Application.handlers.transactions.commands.CancelTransactions;
 using Application.handlers.transactions.commands.CreateTransaction;
 using Application.handlers.transactions.queries.GetUserTransactions;
@@ -35,6 +36,7 @@ public static class DependencyInjection
         services.AddScoped<CheckSpentBudgetQueryHandler>();
         services.AddScoped<CancelTransactionsCommandHandler>();
         services.AddScoped<GetUserTransactionQueryHandler>();
+        services.AddScoped<GetCategoriesQueryHandler>();
 
         services.AddScoped<IEventsProducer, EventsProducer>();
         services.AddHostedService<TransactionsConsumer>();

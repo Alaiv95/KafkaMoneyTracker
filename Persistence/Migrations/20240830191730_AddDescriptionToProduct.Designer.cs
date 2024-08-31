@@ -3,6 +3,7 @@ using System;
 using Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(MoneyTrackerDbContext))]
-    partial class MoneyTrackerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240830191730_AddDescriptionToProduct")]
+    partial class AddDescriptionToProduct
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.20");
@@ -58,14 +61,7 @@ namespace Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("CategoryName")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
                     b.Property<int>("CategoryType")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<bool>("IsCustom")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
@@ -77,31 +73,23 @@ namespace Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("83ea6329-9d77-46bc-92c9-d81a43755fd4"),
-                            CategoryName = "Entertainment",
-                            CategoryType = 3,
-                            IsCustom = false
+                            Id = new Guid("47b31ca8-8816-42ee-8843-10d10a0f1555"),
+                            CategoryType = 3
                         },
                         new
                         {
-                            Id = new Guid("cf24cfb3-1cd3-4075-8a52-eb17cfc2a9a0"),
-                            CategoryName = "Food",
-                            CategoryType = 0,
-                            IsCustom = false
+                            Id = new Guid("6f1a3b79-27a0-48d4-b9c7-62099fde3ee0"),
+                            CategoryType = 0
                         },
                         new
                         {
-                            Id = new Guid("9e1a1c0b-1768-46dc-8940-86787a382633"),
-                            CategoryName = "Salary",
-                            CategoryType = 2,
-                            IsCustom = false
+                            Id = new Guid("f1ce6039-cdf1-4814-8f56-db9679192fcc"),
+                            CategoryType = 2
                         },
                         new
                         {
-                            Id = new Guid("8c282001-c121-47d1-b87e-024f98440329"),
-                            CategoryName = "Transport",
-                            CategoryType = 1,
-                            IsCustom = false
+                            Id = new Guid("b8eb0f8e-a4c4-4841-9756-da7161317006"),
+                            CategoryType = 1
                         });
                 });
 
