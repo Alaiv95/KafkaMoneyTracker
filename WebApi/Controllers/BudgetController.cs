@@ -53,7 +53,7 @@ public class BudgetController : ControllerBase
     [ProducesResponseType(typeof(BudgetListVm), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<BudgetListVm>> SearchBudgets([FromQuery] BudgetGetListDto dto)
+    public async Task<ActionResult<BudgetListVm>> SearchBudgets([FromQuery] BaseFilterSearchDto dto)
     {
         var userId = HttpContext.GetUserIdFromToken();
 

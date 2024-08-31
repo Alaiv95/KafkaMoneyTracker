@@ -1,6 +1,6 @@
 ﻿namespace Application.Dtos;
 
-public class BudgetGetListDto
+public class BaseFilterSearchDto
 {
     public DateTime? DateFrom { get; set; }
 

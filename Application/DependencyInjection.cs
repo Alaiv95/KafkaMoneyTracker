@@ -12,6 +12,7 @@ using Application.handlers.auth.commands.Login;
 using Application.handlers.auth.commands.Register;
 using Application.handlers.transactions.commands.CancelTransactions;
 using Application.handlers.transactions.commands.CreateTransaction;
+using Application.handlers.transactions.queries.GetUserTransactions;
 
 namespace Application;
 
@@ -33,6 +34,7 @@ public static class DependencyInjection
         services.AddScoped<CreateTransactionCommandHandler>();
         services.AddScoped<CheckSpentBudgetQueryHandler>();
         services.AddScoped<CancelTransactionsCommandHandler>();
+        services.AddScoped<GetUserTransactionQueryHandler>();
 
         services.AddScoped<IEventsProducer, EventsProducer>();
         services.AddHostedService<TransactionsConsumer>();

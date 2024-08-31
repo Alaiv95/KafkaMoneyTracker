@@ -43,6 +43,26 @@ public class TransactionsController : ControllerBase
     }
     
     /// <summary>
+    /// Get list of transactions
+    /// </summary>
+    /// <returns>Returns list of TransactionLookupExtendedDto</returns>
+    /// <response code="200">Success</response>
+    /// <response code="400">Bad Request</response>
+    [Authorize]
+    [HttpGet("search")]
+    [ProducesResponseType(typeof(List<TransactionLookupExtendedDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<TransactionLookupDto>> SearchTransactions([FromBody] BaseFilterSearchDto dto)
+    {
+        var userId = HttpContext.GetUserIdFromToken();
+
+        var searchQuery = _transactionMapper.DtoToGetUserTransactionsQuery(dto, userId);
+        var result = await _mediator.HandleRequest(searchQuery);
+    
+        return Ok(result);
+    }
+    
+    /// <summary>
     /// Cancel transactions of current user, transaction ids of other users are ignored
     /// </summary>
     /// <returns>Return canceled transactions of current user</returns>

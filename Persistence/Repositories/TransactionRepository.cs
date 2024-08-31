@@ -1,12 +1,15 @@
-﻿using Domain.Models;
+﻿using System.Linq.Expressions;
+using Domain.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories;
 
-public class TransactionRepository : GenericRepository<Transaction>, ITransactionRepository 
+public class TransactionRepository : GenericRepository<Transaction>, ITransactionRepository
 {
-    public TransactionRepository(IMoneyTrackerDbContext context) 
-        : base(context) { }
+    public TransactionRepository(IMoneyTrackerDbContext context)
+        : base(context)
+    {
+    }
 
     public async Task UpdateRangeAsync(List<Transaction> transactions)
     {
@@ -18,5 +21,12 @@ public class TransactionRepository : GenericRepository<Transaction>, ITransactio
     {
         return await _dbSet.Where(t => itemIds.Contains(t.Id)).ToListAsync();
     }
-}
 
+    public async Task<List<Transaction>> SearchWithIncludeAsync(Expression<Func<Transaction, bool>> predicate)
+    {
+        return await _dbSet
+            .Where(predicate)
+            .Include(t => t.Category)
+            .ToListAsync();
+    }
+}
