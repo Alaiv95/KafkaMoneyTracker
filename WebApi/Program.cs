@@ -17,20 +17,20 @@ public class Program
 
         var app = builder.Build();
 
-        using (var scope = app.Services.CreateScope())
-        {
-            var services = scope.ServiceProvider;
-
-            try
-            {
-                var context = services.GetRequiredService<MoneyTrackerDbContext>();
-                context.Database.EnsureCreated();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-            }
-        }
+        // using (var scope = app.Services.CreateScope())
+        // {
+        //     var services = scope.ServiceProvider;
+        //
+        //     try
+        //     {
+        //         var context = services.GetRequiredService<MoneyTrackerDbContext>();
+        //         context.Database.EnsureCreated();
+        //     }
+        //     catch (Exception e)
+        //     {
+        //         Console.WriteLine(e.Message);
+        //     }
+        // }
 
         var env = builder.Environment;
         ConfigureApp(app, env);

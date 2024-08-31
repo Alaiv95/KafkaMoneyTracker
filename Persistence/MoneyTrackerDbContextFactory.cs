@@ -13,7 +13,7 @@ public class MoneyTrackerDbContextFactory : IDesignTimeDbContextFactory<MoneyTra
         var dbConnection = configuration.GetConnectionString("DefaultConnection");
         
         var optionsBuilder = new DbContextOptionsBuilder<MoneyTrackerDbContext>();
-        optionsBuilder.UseSqlite(dbConnection);
+        optionsBuilder.UseNpgsql(dbConnection);
 
         return new MoneyTrackerDbContext(optionsBuilder.Options);
     }

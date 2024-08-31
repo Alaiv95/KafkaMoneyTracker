@@ -49,6 +49,20 @@ services:
       - REDIS_PORT=6379
       - REDIS_DATABASES=16
 
+  main-db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: main
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata-main:/var/lib/postgresql/data
+    networks:
+      - kafka-network
+
   app:
     build: 
       context: .
@@ -60,8 +74,13 @@ services:
       KAFKA_BOOTSTRAP_SERVERS: kafka:9092
       REDIS_HOST: redis
       REDIS_NAME: docker-redis
+      DB_CONNECTION: Host=main-db;Port=5432;User Id=postgres;Password=postgres;Database=main;
     networks:
       - kafka-network
     depends_on:
       - kafka
       - redis
+      - main-db
+
+volumes:
+  pgdata-main:

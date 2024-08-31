@@ -10,9 +10,10 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddPersistence(this IServiceCollection collection, IConfiguration configuration)
     {
-        var dbConnection = configuration.GetConnectionString("DefaultConnection");
+        var connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION") ?? "DefaultConnection";
+        var dbConnection = configuration.GetConnectionString(connectionString);
 
-        collection.AddDbContext<MoneyTrackerDbContext>(options => options.UseSqlite(dbConnection));
+        collection.AddDbContext<MoneyTrackerDbContext>(options => options.UseNpgsql(dbConnection));
         collection.AddScoped<IMoneyTrackerDbContext>(provider => provider.GetRequiredService<MoneyTrackerDbContext>());
         collection.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
         collection.AddScoped<IBudgetRepository, BudgetRepository>();
