@@ -8,5 +8,5 @@ public interface ITransactionRepository : IGenericRepository<Transaction>
 {
     Task UpdateRangeAsync(List<Transaction> transactions);
 
-    Task<List<Transaction>> GetByIdsAsync(Dictionary<Guid, Guid> itemIds);
+    Task<List<Transaction>> GetByIdsAsync(List<Guid> itemIds);
 }

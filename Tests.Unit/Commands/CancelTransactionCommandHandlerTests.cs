@@ -74,7 +74,7 @@ public class CancelTransactionCommandHandlerTests
         };
 
         _transactionRepository
-            .Setup(repository => repository.GetByIdsAsync(It.IsAny<Dictionary<Guid, Guid>>()))
+            .Setup(repository => repository.GetByIdsAsync(It.IsAny<List<Guid>>()))
             .ReturnsAsync(() => transactionsResponse);
 
         var handler = new CancelTransactionsCommandHandler(_transactionRepository.Object);

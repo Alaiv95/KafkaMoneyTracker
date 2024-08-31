@@ -18,9 +18,8 @@ public class CancelTransactionsCommandHandler : IRequestHandler<CancelTransactio
         {
             return new List<TransactionLookupDto>();
         }
-
-        var transactionsDict = command.TransactionIds!.ToDictionary(k => k, v => v);
-        var transactions = await _transactionRepository.GetByIdsAsync(transactionsDict);
+        
+        var transactions = await _transactionRepository.GetByIdsAsync(command.TransactionIds!);
         var currentUserTransactions = transactions
             .Where(t => t.UserId == command.UserId)
             .ToList();

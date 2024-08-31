@@ -14,9 +14,9 @@ public class TransactionRepository : GenericRepository<Transaction>, ITransactio
         await _context.SaveChangesAsync(default);
     }
 
-    public async Task<List<Transaction>> GetByIdsAsync(Dictionary<Guid, Guid> itemIds)
+    public async Task<List<Transaction>> GetByIdsAsync(List<Guid> itemIds)
     {
-        return await _dbSet.Where(t => itemIds.ContainsKey(t.Id)).ToListAsync();
+        return await _dbSet.Where(t => itemIds.Contains(t.Id)).ToListAsync();
     }
 }
 
