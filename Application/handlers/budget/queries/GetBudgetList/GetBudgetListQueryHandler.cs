@@ -2,6 +2,7 @@
 using Application.mappers;
 using Application.mediator.interfaces;
 using Application.specs;
+using AutoMapper;
 using Infrastructure.Repositories;
 
 namespace Application.handlers.budget.queries.GetBudgetList;
@@ -10,13 +11,13 @@ public class GetBudgetListQueryHandler : IRequestHandler<GetBudgetListQuery, Bud
 {
     private readonly IBudgetRepository _budgetRepository;
     private readonly BudgetSpecs _budgetSpecs;
-    private readonly BudgetMapper _budgetMapper;
+    private readonly IMapper _budgetMapper;
 
-    public GetBudgetListQueryHandler(IBudgetRepository budgetRepository, BudgetSpecs budgetSpecs, BudgetMapper budgetMapper)
+    public GetBudgetListQueryHandler(IBudgetRepository budgetRepository, BudgetSpecs budgetSpecs, IMapper mapper)
     {
         _budgetRepository = budgetRepository;
         _budgetSpecs = budgetSpecs;
-        _budgetMapper = budgetMapper;
+        _budgetMapper = mapper;
     }
 
     public async Task<BudgetListVm> Handle(GetBudgetListQuery query)
@@ -27,7 +28,7 @@ public class GetBudgetListQueryHandler : IRequestHandler<GetBudgetListQuery, Bud
         }
 
         var budgetList = await _budgetRepository.SearchAsync(_budgetSpecs.Build(query));
-        var budgetLookupList = budgetList.Select(_budgetMapper.EntityToDto).ToList();
+        var budgetLookupList = _budgetMapper.Map<List<BudgetLookUpVm>>(budgetList);
 
         return new BudgetListVm { Budgets = budgetLookupList };
     }

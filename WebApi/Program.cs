@@ -38,6 +38,8 @@ public class Program
 
     private static void ConfigureServices(IServiceCollection services, IConfiguration configuration)
     {
+        AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+        
         var redisHost = Environment.GetEnvironmentVariable("REDIS_HOST");
         var redisName = Environment.GetEnvironmentVariable("REDIS_NAME");
         

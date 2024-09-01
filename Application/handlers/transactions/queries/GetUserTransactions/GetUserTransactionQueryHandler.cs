@@ -3,6 +3,8 @@ using Application.exceptions;
 using Application.mappers;
 using Application.mediator.interfaces;
 using Application.specs;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Infrastructure.Repositories;
 
 namespace Application.handlers.transactions.queries.GetUserTransactions;
@@ -11,12 +13,12 @@ public class GetUserTransactionQueryHandler :
     IRequestHandler<GetUserTransactionsQuery, List<TransactionLookupExtendedDto>>
 {
     private readonly ITransactionRepository _transactionRepository;
-    private readonly TransactionMapper _transactionsMapper;
+    private readonly IMapper _transactionsMapper;
     private readonly TransactionSpecs _spec;
 
     public GetUserTransactionQueryHandler(
         ITransactionRepository transactionRepository,
-        TransactionMapper mapper,
+        IMapper mapper,
         TransactionSpecs spec
     )
     {
@@ -33,11 +35,12 @@ public class GetUserTransactionQueryHandler :
                 $"DateFrom {query.DateFrom} can't be less then DateTo {query.DateTo}"
             );
         }
-
-        var baseSearchDto = _transactionsMapper.QueryToBaseSearchDto(query);
+        
+        var baseSearchDto = _transactionsMapper.Map<BaseSearchDto>(query);
+        
         var transactions = await _transactionRepository
             .SearchWithIncludeAsync(_spec.Build(baseSearchDto));
 
-        return _transactionsMapper.TransactionsToExtendedLookupDto(transactions);
+        return _transactionsMapper.Map<List<TransactionLookupExtendedDto>>(transactions);
     }
 }

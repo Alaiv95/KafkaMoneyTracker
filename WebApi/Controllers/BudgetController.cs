@@ -1,7 +1,9 @@
 ﻿using Application.Dtos;
+using Application.handlers.budget.commands.CreateBudget;
 using Application.handlers.budget.queries.GetBudgetList;
 using Application.mappers;
 using Application.mediator.interfaces;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Extentions;
@@ -13,9 +15,9 @@ namespace WebApi.Controllers;
 public class BudgetController : ControllerBase
 {
     private readonly IMediator _mediator;
-    private readonly BudgetMapper _budgetMapper;
+    private readonly IMapper _budgetMapper;
 
-    public BudgetController(IMediator mediator, BudgetMapper budgetMapper)
+    public BudgetController(IMediator mediator, IMapper budgetMapper)
     {
         _mediator = mediator;
         _budgetMapper = budgetMapper;
@@ -33,9 +35,9 @@ public class BudgetController : ControllerBase
     [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<Guid>> AddBudget([FromBody] BudgetCreateDto dto)
     {
-        var userId = HttpContext.GetUserIdFromToken();
-
-        var createBudgetCommand = _budgetMapper.DtoToCommand(dto, userId);
+        var createBudgetCommand = _budgetMapper.Map<CreateBudgetCommand>(dto);
+        createBudgetCommand.UserId = HttpContext.GetUserIdFromToken();
+        
         var createdBudgetId = await _mediator.HandleRequest(createBudgetCommand);
 
         return Ok(createdBudgetId);
@@ -55,11 +57,11 @@ public class BudgetController : ControllerBase
     [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<BudgetListVm>> SearchBudgets([FromQuery] BaseFilterSearchDto dto)
     {
-        var userId = HttpContext.GetUserIdFromToken();
-
-        var getBudgetQuery = _budgetMapper.DtoToQuery(dto, userId);
+        var getBudgetQuery = _budgetMapper.Map<GetBudgetListQuery>(dto);
+        getBudgetQuery.UserId = HttpContext.GetUserIdFromToken();
+        
         var budgetList = await _mediator.HandleRequest(getBudgetQuery);
 
-        return (budgetList == null || !budgetList.Budgets.Any()) ? NoContent() : Ok(budgetList);
+        return (!budgetList.Budgets.Any()) ? NoContent() : Ok(budgetList);
     }
 }

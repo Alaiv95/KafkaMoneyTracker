@@ -1,6 +1,9 @@
 ﻿using Application.Dtos;
+using Application.handlers.auth.commands.Login;
+using Application.handlers.auth.commands.Register;
 using Application.mappers;
 using Application.mediator.interfaces;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers;
@@ -10,12 +13,12 @@ namespace WebApi.Controllers;
 public class AuthController : ControllerBase
 {
     private readonly IMediator _mediator;
-    private readonly AuthMapper _authMapper;
+    private readonly IMapper _mapper;
 
-    public AuthController(IMediator mediator, AuthMapper authMapper)
+    public AuthController(IMediator mediator, IMapper mapper)
     {
         _mediator = mediator;
-        _authMapper = authMapper;
+        _mapper = mapper;
     }
 
     /// <summary>
@@ -29,7 +32,7 @@ public class AuthController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<bool>> Register([FromBody] AuthDto dto)
     {
-        var registerUserCommand = _authMapper.DtoToRegisterUserCommand(dto);
+        var registerUserCommand = _mapper.Map<RegisterUserCommand>(dto);
         var result = await _mediator.HandleRequest(registerUserCommand);
 
         return Ok(result);
@@ -48,7 +51,7 @@ public class AuthController : ControllerBase
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public async Task<ActionResult<string>> Login([FromBody] AuthDto dto)
     { 
-        var loginUserCommand = _authMapper.DtoToLoginCommand(dto);
+        var loginUserCommand = _mapper.Map<LoginCommand>(dto);
         var result = await _mediator.HandleRequest(loginUserCommand);
 
         return Ok(result);

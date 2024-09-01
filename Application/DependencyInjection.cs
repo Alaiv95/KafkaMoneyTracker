@@ -1,7 +1,6 @@
 ﻿using Application.mappers;
 using Application.mediator;
 using Application.specs;
-using Microsoft.Extensions.DependencyInjection;
 using Application.kafka.producer;
 using Application.kafka.consumer;
 using Application.MailClient;
@@ -15,13 +14,20 @@ using Application.handlers.category.queries;
 using Application.handlers.transactions.commands.CancelTransactions;
 using Application.handlers.transactions.commands.CreateTransaction;
 using Application.handlers.transactions.queries.GetUserTransactions;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Application;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection AddApplication(this IServiceCollection services)
+    public static void AddApplication(this IServiceCollection services)
     {
+        services.AddAutoMapper(
+            typeof(AuthMappingProfile),
+            typeof(BudgetMappingProfile),
+            typeof(TransactionMappingProfile)
+        );
+        
         services.AddScoped<BudgetSpecs>();
         services.AddScoped<TransactionSpecs>();
 
@@ -46,7 +52,5 @@ public static class DependencyInjection
         services.AddScoped<IMailClient, SmtpMailClient>();
 
         services.AddMediator();
-
-        return services;
     }
 }

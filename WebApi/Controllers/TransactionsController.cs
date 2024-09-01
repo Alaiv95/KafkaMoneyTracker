@@ -1,8 +1,12 @@
 ﻿
 using Application.Dtos;
+using Application.handlers.transactions.commands.CancelTransactions;
+using Application.handlers.transactions.commands.CreateTransaction;
+using Application.handlers.transactions.queries.GetUserTransactions;
 using Application.MailClient;
 using Application.mappers;
 using Application.mediator.interfaces;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Extentions;
@@ -14,9 +18,9 @@ namespace WebApi.Controllers;
 public class TransactionsController : ControllerBase
 {
     private readonly IMediator _mediator;
-    private readonly TransactionMapper _transactionMapper;
+    private readonly IMapper _transactionMapper;
 
-    public TransactionsController(IMediator mediator, TransactionMapper transactionMapper)
+    public TransactionsController(IMediator mediator, IMapper transactionMapper)
     {
         _mediator = mediator;
         _transactionMapper = transactionMapper;
@@ -34,9 +38,9 @@ public class TransactionsController : ControllerBase
     [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<bool>> InitTransaction([FromBody] TransactionCreateDto dto)
     {
-        var userId = HttpContext.GetUserIdFromToken();
-
-        var createTransactionCommand = _transactionMapper.DtoToCreateCommand(dto, userId);
+        var createTransactionCommand = _transactionMapper.Map<CreateTransactionCommand>(dto);
+        createTransactionCommand.UserId = HttpContext.GetUserIdFromToken();
+        
         var result = await _mediator.HandleRequest(createTransactionCommand);
 
         return Ok(result);
@@ -54,9 +58,9 @@ public class TransactionsController : ControllerBase
     [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<TransactionLookupDto>> SearchTransactions([FromQuery] BaseFilterSearchDto dto)
     {
-        var userId = HttpContext.GetUserIdFromToken();
+        var searchQuery = _transactionMapper.Map<GetUserTransactionsQuery>(dto);
+        searchQuery.UserId = HttpContext.GetUserIdFromToken();
 
-        var searchQuery = _transactionMapper.DtoToGetUserTransactionsQuery(dto, userId);
         var result = await _mediator.HandleRequest(searchQuery);
     
         return Ok(result);
@@ -74,9 +78,9 @@ public class TransactionsController : ControllerBase
     [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<TransactionLookupDto>> CancelTransactions([FromBody] BaseItemListDto dto)
     {
-        var userId = HttpContext.GetUserIdFromToken();
-
-        var cancelTransactionCommand = _transactionMapper.DtoToCancelCommand(dto, userId);
+        var cancelTransactionCommand = _transactionMapper.Map<CancelTransactionsCommand>(dto);
+        cancelTransactionCommand.UserId = HttpContext.GetUserIdFromToken();
+        
         var result = await _mediator.HandleRequest(cancelTransactionCommand);
     
         return Ok(result);
