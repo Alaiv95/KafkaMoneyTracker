@@ -1,5 +1,6 @@
 ﻿using Application.Dtos;
 using Application.handlers.budget.commands.CreateBudget;
+using Application.handlers.budget.commands.UpdateBudget;
 using Application.handlers.budget.queries.GetBudgetList;
 using Application.mappers;
 using Application.mediator.interfaces;
@@ -41,6 +42,26 @@ public class BudgetController : ControllerBase
         var createdBudgetId = await _mediator.HandleRequest(createBudgetCommand);
 
         return Ok(createdBudgetId);
+    }
+    
+    /// <summary>
+    /// Update active Budget for chosen category
+    /// </summary>
+    /// <returns>Returns changed fields of budget</returns>
+    /// <response code="200">Success</response>
+    /// <response code="400">Bad Request</response>
+    [Authorize]
+    [HttpPut("update")]
+    [ProducesResponseType(typeof(BudgetUpdateResponseDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<BudgetUpdateResponseDto>> UpdateBudget([FromBody] BudgetUpdateRequestDto dto)
+    {
+        var createBudgetCommand = _budgetMapper.Map<UpdateBudgetCommand>(dto);
+        createBudgetCommand.UserId = HttpContext.GetUserIdFromToken();
+        
+        var updatedBudget = await _mediator.HandleRequest(createBudgetCommand);
+
+        return Ok(updatedBudget);
     }
 
     /// <summary>
