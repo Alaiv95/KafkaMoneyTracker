@@ -50,10 +50,12 @@ public class BudgetController : ControllerBase
     /// <returns>Returns changed fields of budget</returns>
     /// <response code="200">Success</response>
     /// <response code="400">Bad Request</response>
+    /// <response code="404">Not found</response>
     [Authorize]
     [HttpPut("update")]
     [ProducesResponseType(typeof(BudgetUpdateResponseDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
     public async Task<ActionResult<BudgetUpdateResponseDto>> UpdateBudget([FromBody] BudgetUpdateRequestDto dto)
     {
         var createBudgetCommand = _budgetMapper.Map<UpdateBudgetCommand>(dto);
