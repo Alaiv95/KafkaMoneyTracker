@@ -2,6 +2,7 @@
 using Infrastructure.Repositories;
 using Application.exceptions;
 using Infrastructure.authentication;
+using Infrastructure.Repositories.interfaces;
 
 namespace Application.handlers.auth.commands.Login;
 

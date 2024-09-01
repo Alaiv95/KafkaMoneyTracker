@@ -1,5 +1,6 @@
-﻿using Infrastructure.Models;
+﻿using Domain.Entities.User;
 using Infrastructure.redis;
+using Infrastructure.Repositories.interfaces;
 
 namespace Infrastructure.Repositories;
 
@@ -12,19 +13,19 @@ public class CachedAuthRepository : IAuthRepository
     {
         _authRepository = authRepository;
         _cacheClient = cacheClient;
-    }   
-    
-    public async Task AddUserAsync(User user)
+    }
+
+    public async Task AddUserAsync(UserEntity user)
     {
         await _authRepository.AddUserAsync(user);
     }
 
-    public async Task<User?> GetByEmailAsync(string email)
+    public async Task<UserEntity?> GetByEmailAsync(string email)
     {
         return await _cacheClient.GetOrSetAndGetFromCache(email, () => _authRepository.GetByEmailAsync(email));
     }
 
-    public async Task<User?> GetByIdAsync(Guid id)
+    public async Task<UserEntity?> GetByIdAsync(Guid id)
     {
         return await _cacheClient.GetOrSetAndGetFromCache(id.ToString(), () => _authRepository.GetByIdAsync(id));
     }

@@ -1,5 +1,6 @@
 ﻿using Infrastructure.redis;
 using Infrastructure.Repositories;
+using Infrastructure.Repositories.interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

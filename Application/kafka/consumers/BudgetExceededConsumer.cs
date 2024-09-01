@@ -7,6 +7,7 @@ using Infrastructure.Repositories;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using System.Text.Json;
+using Infrastructure.Repositories.interfaces;
 using Serilog;
 
 namespace Application.kafka.consumer;

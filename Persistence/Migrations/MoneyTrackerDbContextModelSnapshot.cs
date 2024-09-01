@@ -22,7 +22,7 @@ namespace Infrastructure.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Domain.Models.Budget", b =>
+            modelBuilder.Entity("Infrastructure.Models.Budget", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -57,7 +57,7 @@ namespace Infrastructure.Migrations
                     b.ToTable("Budgets");
                 });
 
-            modelBuilder.Entity("Domain.Models.Category", b =>
+            modelBuilder.Entity("Infrastructure.Models.Category", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -86,35 +86,35 @@ namespace Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("8cedf632-1440-4d53-92b0-5c90accca124"),
+                            Id = new Guid("763c4140-735f-4e19-a1cc-cbc91bb57324"),
                             CategoryName = "Entertainment",
                             CategoryType = 3,
                             IsCustom = false
                         },
                         new
                         {
-                            Id = new Guid("42665c94-7410-40d3-9c2a-b78964805b13"),
+                            Id = new Guid("3521e264-0609-4576-9829-098a01f8af8a"),
                             CategoryName = "Food",
                             CategoryType = 0,
                             IsCustom = false
                         },
                         new
                         {
-                            Id = new Guid("26f90784-0da6-45c3-92c4-ca08646c3fc9"),
+                            Id = new Guid("dc701e22-ccb9-4b0c-af62-20d08d44b0a4"),
                             CategoryName = "Salary",
                             CategoryType = 2,
                             IsCustom = false
                         },
                         new
                         {
-                            Id = new Guid("041094ee-b393-4091-992d-f962043a1f1e"),
+                            Id = new Guid("e2dae8c5-7275-458a-8855-3b6a9977f53b"),
                             CategoryName = "Transport",
                             CategoryType = 1,
                             IsCustom = false
                         });
                 });
 
-            modelBuilder.Entity("Domain.Models.Transaction", b =>
+            modelBuilder.Entity("Infrastructure.Models.Transaction", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -128,6 +128,10 @@ namespace Infrastructure.Migrations
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Currency")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
@@ -149,7 +153,7 @@ namespace Infrastructure.Migrations
                     b.ToTable("Transactions");
                 });
 
-            modelBuilder.Entity("Domain.Models.User", b =>
+            modelBuilder.Entity("Infrastructure.Models.User", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -178,15 +182,15 @@ namespace Infrastructure.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("Domain.Models.Budget", b =>
+            modelBuilder.Entity("Infrastructure.Models.Budget", b =>
                 {
-                    b.HasOne("Domain.Models.Category", "Category")
+                    b.HasOne("Infrastructure.Models.Category", "Category")
                         .WithMany("Budgets")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Domain.Models.User", "User")
+                    b.HasOne("Infrastructure.Models.User", "User")
                         .WithMany("Budgets")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -197,15 +201,15 @@ namespace Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Domain.Models.Transaction", b =>
+            modelBuilder.Entity("Infrastructure.Models.Transaction", b =>
                 {
-                    b.HasOne("Domain.Models.Category", "Category")
+                    b.HasOne("Infrastructure.Models.Category", "Category")
                         .WithMany("Transactions")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Domain.Models.User", "User")
+                    b.HasOne("Infrastructure.Models.User", "User")
                         .WithMany("Transactions")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -216,14 +220,14 @@ namespace Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Domain.Models.Category", b =>
+            modelBuilder.Entity("Infrastructure.Models.Category", b =>
                 {
                     b.Navigation("Budgets");
 
                     b.Navigation("Transactions");
                 });
 
-            modelBuilder.Entity("Domain.Models.User", b =>
+            modelBuilder.Entity("Infrastructure.Models.User", b =>
                 {
                     b.Navigation("Budgets");
 

@@ -1,12 +1,13 @@
-﻿using Infrastructure.Models;
+﻿using Domain.Entities.User;
+using Infrastructure.Models;
 
-namespace Infrastructure.Repositories;
+namespace Infrastructure.Repositories.interfaces;
 
 public interface IAuthRepository
 {
-    public Task AddUserAsync(User user);
+    public Task AddUserAsync(UserEntity user);
 
-    public Task<User?> GetByEmailAsync(string email);
+    public Task<UserEntity?> GetByEmailAsync(string email);
 
-    public Task<User?> GetByIdAsync(Guid id);
+    public Task<UserEntity?> GetByIdAsync(Guid id);
 }
