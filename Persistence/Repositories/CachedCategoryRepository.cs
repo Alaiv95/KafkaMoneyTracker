@@ -44,4 +44,11 @@ public class CachedCategoryRepository : ICategoryRepository
     {
         return await _repository.GetByNameAsync(name);
     }
+
+    public async Task DeleteAsync(Category category)
+    {
+        await _cacheClient.InvalidateCache(_getAllKey);
+        await _cacheClient.InvalidateCache(category.Id.ToString());
+        await _repository.DeleteAsync(category);
+    }
 }

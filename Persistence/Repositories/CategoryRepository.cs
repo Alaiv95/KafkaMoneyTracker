@@ -14,4 +14,10 @@ public class CategoryRepository : GenericRepository<Category>, ICategoryReposito
     {
         return await _dbSet.AsNoTracking().FirstOrDefaultAsync(c => c.CategoryName == name);
     }
+
+    public async Task DeleteAsync(Category category)
+    {
+        _dbSet.Remove(category);
+        await _context.SaveChangesAsync(default);
+    }
 }

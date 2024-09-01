@@ -10,6 +10,7 @@ using Application.handlers.auth.commands.Login;
 using Application.handlers.auth.commands.Register;
 using Application.handlers.budget.commands.UpdateBudget;
 using Application.handlers.category.command.AddCategory;
+using Application.handlers.category.command.DeleteCategory;
 using Application.handlers.category.queries;
 using Application.handlers.transactions.commands.CancelTransactions;
 using Application.handlers.transactions.commands.CreateTransaction;
@@ -35,6 +36,7 @@ public static class DependencyInjection
             var getCategoriesQueryHandler = provider.GetRequiredService<GetCategoriesQueryHandler>();
             var addCategoryCommandHandler = provider.GetRequiredService<AddCategoryCommandHandler>();
             var updateBudgetCommandHandler = provider.GetRequiredService<UpdateBudgetCommandHandler>();
+            var deleteCategoryCommandHandler = provider.GetRequiredService<DeleteCategoryCommandHandler>();
 
             mediator.Register(createBudgetCommandHandler);
             mediator.Register(getBudgetQueryHandler);
@@ -47,6 +49,7 @@ public static class DependencyInjection
             mediator.Register(getCategoriesQueryHandler);
             mediator.Register(addCategoryCommandHandler);
             mediator.Register(updateBudgetCommandHandler);
+            mediator.Register(deleteCategoryCommandHandler);
 
             return mediator;
         });

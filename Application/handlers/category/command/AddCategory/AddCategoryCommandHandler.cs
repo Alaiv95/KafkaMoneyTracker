@@ -25,7 +25,8 @@ public class AddCategoryCommandHandler : IRequestHandler<AddCategoryCommand, Cat
             CategoryType = CategoryType.Custom,
             CategoryName = command.Name,
             Id = Guid.NewGuid(),
-            IsCustom = true
+            IsCustom = true,
+            CreatedBy = command.UserId
         };
 
         await _repository.AddAsync(category);

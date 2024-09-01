@@ -15,4 +15,6 @@ public class Category
     public ICollection<Transaction> Transactions { get; set; }
 
     public ICollection<Budget> Budgets { get; set; }
+    
+    public Guid? CreatedBy { get; set; }
 }

@@ -11,6 +11,7 @@ using Application.handlers.auth.commands.Login;
 using Application.handlers.auth.commands.Register;
 using Application.handlers.budget.commands.UpdateBudget;
 using Application.handlers.category.command.AddCategory;
+using Application.handlers.category.command.DeleteCategory;
 using Application.handlers.category.queries;
 using Application.handlers.transactions.commands.CancelTransactions;
 using Application.handlers.transactions.commands.CreateTransaction;
@@ -43,6 +44,7 @@ public static class DependencyInjection
         services.AddScoped<GetCategoriesQueryHandler>();
         services.AddScoped<AddCategoryCommandHandler>();
         services.AddScoped<UpdateBudgetCommandHandler>();
+        services.AddScoped<DeleteCategoryCommandHandler>();
 
         services.AddScoped<IEventsProducer, EventsProducer>();
         services.AddHostedService<TransactionsConsumer>();
