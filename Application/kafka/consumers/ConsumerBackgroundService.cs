@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using System.Text.Json;
+using Serilog;
 
 namespace Application.kafka.consumers;
 
@@ -44,6 +45,7 @@ public abstract class ConsumerBackgroundService : BackgroundService
         while (!stoppingToken.IsCancellationRequested)
         {
             var consumeResult = consumer.Consume(stoppingToken);
+            Log.Information($"Start handling message {consumeResult.Message.Value} in topic {GetTopic()}");
             await HandleMessage(consumeResult.Message.Value);
         }
 

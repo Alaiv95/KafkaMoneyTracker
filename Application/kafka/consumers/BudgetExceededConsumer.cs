@@ -7,6 +7,7 @@ using Infrastructure.Repositories;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using System.Text.Json;
+using Serilog;
 
 namespace Application.kafka.consumer;
 
@@ -22,7 +23,6 @@ public class BudgetExceededConsumer : ConsumerBackgroundService
         try
         {
             using var scope = _scopeFactory.CreateScope();
-            var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
             var mailClient = scope.ServiceProvider.GetRequiredService<IMailClient>();
             var authRepository = scope.ServiceProvider.GetRequiredService<IAuthRepository>();
 
@@ -32,11 +32,12 @@ public class BudgetExceededConsumer : ConsumerBackgroundService
             var message = CreateMailData(exceededDto!, email);
 
             await mailClient.SendMailAsync(message);
+            
+            Log.Information($"Successfully consumed message {messageValue} in topic {GetTopic()}");
         }
         catch (Exception ex)
         {
-            //TODO add serilog
-            Console.WriteLine(ex.Message);
+            Log.Error($"Error occured consuming message {messageValue} in topic {GetTopic()} with exception {ex.Message}");
         }
     }
 

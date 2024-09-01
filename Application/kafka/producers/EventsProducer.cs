@@ -1,5 +1,6 @@
 ﻿using Confluent.Kafka;
 using Microsoft.Extensions.Options;
+using Serilog;
 
 namespace Application.kafka.producer;
 
@@ -20,6 +21,7 @@ public class EventsProducer : IEventsProducer
     }
     public async Task Produce(string topic, Message<string, string> message)
     {
+        Log.Information($"Producing message {message.Value} for topic {topic}");
         await _producer.ProduceAsync(topic, message);
     }
 }

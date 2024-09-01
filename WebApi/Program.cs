@@ -1,8 +1,11 @@
 using Application;
+using Application.handlers.auth.commands.Login;
 using Application.kafka;
 using Application.MailClient;
 using Infrastructure;
 using Infrastructure.authentication;
+using Serilog;
+using Serilog.Events;
 using WebApi.Extentions;
 
 namespace WebApi;
@@ -11,28 +14,20 @@ public class Program
 {
     public static void Main(string[] args)
     {
+        Log.Logger = new LoggerConfiguration()
+            .MinimumLevel.Override("Microsoft", LogEventLevel.Debug)
+            .WriteTo.Console()
+            .CreateLogger();
+        
+        Log.Debug("Starting application");
+        
         var builder = WebApplication.CreateBuilder(args);
-
+        
         ConfigureServices(builder.Services, builder.Configuration);
 
         var app = builder.Build();
-
-        // using (var scope = app.Services.CreateScope())
-        // {
-        //     var services = scope.ServiceProvider;
-        //
-        //     try
-        //     {
-        //         var context = services.GetRequiredService<MoneyTrackerDbContext>();
-        //         context.Database.EnsureCreated();
-        //     }
-        //     catch (Exception e)
-        //     {
-        //         Console.WriteLine(e.Message);
-        //     }
-        // }
-
         var env = builder.Environment;
+        
         ConfigureApp(app, env);
     }
 

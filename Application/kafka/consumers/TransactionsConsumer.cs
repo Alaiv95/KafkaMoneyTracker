@@ -6,6 +6,7 @@ using Infrastructure.Repositories;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using System.Text.Json;
+using Serilog;
 
 namespace Application.kafka.consumer;
 
@@ -38,11 +39,12 @@ public class TransactionsConsumer : ConsumerBackgroundService
 
                 await mediator.HandleRequest(checkBudgetCommand);
             }
+            
+            Log.Information($"Successfully consumed message {messageValue} in topic {GetTopic()}");
         }
         catch (Exception ex)
         {
-            //TODO add serilog
-            Console.WriteLine(ex.Message);
+            Log.Error($"Error occured consuming message {messageValue} in topic {GetTopic()} with exception {ex.Message}");
         }
     }
 }

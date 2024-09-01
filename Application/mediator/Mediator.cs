@@ -1,5 +1,6 @@
 ﻿using Application.exceptions;
 using Application.mediator.interfaces;
+using Serilog;
 
 namespace Application.mediator;
 
@@ -15,6 +16,7 @@ public class Mediator : IMediator
 
         if (isCommandAdded)
         {
+            Log.Error($"Attempet to add already registered command - {commandName}");
             throw new CommandAlreadyRegisteredException(commandName.ToString());
         }
 
@@ -29,13 +31,17 @@ public class Mediator : IMediator
 
         if (!isCommandAdded)
         {
+            Log.Error($"Attempt to use not registered command - {commandName}");
             throw new CommandNotRegisteredException(commandName.ToString());
         }
 
         if (commandHandlerObject is not HandlerWrapperBase<TResponse> handlerCommand)
         {
+            Log.Error($"Invalid command passed to mediator- {commandName}");
             throw new ApplicationException("Invalid command");
         }
+        
+        Log.Information($"Handle request for {commandName} -> {command}");
 
         return await handlerCommand.Handle(command);
     }
