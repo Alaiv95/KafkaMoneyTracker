@@ -15,7 +15,6 @@ public class CheckSpenBudgetListQueryHandlerTests
     private Mock<IBudgetRepository> _budgetRepository;
     private Mock<IGenericRepository<Transaction>> _transactionRepository;
     private Mock<IEventsProducer> _eventsProducer;
-    private BudgetMapper _budgetMapper;
     private BudgetSpecs _spec;
     private TransactionSpecs _transactionSpec;
     private CheckSpentBudgetQuery _query;
@@ -26,7 +25,6 @@ public class CheckSpenBudgetListQueryHandlerTests
         _budgetRepository = new Mock<IBudgetRepository>();
         _transactionRepository = new Mock<IGenericRepository<Transaction>>();
         _eventsProducer = new Mock<IEventsProducer>();
-        _budgetMapper = new BudgetMapper();
         _spec = new BudgetSpecs();
         _transactionSpec = new TransactionSpecs();
 

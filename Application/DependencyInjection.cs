@@ -31,10 +31,6 @@ public static class DependencyInjection
         services.AddScoped<BudgetSpecs>();
         services.AddScoped<TransactionSpecs>();
 
-        services.AddScoped<BudgetMapper>();
-        services.AddScoped<AuthMapper>();
-        services.AddScoped<TransactionMapper>();
-
         services.AddScoped<CreateBudgetCommandHandler>();
         services.AddScoped<GetBudgetListQueryHandler>();
         services.AddScoped<RegisterUserCommandHandler>();
