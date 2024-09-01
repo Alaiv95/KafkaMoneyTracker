@@ -1,7 +1,7 @@
-﻿using Domain.Models;
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
 using Application.extentions;
 using Application.Dtos;
+using Infrastructure.Models;
 
 
 namespace Application.specs;

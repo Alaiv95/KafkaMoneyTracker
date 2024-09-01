@@ -1,8 +1,8 @@
 ﻿using Application.exceptions;
 using Application.handlers.transactions.commands.CreateTransaction;
 using Application.kafka.producer;
-using Domain.Models;
 using FluentAssertions;
+using Infrastructure.Models;
 using Infrastructure.Repositories;
 using Moq;
 

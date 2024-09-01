@@ -5,9 +5,9 @@ using Application.kafka.producer;
 using Application.mediator.interfaces;
 using Application.specs;
 using Confluent.Kafka;
-using Domain.Models;
 using Infrastructure.Repositories;
 using System.Text.Json;
+using Infrastructure.Models;
 
 namespace Application.handlers.budget.queries.CheckSpentBudget;
 

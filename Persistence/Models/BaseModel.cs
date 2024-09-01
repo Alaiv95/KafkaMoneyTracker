@@ -1,6 +1,6 @@
-﻿namespace Domain.Models;
+﻿namespace Infrastructure.Models;
 
-public class BaseEntity
+public class BaseModel
 {
     public Guid Id { get; set; }
 

@@ -1,11 +1,11 @@
 ﻿using Application.handlers.budget.queries.CheckSpentBudget;
 using Application.kafka.consumers;
 using Application.mediator.interfaces;
-using Domain.Models;
 using Infrastructure.Repositories;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using System.Text.Json;
+using Infrastructure.Models;
 using Serilog;
 
 namespace Application.kafka.consumer;

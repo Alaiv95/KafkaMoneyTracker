@@ -2,8 +2,8 @@
 using Application.exceptions;
 using Application.handlers.budget.commands.UpdateBudget;
 using Application.specs;
-using Domain.Models;
 using FluentAssertions;
+using Infrastructure.Models;
 using Infrastructure.Repositories;
 using Moq;
 

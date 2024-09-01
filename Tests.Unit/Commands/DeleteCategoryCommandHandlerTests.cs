@@ -2,8 +2,8 @@
 using Application.exceptions;
 using Application.handlers.category.command.DeleteCategory;
 using Domain.Enums;
-using Domain.Models;
 using FluentAssertions;
+using Infrastructure.Models;
 using Infrastructure.Repositories;
 using Moq;
 

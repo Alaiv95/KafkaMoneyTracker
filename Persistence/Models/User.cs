@@ -1,6 +1,6 @@
-﻿namespace Domain.Models;
+﻿namespace Infrastructure.Models;
 
-public class User : BaseEntity
+public class User : BaseModel
 {
     public string Email { get; set; }
 

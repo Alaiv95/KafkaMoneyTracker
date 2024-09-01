@@ -2,7 +2,7 @@
 using Application.handlers.budget.queries.GetBudgetList;
 using Application.mediator.interfaces;
 using Application.specs;
-using Domain.Models;
+using Infrastructure.Models;
 using Infrastructure.Repositories;
 
 namespace Application.handlers.budget.commands.CreateBudget;

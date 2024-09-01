@@ -1,6 +1,6 @@
-﻿namespace Domain.Models;
+﻿namespace Infrastructure.Models;
 
-public class Budget : BaseEntity
+public class Budget : BaseModel
 {
     public double BudgetLimit { get; set; }
 

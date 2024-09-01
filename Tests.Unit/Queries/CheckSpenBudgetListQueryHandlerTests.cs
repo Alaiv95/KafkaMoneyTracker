@@ -2,11 +2,11 @@
 using Application.kafka.producer;
 using Application.mappers;
 using Application.specs;
-using Domain.Models;
 using FluentAssertions;
 using Infrastructure.Repositories;
 using Moq;
 using System.Linq.Expressions;
+using Infrastructure.Models;
 
 namespace Tests.Unit.Queries;
 

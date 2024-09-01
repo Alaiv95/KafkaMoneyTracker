@@ -1,4 +1,4 @@
-﻿using Domain.Models;
+﻿using Infrastructure.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure;

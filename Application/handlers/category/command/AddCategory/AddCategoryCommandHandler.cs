@@ -2,7 +2,7 @@
 using Application.exceptions;
 using Application.mediator.interfaces;
 using Domain.Enums;
-using Domain.Models;
+using Infrastructure.Models;
 using Infrastructure.Repositories;
 
 namespace Application.handlers.category.command.AddCategory;

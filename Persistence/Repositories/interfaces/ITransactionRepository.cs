@@ -1,7 +1,7 @@
 ﻿
 
 using System.Linq.Expressions;
-using Domain.Models;
+using Infrastructure.Models;
 
 namespace Infrastructure.Repositories;
 

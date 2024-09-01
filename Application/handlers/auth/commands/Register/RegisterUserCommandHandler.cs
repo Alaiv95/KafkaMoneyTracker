@@ -1,8 +1,8 @@
 ﻿using Application.exceptions;
 using Application.kafka.producer;
 using Application.mediator.interfaces;
-using Domain.Models;
 using Infrastructure.authentication;
+using Infrastructure.Models;
 using Infrastructure.Repositories;
 
 namespace Application.handlers.auth.commands.Register;

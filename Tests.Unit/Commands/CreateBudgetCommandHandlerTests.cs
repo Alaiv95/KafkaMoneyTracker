@@ -1,11 +1,11 @@
 ﻿using Application.exceptions;
 using Application.handlers.budget.commands.CreateBudget;
 using Application.specs;
-using Domain.Models;
 using FluentAssertions;
 using Infrastructure.Repositories;
 using Moq;
 using System.Linq.Expressions;
+using Infrastructure.Models;
 
 namespace Tests.Unit.Commands;
 

@@ -1,6 +1,5 @@
 ﻿using Application.Dtos;
 using Application.mediator.interfaces;
-using Domain.Models;
 using Infrastructure.Repositories;
 
 namespace Application.handlers.category.queries;

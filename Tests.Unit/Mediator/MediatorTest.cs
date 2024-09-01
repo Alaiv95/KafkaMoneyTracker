@@ -3,8 +3,8 @@ using Application.handlers.budget.commands.CreateBudget;
 using Application.mediator;
 using Application.mediator.interfaces;
 using Application.specs;
-using Domain.Models;
 using FluentAssertions;
+using Infrastructure.Models;
 using Infrastructure.Repositories;
 using Moq;
 

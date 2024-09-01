@@ -27,7 +27,8 @@ public static class DependencyInjection
         services.AddAutoMapper(
             typeof(AuthMappingProfile),
             typeof(BudgetMappingProfile),
-            typeof(TransactionMappingProfile)
+            typeof(TransactionMappingProfile),
+            typeof(CategoryMappingProfile)
         );
         
         services.AddScoped<BudgetSpecs>();

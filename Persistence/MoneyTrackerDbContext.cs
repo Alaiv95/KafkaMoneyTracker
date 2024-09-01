@@ -1,5 +1,5 @@
-﻿using Domain.Models;
-using Infrastructure.EntityConfigurations;
+﻿using Infrastructure.EntityConfigurations;
+using Infrastructure.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure;

@@ -3,9 +3,9 @@ using Application.kafka;
 using Application.kafka.producer;
 using Application.mediator.interfaces;
 using Confluent.Kafka;
-using Domain.Models;
 using Infrastructure.Repositories;
 using System.Text.Json;
+using Infrastructure.Models;
 
 namespace Application.handlers.transactions.commands.CreateTransaction;
 public class CreateTransactionCommandHandler : IRequestHandler<CreateTransactionCommand, bool>

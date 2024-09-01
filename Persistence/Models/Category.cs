@@ -1,6 +1,6 @@
 ﻿using Domain.Enums;
 
-namespace Domain.Models;
+namespace Infrastructure.Models;
 
 public class Category
 {

@@ -1,7 +1,7 @@
 ﻿using Application.Dtos;
 using Application.handlers.transactions.commands.CancelTransactions;
-using Domain.Models;
 using FluentAssertions;
+using Infrastructure.Models;
 using Infrastructure.Repositories;
 using Moq;
 

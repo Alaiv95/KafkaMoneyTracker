@@ -1,12 +1,14 @@
-﻿namespace Domain.Models;
+﻿namespace Infrastructure.Models;
 
-public class Transaction : BaseEntity
+public class Transaction : BaseModel
 {
     public Guid UserId { get; set; }
 
     public User User { get; set; }
 
     public double Amount { get; set; }
+    
+    public string Currency { get; set; }
     
     public bool IsActive { get; set; }
 

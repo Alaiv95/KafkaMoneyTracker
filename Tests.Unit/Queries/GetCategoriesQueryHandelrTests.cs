@@ -1,8 +1,8 @@
 ﻿using Application.Dtos;
 using Application.handlers.category.queries;
 using Domain.Enums;
-using Domain.Models;
 using FluentAssertions;
+using Infrastructure.Models;
 using Infrastructure.Repositories;
 using Microsoft.AspNetCore.Components.Web;
 using Moq;
