@@ -33,4 +33,9 @@ public class RedisCacheClient : ICacheClient
 
         return entities;
     }
+
+    public async Task InvalidateCache(string key)
+    {
+        await _cache.RemoveAsync(key);
+    }
 }

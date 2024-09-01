@@ -5,5 +5,6 @@ public enum CategoryType
     Food,
     Transport,
     Salary,
-    Entertainment
+    Entertainment,
+    Custom
 }

@@ -10,16 +10,17 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddPersistence(this IServiceCollection collection, IConfiguration configuration)
     {
-        var connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION") ?? "DefaultConnection";
-        var dbConnection = configuration.GetConnectionString(connectionString);
+        var connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION");
+        var dbConnection = connectionString ?? configuration.GetConnectionString("DefaultConnection");
 
         collection.AddDbContext<MoneyTrackerDbContext>(options => options.UseNpgsql(dbConnection));
         collection.AddScoped<IMoneyTrackerDbContext>(provider => provider.GetRequiredService<MoneyTrackerDbContext>());
         collection.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
         collection.AddScoped<IBudgetRepository, BudgetRepository>();
         collection.AddScoped<AuthRepository>();
-        collection.AddScoped<IAuthRepository, AuthCachedRepository>();
+        collection.AddScoped<IAuthRepository, CachedAuthRepository>();
         collection.AddScoped<ITransactionRepository, TransactionRepository>();
+        collection.AddScoped<CategoryRepository>();
         collection.AddScoped<ICategoryRepository, CachedCategoryRepository>();
         collection.AddScoped<ICacheClient, RedisCacheClient>();
 

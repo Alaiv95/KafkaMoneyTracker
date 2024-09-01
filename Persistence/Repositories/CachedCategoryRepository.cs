@@ -6,12 +6,13 @@ namespace Infrastructure.Repositories;
 
 public class CachedCategoryRepository : ICategoryRepository
 {
-    private readonly IGenericRepository<Category> _repository;
+    private readonly CategoryRepository _repository;
     private readonly ICacheClient _cacheClient;
-
-    public CachedCategoryRepository(IGenericRepository<Category> repository, ICacheClient client)
+    private const string _getAllKey = "category-key";
+    
+    public CachedCategoryRepository(CategoryRepository categoryRepository, ICacheClient client)
     {
-        _repository = repository;
+        _repository = categoryRepository;
         _cacheClient = client;
     }
 
@@ -23,6 +24,7 @@ public class CachedCategoryRepository : ICategoryRepository
 
     public async Task AddAsync(Category entity)
     {
+        await _cacheClient.InvalidateCache(_getAllKey);
         await _repository.AddAsync(entity);
     }
 
@@ -33,11 +35,13 @@ public class CachedCategoryRepository : ICategoryRepository
 
     public async Task<IEnumerable<Category>> GetAllAsync()
     {
-        var key = "category-key";
-        var categories = await _cacheClient.GetOrSetAndGetFromCache(key, () => _repository.GetAllAsync());
+        var categories = await _cacheClient.GetOrSetAndGetFromCache(_getAllKey, () => _repository.GetAllAsync());
 
         return categories ?? Enumerable.Empty<Category>();
     }
 
-
+    public async Task<Category?> GetByNameAsync(string name)
+    {
+        return await _repository.GetByNameAsync(name);
+    }
 }

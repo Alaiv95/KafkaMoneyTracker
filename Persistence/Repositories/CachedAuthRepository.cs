@@ -3,12 +3,12 @@ using Infrastructure.redis;
 
 namespace Infrastructure.Repositories;
 
-public class AuthCachedRepository : IAuthRepository
+public class CachedAuthRepository : IAuthRepository
 {
     private readonly AuthRepository _authRepository;
     private readonly ICacheClient _cacheClient;
 
-    public AuthCachedRepository(AuthRepository authRepository, ICacheClient cacheClient)
+    public CachedAuthRepository(AuthRepository authRepository, ICacheClient cacheClient)
     {
         _authRepository = authRepository;
         _cacheClient = cacheClient;
