@@ -45,7 +45,7 @@ public class CheckSpenBudgetListQueryHandlerTests
 
         _query = new CheckSpentBudgetQuery
         {
-            CategoryId = Guid.NewGuid(),
+            BudgetId = Guid.NewGuid(),
             UserId = Guid.NewGuid()
         };
     }
@@ -70,7 +70,7 @@ public class CheckSpenBudgetListQueryHandlerTests
         var handler = new CheckSpentBudgetQueryHandler(
             _transactionRepository.Object,
             _budgetRepository.Object,
-            _eventsProducer.Object, _spec,
+            _eventsProducer.Object,
             _transactionSpec
         );
 
@@ -97,12 +97,18 @@ public class CheckSpenBudgetListQueryHandlerTests
         _transactionRepository
             .Setup(repository => repository.SearchAsync(It.IsAny<Expression<Func<Transaction, bool>>>()))
             .ReturnsAsync(() => transactions);
-
+        _budgetRepository
+            .Setup(rep => rep.GetByIdAsync(It.IsAny<Guid>()))
+            .ReturnsAsync(() => BudgetEntity.Create(
+                Limit.Create(100, 10),
+                Guid.NewGuid(),
+                Guid.NewGuid()
+            ));
 
         var handler = new CheckSpentBudgetQueryHandler(
             _transactionRepository.Object,
             _budgetRepository.Object,
-            _eventsProducer.Object, _spec,
+            _eventsProducer.Object,
             _transactionSpec
         );
 

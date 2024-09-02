@@ -5,33 +5,39 @@ using Application.mediator.interfaces;
 using Confluent.Kafka;
 using Infrastructure.Repositories;
 using System.Text.Json;
+using Application.handlers.budget.queries.GetBudgetList;
+using Application.specs;
 using Domain.Entities;
 using Domain.Entities.Transaction;
 using Infrastructure.Models;
 using Infrastructure.Repositories.interfaces;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Application.handlers.transactions.commands.CreateTransaction;
 public class CreateTransactionCommandHandler : IRequestHandler<CreateTransactionCommand, bool>
 {
-    private readonly IGenericRepository<Category, CategoryEntity> _categoryRepository;
+    private readonly IBudgetRepository _budgetRepository;
     private readonly IEventsProducer _eventsProducer;
+    private readonly BudgetSpecs _budgetSpecs;
 
     public CreateTransactionCommandHandler(
-        IGenericRepository<Category, CategoryEntity> categoryRepository,
-        IEventsProducer eventsProducer
+        IBudgetRepository budgetRepository,
+        IEventsProducer eventsProducer,
+        BudgetSpecs budgetSpecs
     )
     {
-        _categoryRepository = categoryRepository;
+        _budgetRepository = budgetRepository;
         _eventsProducer = eventsProducer;
+        _budgetSpecs = budgetSpecs;
     }
 
     public async Task<bool> Handle(CreateTransactionCommand command)
     {
-        var category = await _categoryRepository.GetByIdAsync(command.CategoryId);
+        var budget = await _budgetRepository.GetByIdAsync(command.BudgetId);
 
-        if (category is null)
+        if (budget is null)
         {
-            throw new NotFoundException($"category {command.CategoryId} not found");
+            throw new NotFoundException($"Active budget with id {command.BudgetId} not found.");
         }
 
         await _eventsProducer.Produce(TopicConstants.TransactionTopc, new Message<string, string>

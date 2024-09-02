@@ -18,8 +18,8 @@ public class TransactionMappingProfile : Profile
         CreateMap<Category, CategoryLookupDto>();
         CreateMap<BaseItemListDto, CancelTransactionsCommand>()
             .ForMember(dest => dest.TransactionIds, opt => opt.MapFrom(dto => dto.ItemsIds));
-        CreateMap<Transaction, TransactionLookupExtendedDto>()
-            .ForMember(dest => dest.Category, opt => opt.MapFrom(src => src.Category));
+        CreateMap<Transaction, TransactionLookupExtendedDto>();
+            // .ForMember(dest => dest.Category, opt => opt.MapFrom(src => src.Category));
 
         CreateMap<TransactionEntity, Transaction>()
             .ForPath(model => model.Amount, opt => opt.MapFrom(ent => ent.Money.Amount))

@@ -16,11 +16,11 @@ public class TransactionEntity : TimeBasedEntity
     
     public bool IsActive { get; private set; }
 
-    public Guid CategoryId { get; private set; }
+    public Guid BudgetId { get; private set; }
 
-    public static TransactionEntity Create(Guid userId, Money money, Guid categoryId)
+    public static TransactionEntity Create(Guid userId, Money money, Guid budgetId)
     {
-        if (categoryId == Guid.Empty || userId == Guid.Empty)
+        if (budgetId == Guid.Empty || userId == Guid.Empty)
         {
             throw new ArgumentException("Some argument was invalid");
         }
@@ -28,7 +28,7 @@ public class TransactionEntity : TimeBasedEntity
         return new()
         {
             Money = money,
-            CategoryId = categoryId,
+            BudgetId = budgetId,
             IsActive = true,
             UserId = userId,
             CreatedAt = DateTime.Now,

@@ -19,27 +19,24 @@ public class CheckSpentBudgetQueryHandler : IRequestHandler<CheckSpentBudgetQuer
     private readonly IGenericRepository<Transaction, TransactionEntity> _transactionRepository;
     private readonly IBudgetRepository _budgetRepository;
     private readonly IEventsProducer _eventsProducer;
-    private readonly BudgetSpecs _budgetSpec;
     private readonly TransactionSpecs _transactionSpec;
 
     public CheckSpentBudgetQueryHandler(
         IGenericRepository<Transaction, TransactionEntity> transactionRepository,
         IBudgetRepository budgetRepository,
         IEventsProducer eventsProducer,
-        BudgetSpecs budgetSpecs,
         TransactionSpecs transactionSpecs
     )
     {
         _transactionRepository = transactionRepository;
         _budgetRepository = budgetRepository;
         _eventsProducer = eventsProducer;
-        _budgetSpec = budgetSpecs;
         _transactionSpec = transactionSpecs;
     }
 
     public async Task<bool> Handle(CheckSpentBudgetQuery query)
     {
-        var budget = await GetActiveBudget(query);
+        var budget = await _budgetRepository.GetByIdAsync(query.BudgetId);
 
         if (budget is null)
         {
@@ -71,7 +68,7 @@ public class CheckSpentBudgetQueryHandler : IRequestHandler<CheckSpentBudgetQuer
 
         await _eventsProducer.Produce(TopicConstants.BudgetExceededTopic, new Message<string, string>
         {
-            Key = $"{query.UserId.ToString()}{query.CategoryId.ToString()}",
+            Key = $"{query.UserId.ToString()}{query.BudgetId.ToString()}",
             Value = JsonSerializer.Serialize(messageData)
         });
     }
@@ -87,21 +84,7 @@ public class CheckSpentBudgetQueryHandler : IRequestHandler<CheckSpentBudgetQuer
     {
         return transactions.Where(t => t.Money.Amount < 0).Sum(t => t.Money.Amount);
     }
-
-    private async Task<BudgetEntity?> GetActiveBudget(CheckSpentBudgetQuery command)
-    {
-        var filter = new GetBudgetListQuery
-        {
-            CategoryId = command.CategoryId,
-            UserId = command.UserId,
-            DateFrom = DateTime.UtcNow,
-        };
-
-        var budgetList = await _budgetRepository.SearchAsync(_budgetSpec.Build(filter));
-
-        return budgetList.FirstOrDefault();
-    }
-
+    
     private async Task<List<TransactionEntity>> GetTransactionsFromBudgetPeriod(BudgetEntity budget, CheckSpentBudgetQuery command)
     {
         var dateFrom = budget.CreatedAt.ToUniversalTime();
@@ -109,7 +92,7 @@ public class CheckSpentBudgetQueryHandler : IRequestHandler<CheckSpentBudgetQuer
 
         var filter = new BaseSearchDto
         {
-            CategoryId = command.CategoryId,
+            BudgetId = command.BudgetId,
             UserId = command.UserId,
             DateFrom = dateFrom,
             DateTo = dateTo,

@@ -13,4 +13,6 @@ public class Budget : BaseModel
     public Guid CategoryId { get; set; }
 
     public Guid UserId { get; set; }
+    
+    public ICollection<Transaction> Transactions { get; set; }
 }

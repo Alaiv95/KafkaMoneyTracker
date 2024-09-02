@@ -12,7 +12,7 @@ public class Transaction : BaseModel
     
     public bool IsActive { get; set; }
 
-    public Guid CategoryId { get; set; }
+    public Guid BudgetId { get; set; }
 
-    public Category Category { get; set; }
+    public Budget Budget { get; set; }
 }

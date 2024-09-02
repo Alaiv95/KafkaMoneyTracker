@@ -1,6 +1,7 @@
 ﻿using Application.Dtos;
 using Application.mediator.interfaces;
 using Infrastructure.Repositories;
+using Infrastructure.Repositories.interfaces;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Application.handlers.transactions.commands.CancelTransactions;
@@ -33,7 +34,7 @@ public class CancelTransactionsCommandHandler : IRequestHandler<CancelTransactio
 
         return currentUserTransactions.Select(t => new TransactionLookupDto
         {
-            CategoryId = t.CategoryId,
+            BudgetId = t.BudgetId,
             IsActive = t.IsActive,
             Amount = t.Amount
         }).ToList();

@@ -2,6 +2,7 @@
 using AutoMapper;
 using Domain.Entities.Transaction;
 using Infrastructure.Models;
+using Infrastructure.Repositories.interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories;
@@ -32,7 +33,7 @@ public class TransactionRepository : GenericRepository<Transaction, TransactionE
         return await _dbSet
             .AsNoTracking()
             .Where(predicate)
-            .Include(t => t.Category)
+            .Include(t => t.Budget)
             .ToListAsync();
     }
 }

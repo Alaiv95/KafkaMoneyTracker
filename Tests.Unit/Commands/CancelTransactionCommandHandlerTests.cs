@@ -3,6 +3,7 @@ using Application.handlers.transactions.commands.CancelTransactions;
 using FluentAssertions;
 using Infrastructure.Models;
 using Infrastructure.Repositories;
+using Infrastructure.Repositories.interfaces;
 using Moq;
 
 namespace Tests.Unit.Commands;
@@ -27,7 +28,7 @@ public class CancelTransactionCommandHandlerTests
             new()
             {
                 Amount = 100,
-                CategoryId = Guid.NewGuid(),
+                BudgetId = Guid.NewGuid(),
                 UserId = userId,
                 Id = Guid.NewGuid(),
                 IsActive = true,
@@ -36,7 +37,7 @@ public class CancelTransactionCommandHandlerTests
             new()
             {
                 Amount = 200,
-                CategoryId = Guid.NewGuid(),
+                BudgetId = Guid.NewGuid(),
                 UserId = userId,
                 Id = Guid.NewGuid(),
                 IsActive = true,
@@ -45,7 +46,7 @@ public class CancelTransactionCommandHandlerTests
             new()
             {
                 Amount = 300,
-                CategoryId = Guid.NewGuid(),
+                BudgetId = Guid.NewGuid(),
                 UserId = Guid.NewGuid(),
                 Id = Guid.NewGuid(),
                 IsActive = true,
@@ -58,7 +59,7 @@ public class CancelTransactionCommandHandlerTests
             .Select(t =>
                 new TransactionLookupDto
                 {
-                    CategoryId = t.CategoryId,
+                    BudgetId = t.BudgetId,
                     IsActive = false,
                     Amount = t.Amount
                 });

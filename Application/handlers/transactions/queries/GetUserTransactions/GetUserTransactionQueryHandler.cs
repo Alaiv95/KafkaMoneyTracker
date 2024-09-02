@@ -6,6 +6,7 @@ using Application.specs;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Infrastructure.Repositories;
+using Infrastructure.Repositories.interfaces;
 
 namespace Application.handlers.transactions.queries.GetUserTransactions;
 

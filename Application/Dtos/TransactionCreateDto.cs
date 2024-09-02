@@ -6,7 +6,11 @@ public class TransactionCreateDto
 {
     [Required]
     public double Amount { get; set; }
-
+    
+    [StringLength(3)]
     [Required]
-    public Guid CategoryId { get; set; }
+    public string Currency { get; set; }
+    
+    [Required]
+    public Guid BudgetId { get; set; }
 }

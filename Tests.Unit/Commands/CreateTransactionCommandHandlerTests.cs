@@ -1,7 +1,10 @@
-﻿using Application.exceptions;
+﻿using System.Linq.Expressions;
+using Application.exceptions;
 using Application.handlers.transactions.commands.CreateTransaction;
 using Application.kafka.producer;
+using Application.specs;
 using Domain.Entities;
+using Domain.Entities.Budget;
 using Domain.Enums;
 using FluentAssertions;
 using Infrastructure.Models;
@@ -13,32 +16,37 @@ namespace Tests.Unit.Commands;
 
 public class CreateTransactionCommandHandlerTests
 {
-    private Mock<IGenericRepository<Category, CategoryEntity>> _categoryRepository;
+    private Mock<IBudgetRepository> _budgetRepository;
     private Mock<IEventsProducer> _eventsProducer;
+    private BudgetSpecs _budgetSpecs;
 
     [SetUp]
     public void Setup()
-    {;
-        _categoryRepository = new Mock<IGenericRepository<Category, CategoryEntity>>();
+    {
+        ;
+        _budgetRepository = new Mock<IBudgetRepository>();
         _eventsProducer = new Mock<IEventsProducer>();
+        _budgetSpecs = new BudgetSpecs();
     }
 
     [Test]
-    public async Task CreateTransaction_CategoryFound_Success()
+    public async Task CreateTransaction_BudgetFound_Success()
     {
         // Arrange
-        _categoryRepository
+        _budgetRepository
             .Setup(repository => repository.GetByIdAsync(It.IsAny<Guid>()))
-            .ReturnsAsync(() => CategoryEntity.Create(CategoryValue.Create(CategoryType.Custom, "asdasd"), Guid.NewGuid()));
+            .ReturnsAsync(() => BudgetEntity.Create(Limit.Create(100.10, 10), Guid.NewGuid(), Guid.NewGuid())
+            );
 
         var command = new CreateTransactionCommand
         {
             Amount = 100,
-            CategoryId = Guid.NewGuid(),
+            BudgetId = Guid.NewGuid(),
             UserId = Guid.NewGuid(),
         };
 
-        var handler = new CreateTransactionCommandHandler(_categoryRepository.Object, _eventsProducer.Object);
+        var handler =
+            new CreateTransactionCommandHandler(_budgetRepository.Object, _eventsProducer.Object, _budgetSpecs);
 
         // Act
         var result = await handler.Handle(command);
@@ -51,18 +59,19 @@ public class CreateTransactionCommandHandlerTests
     public async Task CreateTransaction_CategoryNotFound_Throws()
     {
         // Arrange
-        _categoryRepository
+        _budgetRepository
             .Setup(repository => repository.GetByIdAsync(It.IsAny<Guid>()))
             .ReturnsAsync(() => null);
 
         var command = new CreateTransactionCommand
         {
             Amount = 100,
-            CategoryId = Guid.NewGuid(),
+            BudgetId = Guid.NewGuid(),
             UserId = Guid.NewGuid(),
         };
 
-        var handler = new CreateTransactionCommandHandler(_categoryRepository.Object, _eventsProducer.Object);
+        var handler =
+            new CreateTransactionCommandHandler(_budgetRepository.Object, _eventsProducer.Object, _budgetSpecs);
 
         // Act
         // Assert

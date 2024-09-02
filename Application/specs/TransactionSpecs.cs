@@ -13,26 +13,26 @@ public class TransactionSpecs : ISpec<Transaction, BaseSearchDto>
         return WithUserId(filter.UserId)
             .And(WithDateLtOrEt(filter.DateFrom))
             .And(WithDateGtOrEt(filter.DateTo))
-            .And(WithCategoryId(filter.CategoryId));
+            .And(WithBudgetId(filter.BudgetId));
     }
     
     Expression<Func<Transaction, bool>> WithUserId(Guid userId)
     {
-        return (budget) => budget.UserId == userId;
+        return (transaction) => transaction.UserId == userId;
     }
 
     Expression<Func<Transaction, bool>> WithDateLtOrEt(DateTime? dateFrom)
     {
-        return (budget) => (dateFrom == null) || dateFrom <= budget.CreatedAt;
+        return (transaction) => (dateFrom == null) || dateFrom <= transaction.CreatedAt;
     }
 
     Expression<Func<Transaction, bool>> WithDateGtOrEt(DateTime? dateTo)
     {
-        return (budget) => (dateTo == null) || dateTo >= budget.CreatedAt;
+        return (transaction) => (dateTo == null) || dateTo >= transaction.CreatedAt;
     }
 
-    Expression<Func<Transaction, bool>> WithCategoryId(Guid? categoryId)
+    Expression<Func<Transaction, bool>> WithBudgetId(Guid? budgetId)
     {
-        return (budget) => (categoryId == null || categoryId == Guid.Empty) || budget.CategoryId == categoryId;
+        return (transaction) => (budgetId == null || budgetId == Guid.Empty) || transaction.BudgetId == budgetId;
     }
 }
