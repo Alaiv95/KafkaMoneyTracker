@@ -8,7 +8,7 @@ public class Category
 
     public CategoryType CategoryType { get; set; }
     
-    public String CategoryName { get; set; }
+    public String CategoryName { get; set; } = String.Empty;
     
     public bool IsCustom { get; set; }
 

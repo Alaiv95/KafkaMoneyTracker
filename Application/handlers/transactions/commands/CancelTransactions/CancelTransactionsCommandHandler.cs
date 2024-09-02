@@ -27,7 +27,7 @@ public class CancelTransactionsCommandHandler : IRequestHandler<CancelTransactio
         
         foreach (var transaction in currentUserTransactions)
         {
-            transaction.IsActive = false;
+            transaction.Deactivate();
         }
         
         await _transactionRepository.UpdateRangeAsync(currentUserTransactions);
@@ -36,7 +36,7 @@ public class CancelTransactionsCommandHandler : IRequestHandler<CancelTransactio
         {
             BudgetId = t.BudgetId,
             IsActive = t.IsActive,
-            Amount = t.Amount
+            Amount = t.Money.Amount
         }).ToList();
     }
 }

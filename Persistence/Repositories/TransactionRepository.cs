@@ -1,5 +1,6 @@
 ﻿using System.Linq.Expressions;
 using AutoMapper;
+using Domain.Entities.Budget;
 using Domain.Entities.Transaction;
 using Infrastructure.Models;
 using Infrastructure.Repositories.interfaces;
@@ -14,26 +15,32 @@ public class TransactionRepository : GenericRepository<Transaction, TransactionE
     {
     }
 
-    public async Task UpdateRangeAsync(List<Transaction> transactions)
+    public async Task UpdateRangeAsync(List<TransactionEntity> transactions)
     {
-        _dbSet.UpdateRange(transactions);
+        var transactionsList = Mapper.Map<List<Transaction>>(transactions);
+        _dbSet.UpdateRange(transactionsList);
         await _context.SaveChangesAsync(default);
     }
 
-    public async Task<List<Transaction>> GetByIdsAsync(List<Guid> itemIds)
+    public async Task<List<TransactionEntity>> GetByIdsAsync(List<Guid> itemIds)
     {
-        return await _dbSet
+        var transactions = await _dbSet
             .AsNoTracking()
             .Where(t => itemIds.Contains(t.Id))
             .ToListAsync();
+        
+        return Mapper.Map<List<TransactionEntity>>(transactions);
     }
 
-    public async Task<List<Transaction>> SearchWithIncludeAsync(Expression<Func<Transaction, bool>> predicate)
+    public async Task<List<TransactionInfo>> SearchWithIncludeAsync(Expression<Func<Transaction, bool>> predicate)
     {
-        return await _dbSet
+        var transactions = await _dbSet
             .AsNoTracking()
             .Where(predicate)
             .Include(t => t.Budget)
+            .ThenInclude(b => b.Category)
             .ToListAsync();
+
+        return Mapper.Map<List<TransactionInfo>>(transactions);
     }
 }

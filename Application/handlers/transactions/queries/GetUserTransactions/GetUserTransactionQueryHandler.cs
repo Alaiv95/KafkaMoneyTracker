@@ -5,13 +5,14 @@ using Application.mediator.interfaces;
 using Application.specs;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Domain.Entities.Transaction;
 using Infrastructure.Repositories;
 using Infrastructure.Repositories.interfaces;
 
 namespace Application.handlers.transactions.queries.GetUserTransactions;
 
 public class GetUserTransactionQueryHandler :
-    IRequestHandler<GetUserTransactionsQuery, List<TransactionLookupExtendedDto>>
+    IRequestHandler<GetUserTransactionsQuery, List<TransactionInfo>>
 {
     private readonly ITransactionRepository _transactionRepository;
     private readonly IMapper _transactionsMapper;
@@ -28,7 +29,7 @@ public class GetUserTransactionQueryHandler :
         _spec = spec;
     }
 
-    public async Task<List<TransactionLookupExtendedDto>> Handle(GetUserTransactionsQuery query)
+    public async Task<List<TransactionInfo>> Handle(GetUserTransactionsQuery query)
     {
         if (query.DateFrom > query.DateTo)
         {
@@ -42,6 +43,6 @@ public class GetUserTransactionQueryHandler :
         var transactions = await _transactionRepository
             .SearchWithIncludeAsync(_spec.Build(baseSearchDto));
 
-        return _transactionsMapper.Map<List<TransactionLookupExtendedDto>>(transactions);
+        return transactions;
     }
 }

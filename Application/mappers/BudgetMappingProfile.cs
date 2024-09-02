@@ -17,6 +17,9 @@ public class BudgetMappingProfile : Profile
         CreateMap<BaseFilterSearchDto, GetBudgetListQuery>();
         CreateMap<Budget, BudgetUpdateResponseDto>();
         CreateMap<BudgetUpdateRequestDto, UpdateBudgetCommand>();
+        CreateMap<Budget, BudgetLookUpDto>();
+        CreateMap<Budget, BudgetInfo>()
+            .ForPath(dest => dest.CategoryName, opt => opt.MapFrom(model => model.Category.CategoryName));
 
         CreateMap<BudgetEntity, Budget>()
             .ForPath(model => model.BudgetLimit, opt => opt.MapFrom(ent => ent.BudgetLimit.Amount))

@@ -7,6 +7,7 @@ using Application.MailClient;
 using Application.mappers;
 using Application.mediator.interfaces;
 using AutoMapper;
+using Domain.Entities.Transaction;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Extentions;
@@ -54,9 +55,9 @@ public class TransactionsController : ControllerBase
     /// <response code="400">Bad Request</response>
     [Authorize]
     [HttpGet("search")]
-    [ProducesResponseType(typeof(List<TransactionLookupExtendedDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(List<TransactionInfo>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<TransactionLookupDto>> SearchTransactions([FromQuery] BaseFilterSearchDto dto)
+    public async Task<ActionResult<TransactionInfo>> SearchTransactions([FromQuery] BaseFilterSearchDto dto)
     {
         var searchQuery = _transactionMapper.Map<GetUserTransactionsQuery>(dto);
         searchQuery.UserId = HttpContext.GetUserIdFromToken();

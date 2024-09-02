@@ -1,9 +1,10 @@
 ﻿using Application.Dtos;
 using Application.mediator.interfaces;
+using Domain.Entities.Transaction;
 
 namespace Application.handlers.transactions.queries.GetUserTransactions;
 
-public class GetUserTransactionsQuery : IRequest<List<TransactionLookupExtendedDto>>
+public class GetUserTransactionsQuery : IRequest<List<TransactionInfo>>
 {
     public Guid UserId { get; set; }
     

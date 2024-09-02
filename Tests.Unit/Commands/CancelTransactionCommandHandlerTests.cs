@@ -1,5 +1,6 @@
 ﻿using Application.Dtos;
 using Application.handlers.transactions.commands.CancelTransactions;
+using Domain.Entities.Transaction;
 using FluentAssertions;
 using Infrastructure.Models;
 using Infrastructure.Repositories;
@@ -23,35 +24,11 @@ public class CancelTransactionCommandHandlerTests
     {
         // Arrange
         var userId = Guid.NewGuid();
-        var transactionsResponse = new List<Transaction>
+        var transactionsResponse = new List<TransactionEntity>
         {
-            new()
-            {
-                Amount = 100,
-                BudgetId = Guid.NewGuid(),
-                UserId = userId,
-                Id = Guid.NewGuid(),
-                IsActive = true,
-                CreatedAt = DateTime.Now
-            },
-            new()
-            {
-                Amount = 200,
-                BudgetId = Guid.NewGuid(),
-                UserId = userId,
-                Id = Guid.NewGuid(),
-                IsActive = true,
-                CreatedAt = DateTime.Now
-            },
-            new()
-            {
-                Amount = 300,
-                BudgetId = Guid.NewGuid(),
-                UserId = Guid.NewGuid(),
-                Id = Guid.NewGuid(),
-                IsActive = true,
-                CreatedAt = DateTime.Now
-            },
+            TransactionEntity.Create(userId, Money.Create(100, "eur"), Guid.NewGuid()),
+            TransactionEntity.Create(userId, Money.Create(100, "eur"), Guid.NewGuid()),
+            TransactionEntity.Create(Guid.NewGuid(), Money.Create(100, "eur"), Guid.NewGuid()),
         };
 
         var expectedResult = transactionsResponse
@@ -61,7 +38,7 @@ public class CancelTransactionCommandHandlerTests
                 {
                     BudgetId = t.BudgetId,
                     IsActive = false,
-                    Amount = t.Amount
+                    Amount = t.Money.Amount
                 });
 
         var command = new CancelTransactionsCommand

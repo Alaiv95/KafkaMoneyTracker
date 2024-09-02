@@ -6,9 +6,9 @@ namespace Infrastructure.Repositories.interfaces;
 
 public interface ITransactionRepository : IGenericRepository<Transaction, TransactionEntity>
 {
-    Task UpdateRangeAsync(List<Transaction> transactions);
+    Task UpdateRangeAsync(List<TransactionEntity> transactions);
 
-    Task<List<Transaction>> GetByIdsAsync(List<Guid> itemIds);
+    Task<List<TransactionEntity>> GetByIdsAsync(List<Guid> itemIds);
 
-    Task<List<Transaction>> SearchWithIncludeAsync(Expression<Func<Transaction, bool>> predicate);
+    Task<List<TransactionInfo>> SearchWithIncludeAsync(Expression<Func<Transaction, bool>> predicate);
 }

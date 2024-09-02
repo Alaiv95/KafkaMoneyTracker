@@ -36,6 +36,8 @@ public class TransactionEntity : TimeBasedEntity
             Id = Guid.NewGuid()
         };
     }
+
+    public void Deactivate() => IsActive = false;
 }
 
 public record Money
