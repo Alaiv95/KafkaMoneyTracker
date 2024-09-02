@@ -3,6 +3,7 @@ using Application.Dtos;
 using Application.handlers.transactions.commands.CancelTransactions;
 using Application.handlers.transactions.commands.CreateTransaction;
 using Application.handlers.transactions.queries.GetUserTransactions;
+using Application.handlers.transactions.queries.GetUserTransactionsSummary;
 using Application.MailClient;
 using Application.mappers;
 using Application.mediator.interfaces;
@@ -10,6 +11,7 @@ using AutoMapper;
 using Domain.Entities.Transaction;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using WebApi.Extentions;
 
 namespace WebApi.Controllers;
@@ -61,6 +63,29 @@ public class TransactionsController : ControllerBase
     {
         var searchQuery = _transactionMapper.Map<GetUserTransactionsQuery>(dto);
         searchQuery.UserId = HttpContext.GetUserIdFromToken();
+
+        var result = await _mediator.HandleRequest(searchQuery);
+    
+        return Ok(result);
+    }
+    
+    /// <summary>
+    /// Get summary of transactions
+    /// </summary>
+    /// <returns>Returns TransactionSummaryDto</returns>
+    /// <response code="200">Success</response>
+    /// <response code="400">Bad Request</response>
+    [Authorize]
+    [HttpGet("summary")]
+    [ProducesResponseType(typeof(List<TransactionSummaryDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<TransactionSummaryDto>> GetTransactionsSummary([FromQuery] Guid budgetId)
+    {
+        var searchQuery = new GetUserTransactionsSummaryQuery
+        {
+            UserId = HttpContext.GetUserIdFromToken(),
+            BudgetId = budgetId
+        };
 
         var result = await _mediator.HandleRequest(searchQuery);
     

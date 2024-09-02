@@ -16,6 +16,7 @@ using Application.handlers.category.queries;
 using Application.handlers.transactions.commands.CancelTransactions;
 using Application.handlers.transactions.commands.CreateTransaction;
 using Application.handlers.transactions.queries.GetUserTransactions;
+using Application.handlers.transactions.queries.GetUserTransactionsSummary;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Application;
@@ -46,6 +47,7 @@ public static class DependencyInjection
         services.AddScoped<AddCategoryCommandHandler>();
         services.AddScoped<UpdateBudgetCommandHandler>();
         services.AddScoped<DeleteCategoryCommandHandler>();
+        services.AddScoped<GetUserTransactionsSummaryQueryHandler>();
 
         services.AddScoped<IEventsProducer, EventsProducer>();
         services.AddHostedService<TransactionsConsumer>();

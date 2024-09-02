@@ -15,6 +15,7 @@ using Application.handlers.category.queries;
 using Application.handlers.transactions.commands.CancelTransactions;
 using Application.handlers.transactions.commands.CreateTransaction;
 using Application.handlers.transactions.queries.GetUserTransactions;
+using Application.handlers.transactions.queries.GetUserTransactionsSummary;
 
 namespace Application.mediator;
 
@@ -37,6 +38,7 @@ public static class DependencyInjection
             var addCategoryCommandHandler = provider.GetRequiredService<AddCategoryCommandHandler>();
             var updateBudgetCommandHandler = provider.GetRequiredService<UpdateBudgetCommandHandler>();
             var deleteCategoryCommandHandler = provider.GetRequiredService<DeleteCategoryCommandHandler>();
+            var getUserTransactionsSummaryQueryHandler = provider.GetRequiredService<GetUserTransactionsSummaryQueryHandler>();
 
             mediator.Register(createBudgetCommandHandler);
             mediator.Register(getBudgetQueryHandler);
@@ -50,6 +52,7 @@ public static class DependencyInjection
             mediator.Register(addCategoryCommandHandler);
             mediator.Register(updateBudgetCommandHandler);
             mediator.Register(deleteCategoryCommandHandler);
+            mediator.Register(getUserTransactionsSummaryQueryHandler);
 
             return mediator;
         });
