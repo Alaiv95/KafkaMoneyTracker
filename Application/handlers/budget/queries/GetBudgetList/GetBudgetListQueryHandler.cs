@@ -4,6 +4,7 @@ using Application.mediator.interfaces;
 using Application.specs;
 using AutoMapper;
 using Infrastructure.Repositories;
+using Infrastructure.Repositories.interfaces;
 
 namespace Application.handlers.budget.queries.GetBudgetList;
 

@@ -26,7 +26,7 @@ public class CategoryEntity
             CategoryValue = categoryValue,
             CreatedBy = userId,
             IsCustom = true,
-            Id = Guid.NewGuid()
+            Id = Guid.NewGuid(),
         };
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Application.Dtos;
 using Application.mediator.interfaces;
 using Infrastructure.Repositories;
+using Infrastructure.Repositories.interfaces;
 
 namespace Application.handlers.category.queries;
 
@@ -16,14 +17,14 @@ public class GetCategoriesQueryHandler : IRequestHandler<GetCategoriesQuery, Lis
 
         if (!command.IncludeCustom)
         {
-            categories = categories.Where(c => !c.IsCustom);
+            categories = categories.Where(c => !c.IsCustom).ToList();
         }
 
         return categories.Select(c => new CategoryLookupDto
         {
-            CategoryType = c.CategoryType,
+            CategoryType = c.CategoryValue.CategoryType,
             Id = c.Id,
-            CategoryName = c.CategoryName
+            CategoryName = c.CategoryValue.CategoryName
         }).ToList();
     }
 }

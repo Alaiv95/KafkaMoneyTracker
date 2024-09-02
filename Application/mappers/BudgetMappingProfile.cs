@@ -25,5 +25,13 @@ public class BudgetMappingProfile : Profile
         CreateMap<Budget, BudgetEntity>()
             .ForPath(ent => ent.BudgetLimit.Amount, opt => opt.MapFrom(model => model.BudgetLimit))
             .ForPath(ent => ent.BudgetLimit.Duration, opt => opt.MapFrom(model => model.DurationInDays));
+        
+        CreateMap<BudgetEntity, BudgetUpdateResponseDto>()
+            .ForPath(ent => ent.BudgetLimit, opt => opt.MapFrom(model => model.BudgetLimit.Amount))
+            .ForPath(ent => ent.DurationInDays, opt => opt.MapFrom(model => model.BudgetLimit.Duration));
+        
+        CreateMap<BudgetEntity, BudgetLookUpVm>()
+            .ForPath(ent => ent.BudgetLimit, opt => opt.MapFrom(model => model.BudgetLimit.Amount))
+            .ForPath(ent => ent.DurationInDays, opt => opt.MapFrom(model => model.BudgetLimit.Duration));
     }
 }

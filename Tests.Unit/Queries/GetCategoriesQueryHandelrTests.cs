@@ -1,9 +1,11 @@
 ﻿using Application.Dtos;
 using Application.handlers.category.queries;
+using Domain.Entities;
 using Domain.Enums;
 using FluentAssertions;
 using Infrastructure.Models;
 using Infrastructure.Repositories;
+using Infrastructure.Repositories.interfaces;
 using Microsoft.AspNetCore.Components.Web;
 using Moq;
 using Org.BouncyCastle.Crypto.Digests;
@@ -13,29 +15,17 @@ namespace Tests.Unit.Queries;
 public class GetCategoriesQueryHandelrTests
 {
     private Mock<ICategoryRepository> _categoryRepository;
-    private List<Category> _categories;
+    private List<CategoryEntity> _categories;
 
     [SetUp]
     public void Setup()
     {
         _categoryRepository = new Mock<ICategoryRepository>();
         
-        _categories = new List<Category>
+        _categories = new List<CategoryEntity>
         {
-            new()
-            {
-                CategoryType = CategoryType.Entertainment,
-                IsCustom = false,
-                CategoryName = "test",
-                Id = Guid.NewGuid(),
-            },
-            new()
-            {
-                CategoryType = CategoryType.Custom,
-                IsCustom = true,
-                CategoryName = "test123",
-                Id = Guid.NewGuid(),
-            }
+            CategoryEntity.Create(CategoryValue.Create(CategoryType.Entertainment, "test"), Guid.NewGuid()),
+            CategoryEntity.Create(CategoryValue.Create(CategoryType.Custom, "test123"), Guid.NewGuid())
         };
         
         _categoryRepository
@@ -55,8 +45,8 @@ public class GetCategoriesQueryHandelrTests
 
         var expectedResult = _categories.Select(c => new CategoryLookupDto
         {
-            CategoryType = c.CategoryType,
-            CategoryName = c.CategoryName,
+            CategoryType = c.CategoryValue.CategoryType,
+            CategoryName = c.CategoryValue.CategoryName,
             Id = c.Id,
         });
 
@@ -83,8 +73,8 @@ public class GetCategoriesQueryHandelrTests
             .Where(c => !c.IsCustom)
             .Select(c => new CategoryLookupDto
         {
-            CategoryType = c.CategoryType,
-            CategoryName = c.CategoryName,
+            CategoryType = c.CategoryValue.CategoryType,
+            CategoryName = c.CategoryValue.CategoryName,
             Id = c.Id,
         });
 

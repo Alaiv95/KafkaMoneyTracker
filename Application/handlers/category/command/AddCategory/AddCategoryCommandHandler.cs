@@ -1,9 +1,11 @@
 ﻿using Application.Dtos;
 using Application.exceptions;
 using Application.mediator.interfaces;
+using Domain.Entities;
 using Domain.Enums;
 using Infrastructure.Models;
 using Infrastructure.Repositories;
+using Infrastructure.Repositories.interfaces;
 
 namespace Application.handlers.category.command.AddCategory;
 
@@ -19,22 +21,18 @@ public class AddCategoryCommandHandler : IRequestHandler<AddCategoryCommand, Cat
         {
             throw new CategoryAlreadyExistsException($"Category {command.Name} already exists.");
         } 
-        
-        var category = new Category
-        {
-            CategoryType = CategoryType.Custom,
-            CategoryName = command.Name,
-            Id = Guid.NewGuid(),
-            IsCustom = true,
-            CreatedBy = command.UserId
-        };
+
+        var category = CategoryEntity.Create(
+            CategoryValue.Create(CategoryType.Custom, command.Name),
+            command.UserId
+        );
 
         await _repository.AddAsync(category);
 
         return new CategoryLookupDto
         {
             CategoryType = CategoryType.Custom,
-            CategoryName = category.CategoryName,
+            CategoryName = category.CategoryValue.CategoryName,
             Id = category.Id
         };
     }

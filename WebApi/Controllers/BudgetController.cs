@@ -5,6 +5,7 @@ using Application.handlers.budget.queries.GetBudgetList;
 using Application.mappers;
 using Application.mediator.interfaces;
 using AutoMapper;
+using Domain.Entities.Budget;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Extentions;
@@ -53,7 +54,7 @@ public class BudgetController : ControllerBase
     /// <response code="404">Not found</response>
     [Authorize]
     [HttpPut("update")]
-    [ProducesResponseType(typeof(BudgetUpdateResponseDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(Limit), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
     public async Task<ActionResult<BudgetUpdateResponseDto>> UpdateBudget([FromBody] BudgetUpdateRequestDto dto)
@@ -61,9 +62,9 @@ public class BudgetController : ControllerBase
         var createBudgetCommand = _budgetMapper.Map<UpdateBudgetCommand>(dto);
         createBudgetCommand.UserId = HttpContext.GetUserIdFromToken();
         
-        var updatedBudget = await _mediator.HandleRequest(createBudgetCommand);
+        var limit = await _mediator.HandleRequest(createBudgetCommand);
 
-        return Ok(updatedBudget);
+        return Ok(limit);
     }
 
     /// <summary>

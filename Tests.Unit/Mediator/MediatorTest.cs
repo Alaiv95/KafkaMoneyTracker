@@ -3,9 +3,12 @@ using Application.handlers.budget.commands.CreateBudget;
 using Application.mediator;
 using Application.mediator.interfaces;
 using Application.specs;
+using Domain.Entities;
+using Domain.Entities.User;
 using FluentAssertions;
 using Infrastructure.Models;
 using Infrastructure.Repositories;
+using Infrastructure.Repositories.interfaces;
 using Moq;
 
 namespace Tests.Unit.Commands;
@@ -13,8 +16,8 @@ namespace Tests.Unit.Commands;
 public class MediatorTest
 {
     private Mock<IBudgetRepository> _budgetRepository;
-    private Mock<IGenericRepository<User>> _userRepository;
-    private Mock<IGenericRepository<Category>> _categoryRepository;
+    private Mock<IGenericRepository<User, UserEntity>> _userRepository;
+    private Mock<IGenericRepository<Category, CategoryEntity>> _categoryRepository;
     private CreateBudgetCommand _command;
     private BudgetSpecs _spec;
 
@@ -22,8 +25,8 @@ public class MediatorTest
     public void Setup()
     {
         _budgetRepository = new Mock<IBudgetRepository>();
-        _userRepository = new Mock<IGenericRepository<User>>();
-        _categoryRepository = new Mock<IGenericRepository<Category>>();
+        _userRepository = new Mock<IGenericRepository<User, UserEntity>>();
+        _categoryRepository = new Mock<IGenericRepository<Category, CategoryEntity>>();
         _spec = new BudgetSpecs();
     }
 
@@ -32,7 +35,7 @@ public class MediatorTest
     {
         // Arrange
         var mediator = new Mediator();
-        var handler = new CreateBudgetCommandHandler(_budgetRepository.Object, _userRepository.Object, _categoryRepository.Object, _spec);
+        var handler = new CreateBudgetCommandHandler(_budgetRepository.Object, _categoryRepository.Object, _spec);
         mediator.Register(handler);
 
         // Act

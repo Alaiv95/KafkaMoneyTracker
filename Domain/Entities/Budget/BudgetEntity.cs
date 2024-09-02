@@ -4,6 +4,8 @@ public class BudgetEntity : TimeBasedEntity
 {
     private BudgetEntity() {}
     
+    public Guid Id { get; private set; }
+    
     public Limit BudgetLimit { get; private set; }
 
     public Guid CategoryId { get; private  set; }
@@ -19,6 +21,7 @@ public class BudgetEntity : TimeBasedEntity
 
         return new()
         {
+            Id = Guid.NewGuid(),
             BudgetLimit = limit,
             CategoryId = categoryId,
             UserId = userId,

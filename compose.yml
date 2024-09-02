@@ -63,24 +63,24 @@ services:
     networks:
       - kafka-network
 
-  app:
-    build: 
-      context: .
-      dockerfile: Dockerfile
-    ports:
-      - "8080:8080"
-    restart: always
-    environment:
-      KAFKA_BOOTSTRAP_SERVERS: kafka:9092
-      REDIS_HOST: redis
-      REDIS_NAME: docker-redis
-      DB_CONNECTION: Host=main-db;Port=5432;User Id=postgres;Password=postgres;Database=main;
-    networks:
-      - kafka-network
-    depends_on:
-      - kafka
-      - redis
-      - main-db
+  # app:
+  #   build: 
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "8080:8080"
+  #   restart: always
+  #   environment:
+  #     KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+  #     REDIS_HOST: redis
+  #     REDIS_NAME: docker-redis
+  #     DB_CONNECTION: Host=main-db;Port=5432;User Id=postgres;Password=postgres;Database=main;
+  #   networks:
+  #     - kafka-network
+  #   depends_on:
+  #     - kafka
+  #     - redis
+  #     - main-db
 
 volumes:
   pgdata-main:

@@ -2,7 +2,9 @@
 using Application.exceptions;
 using Application.mediator.interfaces;
 using AutoMapper;
+using Domain.Enums;
 using Infrastructure.Repositories;
+using Infrastructure.Repositories.interfaces;
 
 namespace Application.handlers.category.command.DeleteCategory;
 
@@ -25,7 +27,7 @@ public class DeleteCategoryCommandHandler : IRequestHandler<DeleteCategoryComman
             throw new NotFoundException($"Category with id {command.CategoryId} not found");
         }
 
-        if (!category.IsCustom || category.CreatedBy != command.UserId)
+        if (category.CategoryValue.CategoryType != CategoryType.Custom || category.CreatedBy != command.UserId)
         {
             throw new CategoryCantBeDeletedException($"Category with id {category.Id} is not custom or created by other user");
         }

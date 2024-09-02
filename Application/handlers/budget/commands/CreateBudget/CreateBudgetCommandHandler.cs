@@ -2,24 +2,26 @@
 using Application.handlers.budget.queries.GetBudgetList;
 using Application.mediator.interfaces;
 using Application.specs;
+using Domain.Entities;
+using Domain.Entities.Budget;
 using Infrastructure.Models;
 using Infrastructure.Repositories;
+using Infrastructure.Repositories.interfaces;
 
 namespace Application.handlers.budget.commands.CreateBudget;
 
 public class CreateBudgetCommandHandler : IRequestHandler<CreateBudgetCommand, Guid>
 {
     private readonly IBudgetRepository _budgetRepository;
-    private readonly IGenericRepository<Category> _categoryRepository;
+    private readonly IGenericRepository<Category, CategoryEntity> _categoryRepository;
     private readonly BudgetSpecs _budgetSpecs;
 
     public CreateBudgetCommandHandler
-        (
-            IBudgetRepository budgetRepository,
-            IGenericRepository<User> userRepository,
-            IGenericRepository<Category> categoryRepository,
-            BudgetSpecs budgetSpecs
-        )
+    (
+        IBudgetRepository budgetRepository,
+        IGenericRepository<Category, CategoryEntity> categoryRepository,
+        BudgetSpecs budgetSpecs
+    )
     {
         _budgetRepository = budgetRepository;
         _categoryRepository = categoryRepository;
@@ -42,16 +44,11 @@ public class CreateBudgetCommandHandler : IRequestHandler<CreateBudgetCommand, G
             throw new BudgetForCategoryAlreadyExistsException(command.CategoryId.ToString());
         }
 
-        var budget = new Budget
-        {
-            Id = Guid.NewGuid(),
-            UserId = command.UserId,
-            CategoryId = command.CategoryId,
-            BudgetLimit = command.BudgetLimit,
-            DurationInDays = command.DurationInDays,
-            CreatedAt = DateTime.Now,
-            UpdatedAt = null
-        };
+        var budget = BudgetEntity.Create(
+            Limit.Create(command.BudgetLimit, command.DurationInDays),
+            command.CategoryId,
+            command.UserId
+        );
 
         await _budgetRepository.AddAsync(budget);
 
@@ -71,5 +68,4 @@ public class CreateBudgetCommandHandler : IRequestHandler<CreateBudgetCommand, G
 
         return budgetList.Any();
     }
-
 }

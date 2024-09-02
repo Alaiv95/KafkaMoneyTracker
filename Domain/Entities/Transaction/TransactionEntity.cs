@@ -1,8 +1,14 @@
-﻿namespace Domain.Entities.Transaction;
+﻿using System.Text.Json.Serialization;
+using Domain.Entities.Budget;
+
+namespace Domain.Entities.Transaction;
 
 public class TransactionEntity : TimeBasedEntity
 {
+    [JsonConstructor]
     private TransactionEntity() {}
+    
+    public Guid Id { get; private set; }
     
     public Guid UserId { get; private set; }
 
@@ -26,9 +32,25 @@ public class TransactionEntity : TimeBasedEntity
             IsActive = true,
             UserId = userId,
             CreatedAt = DateTime.Now,
-            UpdatedAt = null
+            UpdatedAt = null,
+            Id = Guid.NewGuid()
         };
     }
 }
 
-public record Money(double Amount, string Currency);
+public record Money
+{
+    public double Amount { get; private set; }
+    public string Currency { get; private set; }
+    
+    private Money() {}
+    
+    public static Money Create(double amount, string currency)
+    {
+        return new()
+        {   
+            Amount = amount,
+            Currency = currency
+        };
+    }
+}

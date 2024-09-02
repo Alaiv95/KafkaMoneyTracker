@@ -7,20 +7,23 @@ using Application.specs;
 using Confluent.Kafka;
 using Infrastructure.Repositories;
 using System.Text.Json;
+using Domain.Entities.Budget;
+using Domain.Entities.Transaction;
 using Infrastructure.Models;
+using Infrastructure.Repositories.interfaces;
 
 namespace Application.handlers.budget.queries.CheckSpentBudget;
 
 public class CheckSpentBudgetQueryHandler : IRequestHandler<CheckSpentBudgetQuery, bool>
 {
-    private readonly IGenericRepository<Transaction> _transactionRepository;
+    private readonly IGenericRepository<Transaction, TransactionEntity> _transactionRepository;
     private readonly IBudgetRepository _budgetRepository;
     private readonly IEventsProducer _eventsProducer;
     private readonly BudgetSpecs _budgetSpec;
     private readonly TransactionSpecs _transactionSpec;
 
     public CheckSpentBudgetQueryHandler(
-        IGenericRepository<Transaction> transactionRepository,
+        IGenericRepository<Transaction, TransactionEntity> transactionRepository,
         IBudgetRepository budgetRepository,
         IEventsProducer eventsProducer,
         BudgetSpecs budgetSpecs,
@@ -55,12 +58,12 @@ public class CheckSpentBudgetQueryHandler : IRequestHandler<CheckSpentBudgetQuer
         return isExceeded;
     }
 
-    private async Task ProduceMessage(CheckSpentBudgetQuery query, Budget budget, double spentAmount)
+    private async Task ProduceMessage(CheckSpentBudgetQuery query, BudgetEntity budget, double spentAmount)
     {
         var messageData = new BudgetExceededDto
         {
-            BudgetLimit = budget.BudgetLimit,
-            BudgetPeriod = $"{budget.CreatedAt} - {budget.CreatedAt.AddDays(budget.DurationInDays)}",
+            BudgetLimit = budget.BudgetLimit.Amount,
+            BudgetPeriod = $"{budget.CreatedAt} - {budget.CreatedAt.AddDays(budget.BudgetLimit.Duration)}",
             Category = budget.CategoryId.ToString(),
             SpentAmount = spentAmount,
             UserId = query.UserId
@@ -73,19 +76,19 @@ public class CheckSpentBudgetQueryHandler : IRequestHandler<CheckSpentBudgetQuer
         });
     }
 
-    private bool IsBudgetForCategoryExceeded(Budget budget, double moneySpent)
+    private bool IsBudgetForCategoryExceeded(BudgetEntity budget, double moneySpent)
     {
-        var transactionLimit = budget.BudgetLimit;
+        var transactionLimit = budget.BudgetLimit.Amount;
 
         return Math.Abs(moneySpent) > transactionLimit;
     }
 
-    private double GetSpentAmount(List<Transaction> transactions)
+    private double GetSpentAmount(List<TransactionEntity> transactions)
     {
-        return transactions.Where(t => t.Amount < 0).Sum(t => t.Amount);
+        return transactions.Where(t => t.Money.Amount < 0).Sum(t => t.Money.Amount);
     }
 
-    private async Task<Budget?> GetActiveBudget(CheckSpentBudgetQuery command)
+    private async Task<BudgetEntity?> GetActiveBudget(CheckSpentBudgetQuery command)
     {
         var filter = new GetBudgetListQuery
         {
@@ -99,10 +102,10 @@ public class CheckSpentBudgetQueryHandler : IRequestHandler<CheckSpentBudgetQuer
         return budgetList.FirstOrDefault();
     }
 
-    private async Task<List<Transaction>> GetTransactionsFromBudgetPeriod(Budget budget, CheckSpentBudgetQuery command)
+    private async Task<List<TransactionEntity>> GetTransactionsFromBudgetPeriod(BudgetEntity budget, CheckSpentBudgetQuery command)
     {
         var dateFrom = budget.CreatedAt.ToUniversalTime();
-        var dateTo = dateFrom.AddDays(budget.DurationInDays);
+        var dateTo = dateFrom.AddDays(budget.BudgetLimit.Duration);
 
         var filter = new BaseSearchDto
         {

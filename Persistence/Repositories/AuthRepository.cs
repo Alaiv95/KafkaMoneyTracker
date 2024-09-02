@@ -26,15 +26,25 @@ public class AuthRepository : IAuthRepository
 
     public async Task<UserEntity?> GetByEmailAsync(string email)
     {
-        var user = await _context.Users.AsNoTracking().FirstOrDefaultAsync(x => x.Email == email);
+        var user = await GetUserByEmailAsync(email);
 
         return _mapper.Map<UserEntity>(user);
     }
 
+    internal async Task<User?> GetUserByEmailAsync(string email)
+    {
+        return await _context.Users.AsNoTracking().FirstOrDefaultAsync(x => x.Email == email);
+    }
+
     public async Task<UserEntity?> GetByIdAsync(Guid id)
     {
-        var user = await _context.Users.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
+        var user = await GetUserByIdAsync(id);
 
         return _mapper.Map<UserEntity>(user);
+    }
+    
+    internal async Task<User?> GetUserByIdAsync(Guid id)
+    {
+        return await _context.Users.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
     }
 }

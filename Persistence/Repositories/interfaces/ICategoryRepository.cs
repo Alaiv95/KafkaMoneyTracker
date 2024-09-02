@@ -1,10 +1,11 @@
-﻿using Infrastructure.Models;
+﻿using Domain.Entities;
+using Infrastructure.Models;
 
-namespace Infrastructure.Repositories;
+namespace Infrastructure.Repositories.interfaces;
 
-public interface ICategoryRepository : IGenericRepository<Category>
+public interface ICategoryRepository : IGenericRepository<Category, CategoryEntity>
 {
-    Task<Category?> GetByNameAsync(string name);
+    Task<CategoryEntity?> GetByNameAsync(string name);
 
-    Task DeleteAsync(Category category);
+    Task DeleteAsync(CategoryEntity category);
 }

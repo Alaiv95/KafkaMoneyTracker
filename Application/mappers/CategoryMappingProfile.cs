@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using Application.Dtos;
+using AutoMapper;
 using Domain.Entities;
 using Infrastructure.Models;
 
@@ -13,7 +14,12 @@ public class CategoryMappingProfile : Profile
             .ForPath(model => model.CategoryType, opt => opt.MapFrom(ent => ent.CategoryValue.CategoryType));
         
         CreateMap<Category, CategoryEntity>()
-            .ForPath(ent => ent.CategoryValue.CategoryName, model => model.MapFrom(ent => ent.CategoryName))
-            .ForPath(ent => ent.CategoryValue.CategoryType, model => model.MapFrom(ent => ent.CategoryType));
+            .ForPath(ent => ent.CategoryValue.CategoryName, opt => opt.MapFrom(ent => ent.CategoryName))
+            .ForPath(ent => ent.CategoryValue.CategoryType, opt => opt.MapFrom(ent => ent.CategoryType));
+
+        CreateMap<CategoryEntity, CategoryLookupDto>()
+            .ForPath(dto => dto.CategoryName, opt => opt.MapFrom(ent => ent.CategoryValue.CategoryName))
+            .ForPath(dto => dto.CategoryType, opt => opt.MapFrom(ent => ent.CategoryValue.CategoryType))
+            .ForMember(dto => dto.Id, opt => opt.MapFrom(ent => ent.Id));
     }
 }

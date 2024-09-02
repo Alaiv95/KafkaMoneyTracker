@@ -1,19 +1,21 @@
-﻿using Application.handlers.budget.queries.CheckSpentBudget;
+﻿using System.Linq.Expressions;
+using Application.handlers.budget.queries.CheckSpentBudget;
 using Application.kafka.producer;
-using Application.mappers;
 using Application.specs;
+using Domain.Entities.Budget;
+using Domain.Entities.Transaction;
 using FluentAssertions;
-using Infrastructure.Repositories;
-using Moq;
-using System.Linq.Expressions;
 using Infrastructure.Models;
+using Infrastructure.Repositories;
+using Infrastructure.Repositories.interfaces;
+using Moq;
 
 namespace Tests.Unit.Queries;
 
 public class CheckSpenBudgetListQueryHandlerTests
 {
     private Mock<IBudgetRepository> _budgetRepository;
-    private Mock<IGenericRepository<Transaction>> _transactionRepository;
+    private Mock<IGenericRepository<Transaction, TransactionEntity>> _transactionRepository;
     private Mock<IEventsProducer> _eventsProducer;
     private BudgetSpecs _spec;
     private TransactionSpecs _transactionSpec;
@@ -23,21 +25,18 @@ public class CheckSpenBudgetListQueryHandlerTests
     public void Setup()
     {
         _budgetRepository = new Mock<IBudgetRepository>();
-        _transactionRepository = new Mock<IGenericRepository<Transaction>>();
+        _transactionRepository = new Mock<IGenericRepository<Transaction, TransactionEntity>>();
         _eventsProducer = new Mock<IEventsProducer>();
         _spec = new BudgetSpecs();
         _transactionSpec = new TransactionSpecs();
 
-        var budgets = new List<Budget>
+        var budgets = new List<BudgetEntity>
         {
-            new()
-            {
-                UserId = Guid.NewGuid(),
-                BudgetLimit = 1000,
-                CategoryId = Guid.NewGuid(),
-                CreatedAt = DateTime.Now,
-                Id = Guid.NewGuid(),
-            }
+            BudgetEntity.Create(
+                Limit.Create(100.12, 12),
+                Guid.NewGuid(),
+                Guid.NewGuid()
+            )
         };
 
         _budgetRepository
@@ -55,31 +54,22 @@ public class CheckSpenBudgetListQueryHandlerTests
     public async Task CheckBudget_NotExceededLimit_ReturnsFalse()
     {
         // Arrange
-        var transactions = new List<Transaction>
+        var transactions = new List<TransactionEntity>
         {
-            new()
-            {
-                Amount = -500,
-                CategoryId = Guid.NewGuid(),
-                CreatedAt = DateTime.Now,
-                Id = Guid.NewGuid(),
-                UserId = Guid.NewGuid(),
-            }
+            TransactionEntity.Create(
+                Guid.NewGuid(),
+                Money.Create(123.23, "RUB"),
+                Guid.NewGuid()
+            )
         };
 
         _transactionRepository
             .Setup(repository => repository.SearchAsync(It.IsAny<Expression<Func<Transaction, bool>>>()))
             .ReturnsAsync(() => transactions);
-
-        var query = new CheckSpentBudgetQuery
-        {
-            CategoryId = Guid.NewGuid(),
-            UserId = Guid.NewGuid()
-        };
-
+        
         var handler = new CheckSpentBudgetQueryHandler(
             _transactionRepository.Object,
-            _budgetRepository.Object, 
+            _budgetRepository.Object,
             _eventsProducer.Object, _spec,
             _transactionSpec
         );
@@ -95,17 +85,13 @@ public class CheckSpenBudgetListQueryHandlerTests
     public async Task CheckBudget_ExceededLimit_ReturnsTrue()
     {
         // Arrange
-        var transactions = new List<Transaction>
+        var transactions = new List<TransactionEntity>
         {
-            new()
-            {
-                Amount = -1500,
-                CategoryId = Guid.NewGuid(),
-                CreatedAt = DateTime.Now,
-                Id = Guid.NewGuid(),
-                UserId = Guid.NewGuid(),
-                IsActive = true
-            }
+            TransactionEntity.Create(
+                Guid.NewGuid(),
+                Money.Create(-1500, "RUB"),
+                Guid.NewGuid()
+            )
         };
 
         _transactionRepository

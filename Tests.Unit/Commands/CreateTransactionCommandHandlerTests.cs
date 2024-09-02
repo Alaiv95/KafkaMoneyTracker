@@ -1,22 +1,25 @@
 ﻿using Application.exceptions;
 using Application.handlers.transactions.commands.CreateTransaction;
 using Application.kafka.producer;
+using Domain.Entities;
+using Domain.Enums;
 using FluentAssertions;
 using Infrastructure.Models;
 using Infrastructure.Repositories;
+using Infrastructure.Repositories.interfaces;
 using Moq;
 
 namespace Tests.Unit.Commands;
 
 public class CreateTransactionCommandHandlerTests
 {
-    private Mock<IGenericRepository<Category>> _categoryRepository;
+    private Mock<IGenericRepository<Category, CategoryEntity>> _categoryRepository;
     private Mock<IEventsProducer> _eventsProducer;
 
     [SetUp]
     public void Setup()
     {;
-        _categoryRepository = new Mock<IGenericRepository<Category>>();
+        _categoryRepository = new Mock<IGenericRepository<Category, CategoryEntity>>();
         _eventsProducer = new Mock<IEventsProducer>();
     }
 
@@ -26,7 +29,7 @@ public class CreateTransactionCommandHandlerTests
         // Arrange
         _categoryRepository
             .Setup(repository => repository.GetByIdAsync(It.IsAny<Guid>()))
-            .ReturnsAsync(() => new Category());
+            .ReturnsAsync(() => CategoryEntity.Create(CategoryValue.Create(CategoryType.Custom, "asdasd"), Guid.NewGuid()));
 
         var command = new CreateTransactionCommand
         {

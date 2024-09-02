@@ -14,6 +14,7 @@ public class TestBase
             cfg.AddProfile(typeof(AuthMappingProfile));
             cfg.AddProfile(typeof(BudgetMappingProfile));
             cfg.AddProfile(typeof(TransactionMappingProfile));
+            cfg.AddProfile(typeof(CategoryMappingProfile));
         });
 
         Mapper = configBuilder.CreateMapper();

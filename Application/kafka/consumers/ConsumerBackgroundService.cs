@@ -19,7 +19,7 @@ public abstract class ConsumerBackgroundService : BackgroundService
     )
     {
         _scopeFactory = scopeFactory;
-        _options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+        _options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true};
         _config = new ConsumerConfig
         {
             GroupId = options.Value.GroupId,
@@ -32,6 +32,7 @@ public abstract class ConsumerBackgroundService : BackgroundService
     {
         return Task.Run(() =>
         {
+            Log.Information($"Start consumer background service");
             _ = ConsumeAsync(GetTopic(), stoppingToken);
         }, stoppingToken);
     }
@@ -44,6 +45,7 @@ public abstract class ConsumerBackgroundService : BackgroundService
 
         while (!stoppingToken.IsCancellationRequested)
         {
+            Log.Information($"Start cycle after sub");
             var consumeResult = consumer.Consume(stoppingToken);
             Log.Information($"Start handling message {consumeResult.Message.Value} in topic {GetTopic()}");
             await HandleMessage(consumeResult.Message.Value);

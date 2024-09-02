@@ -1,13 +1,15 @@
 ﻿using System.Linq.Expressions;
+using AutoMapper;
+using Domain.Entities.Transaction;
 using Infrastructure.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories;
 
-public class TransactionRepository : GenericRepository<Transaction>, ITransactionRepository
+public class TransactionRepository : GenericRepository<Transaction, TransactionEntity>, ITransactionRepository
 {
-    public TransactionRepository(IMoneyTrackerDbContext context)
-        : base(context)
+    public TransactionRepository(IMoneyTrackerDbContext context, IMapper mapper)
+        : base(context, mapper)
     {
     }
 

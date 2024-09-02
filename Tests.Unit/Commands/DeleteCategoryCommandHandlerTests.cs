@@ -1,10 +1,12 @@
 ﻿using Application.Dtos;
 using Application.exceptions;
 using Application.handlers.category.command.DeleteCategory;
+using Domain.Entities;
 using Domain.Enums;
 using FluentAssertions;
 using Infrastructure.Models;
 using Infrastructure.Repositories;
+using Infrastructure.Repositories.interfaces;
 using Moq;
 
 namespace Tests.Unit.Commands;
@@ -24,26 +26,22 @@ public class DeleteCategoryCommandHandlerTests : TestBase
     {
         // Arrange
         var userId = Guid.NewGuid();
-        var categoryId = Guid.NewGuid();
 
+        var category = CategoryEntity.Create(
+            CategoryValue.Create(CategoryType.Custom, "asd"),
+            userId
+        );
+        
         var command = new DeleteCategoryCommand()
         {
-            CategoryId = categoryId,
+            CategoryId = category.Id,
             UserId = userId
         };
 
-        var dbResponse = new Category()
-        {
-            CategoryName = "asd",
-            CategoryType = CategoryType.Custom,
-            IsCustom = true,
-            Id = categoryId,
-            CreatedBy = userId
-        };
 
         _categoryRepository
             .Setup(repository => repository.GetByIdAsync(It.IsAny<Guid>()))
-            .ReturnsAsync(() => dbResponse);
+            .ReturnsAsync(() => category);
 
         var handler = new DeleteCategoryCommandHandler(_categoryRepository.Object, Mapper);
 
@@ -52,7 +50,7 @@ public class DeleteCategoryCommandHandlerTests : TestBase
 
         // Assert
         result.Should().NotBeNull();
-        result.Should().BeEquivalentTo(Mapper.Map<CategoryLookupDto>(dbResponse));
+        result.Should().BeEquivalentTo(Mapper.Map<CategoryLookupDto>(category));
     }
 
     [Test]
@@ -61,26 +59,22 @@ public class DeleteCategoryCommandHandlerTests : TestBase
         // Arrange
         var userId = Guid.NewGuid();
         var user2Id = Guid.NewGuid();
-        var categoryId = Guid.NewGuid();
-
+        
+        var category = CategoryEntity.Create(
+            CategoryValue.Create(CategoryType.Custom, "asd"),
+            user2Id
+        );
+        
         var command = new DeleteCategoryCommand()
         {
-            CategoryId = categoryId,
+            CategoryId = category.Id,
             UserId = userId
         };
-
-        var dbResponse = new Category()
-        {
-            CategoryName = "asd",
-            CategoryType = CategoryType.Custom,
-            IsCustom = true,
-            Id = categoryId,
-            CreatedBy = user2Id
-        };
+        
 
         _categoryRepository
             .Setup(repository => repository.GetByIdAsync(It.IsAny<Guid>()))
-            .ReturnsAsync(() => dbResponse);
+            .ReturnsAsync(() => category);
 
         var handler = new DeleteCategoryCommandHandler(_categoryRepository.Object, Mapper);
 
@@ -94,22 +88,15 @@ public class DeleteCategoryCommandHandlerTests : TestBase
     {
         // Arrange
         var userId = Guid.NewGuid();
-        var categoryId = Guid.NewGuid();
 
+        var dbResponse = CategoryEntity.Create(CategoryValue.Create(CategoryType.Entertainment, "alal"), userId);
+        
         var command = new DeleteCategoryCommand()
         {
-            CategoryId = categoryId,
+            CategoryId = dbResponse.Id,
             UserId = userId
         };
-
-        var dbResponse = new Category()
-        {
-            CategoryName = "asd",
-            CategoryType = CategoryType.Food,
-            IsCustom = false,
-            Id = categoryId,
-            CreatedBy = userId
-        };
+        
 
         _categoryRepository
             .Setup(repository => repository.GetByIdAsync(It.IsAny<Guid>()))

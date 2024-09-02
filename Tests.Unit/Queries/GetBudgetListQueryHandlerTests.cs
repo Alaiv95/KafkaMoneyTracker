@@ -6,7 +6,9 @@ using FluentAssertions;
 using Infrastructure.Repositories;
 using Moq;
 using System.Linq.Expressions;
+using Domain.Entities.Budget;
 using Infrastructure.Models;
+using Infrastructure.Repositories.interfaces;
 
 namespace Tests.Unit.Queries;
 
@@ -34,45 +36,30 @@ public class GetBudgetListQueryHandlerTests : TestBase
     public async Task GetBudgets_DataReturned_Success()
     {
         // Arrange
-        var budgetList = new List<Budget>()
+        var budgets = new List<BudgetEntity>
         {
-            new()
-            {
-                Id = Guid.NewGuid(),
-                UserId = Guid.NewGuid(),
-                CategoryId = Guid.NewGuid(),
-                BudgetLimit = 100,
-                DurationInDays = 30,
-                CreatedAt = DateTime.Now,
-                UpdatedAt = null
-            },
-            new()
-            {
-                Id = Guid.NewGuid(),
-                UserId = Guid.NewGuid(),
-                CategoryId = Guid.NewGuid(),
-                BudgetLimit = 100,
-                DurationInDays = 30,
-                CreatedAt = DateTime.Now,
-                UpdatedAt = null
-            },
-            new()
-            {
-                Id = Guid.NewGuid(),
-                UserId = Guid.NewGuid(),
-                CategoryId = Guid.NewGuid(),
-                BudgetLimit = 100,
-                DurationInDays = 30,
-                CreatedAt = DateTime.Now,
-                UpdatedAt = null
-            },
+            BudgetEntity.Create(
+                Limit.Create(100.12, 12),
+                Guid.NewGuid(),
+                Guid.NewGuid()
+            ),
+            BudgetEntity.Create(
+                Limit.Create(102.12, 14),
+                Guid.NewGuid(),
+                Guid.NewGuid()
+            ),
+            BudgetEntity.Create(
+                Limit.Create(-100.12, 2),
+                Guid.NewGuid(),
+                Guid.NewGuid()
+            )
         };
         
-        var expectedResult = Mapper.Map<List<BudgetLookUpVm>>(budgetList);
+        var expectedResult = Mapper.Map<List<BudgetLookUpVm>>(budgets);
 
         _repository
           .Setup(repository => repository.SearchAsync(It.IsAny<Expression<Func<Budget, bool>>>()))
-          .ReturnsAsync(() => budgetList);
+          .ReturnsAsync(() => budgets);
 
         var queryHandler = new GetBudgetListQueryHandler(_repository.Object, _spec, Mapper);
 
@@ -88,7 +75,7 @@ public class GetBudgetListQueryHandlerTests : TestBase
     public async Task GetBudgets_DataNotReturned_Success()
     {
         // Arrange
-        var budgetList = new List<Budget>();
+        var budgetList = new List<BudgetEntity>();
         var expectedResult = new List<BudgetLookUpVm>();
 
         _repository

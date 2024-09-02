@@ -1,4 +1,5 @@
-﻿using Domain.Entities.User;
+﻿using AutoMapper;
+using Domain.Entities.User;
 using Infrastructure.redis;
 using Infrastructure.Repositories.interfaces;
 
@@ -8,11 +9,13 @@ public class CachedAuthRepository : IAuthRepository
 {
     private readonly AuthRepository _authRepository;
     private readonly ICacheClient _cacheClient;
+    private readonly IMapper _mapper;
 
-    public CachedAuthRepository(AuthRepository authRepository, ICacheClient cacheClient)
+    public CachedAuthRepository(AuthRepository authRepository, ICacheClient cacheClient, IMapper mapper)
     {
         _authRepository = authRepository;
         _cacheClient = cacheClient;
+        _mapper = mapper;
     }
 
     public async Task AddUserAsync(UserEntity user)
@@ -22,11 +25,15 @@ public class CachedAuthRepository : IAuthRepository
 
     public async Task<UserEntity?> GetByEmailAsync(string email)
     {
-        return await _cacheClient.GetOrSetAndGetFromCache(email, () => _authRepository.GetByEmailAsync(email));
+        var user = await _cacheClient.GetOrSetAndGetFromCache(email, () => _authRepository.GetUserByEmailAsync(email));
+        
+        return _mapper.Map<UserEntity>(user);
     }
 
     public async Task<UserEntity?> GetByIdAsync(Guid id)
     {
-        return await _cacheClient.GetOrSetAndGetFromCache(id.ToString(), () => _authRepository.GetByIdAsync(id));
+        var user = await _cacheClient.GetOrSetAndGetFromCache(id.ToString(), () => _authRepository.GetUserByIdAsync(id));
+        
+        return _mapper.Map<UserEntity>(user);
     }
 }

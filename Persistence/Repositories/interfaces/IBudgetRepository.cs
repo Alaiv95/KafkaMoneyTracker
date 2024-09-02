@@ -1,11 +1,9 @@
-﻿using System.Linq.Expressions;
+﻿using Domain.Entities.Budget;
 using Infrastructure.Models;
 
-namespace Infrastructure.Repositories;
+namespace Infrastructure.Repositories.interfaces;
 
-public interface IBudgetRepository : IGenericRepository<Budget>
+public interface IBudgetRepository : IGenericRepository<Budget, BudgetEntity>
 {
-    Task<List<Budget>> SearchAsync(Expression<Func<Budget, bool>> predicate);
-
-    Task UpdateOne(Budget budget);
+    Task UpdateOne(Guid id, Limit limit);
 }

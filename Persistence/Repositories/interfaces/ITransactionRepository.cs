@@ -1,11 +1,13 @@
 ﻿
 
 using System.Linq.Expressions;
+using Domain.Entities.Transaction;
 using Infrastructure.Models;
+using Infrastructure.Repositories.interfaces;
 
 namespace Infrastructure.Repositories;
 
-public interface ITransactionRepository : IGenericRepository<Transaction>
+public interface ITransactionRepository : IGenericRepository<Transaction, TransactionEntity>
 {
     Task UpdateRangeAsync(List<Transaction> transactions);
 

@@ -4,30 +4,29 @@ using Application.handlers.budget.queries.GetBudgetList;
 using Application.mediator.interfaces;
 using Application.specs;
 using AutoMapper;
+using Domain.Entities.Budget;
 using Infrastructure.Models;
 using Infrastructure.Repositories;
+using Infrastructure.Repositories.interfaces;
 
 namespace Application.handlers.budget.commands.UpdateBudget;
 
-public class UpdateBudgetCommandHandler : IRequestHandler<UpdateBudgetCommand, BudgetUpdateResponseDto>
+public class UpdateBudgetCommandHandler : IRequestHandler<UpdateBudgetCommand, Limit>
 {
     private readonly IBudgetRepository _budgetRepository;
     private readonly BudgetSpecs _budgetSpecs;
-    private readonly IMapper _mapper;
 
     public UpdateBudgetCommandHandler
     (
         IBudgetRepository budgetRepository,
-        BudgetSpecs budgetSpecs,
-        IMapper mapper
+        BudgetSpecs budgetSpecs
     )
     {
         _budgetRepository = budgetRepository;
         _budgetSpecs = budgetSpecs;
-        _mapper = mapper;
     }
     
-    public async Task<BudgetUpdateResponseDto> Handle(UpdateBudgetCommand command)
+    public async Task<Limit> Handle(UpdateBudgetCommand command)
     {
         if (command.BudgetLimit is null && command.DurationInDays is null) 
         {
@@ -41,16 +40,17 @@ public class UpdateBudgetCommandHandler : IRequestHandler<UpdateBudgetCommand, B
             throw new NotFoundException($"Budget for category with id {command.CategoryId} not found");
         }
 
-        budget.BudgetLimit = command.BudgetLimit ?? budget.BudgetLimit;
-        budget.DurationInDays = command.DurationInDays ?? budget.DurationInDays;
-        budget.UpdatedAt = DateTime.Now;
+        var newLimit = command.BudgetLimit ?? budget.BudgetLimit.Amount;
+        var newDuration = command.DurationInDays ?? budget.BudgetLimit.Duration;
 
-        await _budgetRepository.UpdateOne(budget);
+        var limitValue = Limit.Create(newLimit, newDuration);
+        
+        await _budgetRepository.UpdateOne(budget.Id, limitValue);
 
-        return _mapper.Map<BudgetUpdateResponseDto>(budget);
+        return limitValue;
     }
     
-    private async Task<Budget?> FindActiveBudget(Guid userId, Guid categoryId)
+    private async Task<BudgetEntity?> FindActiveBudget(Guid userId, Guid categoryId)
     {
         var filter = new GetBudgetListQuery
         {
