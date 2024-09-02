@@ -85,6 +85,7 @@ public class CheckSpentBudgetQueryHandler : IRequestHandler<CheckSpentBudgetQuer
         return transactions.Where(t => t.Money.Amount < 0).Sum(t => t.Money.Amount);
     }
     
+    //todo refactor to find transactions by budgetId
     private async Task<List<TransactionEntity>> GetTransactionsFromBudgetPeriod(BudgetEntity budget, CheckSpentBudgetQuery command)
     {
         var dateFrom = budget.CreatedAt.ToUniversalTime();
