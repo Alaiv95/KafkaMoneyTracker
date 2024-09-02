@@ -41,7 +41,6 @@ public class CachedCategoryRepository : ICategoryRepository
     public async Task<List<CategoryEntity>> GetAllAsync()
     {
         var categories = await _cacheClient.GetOrSetAndGetFromCache(_getAllKey, () => _repository.GetAllCategoriesAsync());
-
         var categoryEntities = _mapper.Map<List<CategoryEntity>>(categories);
         
         return categoryEntities ?? new List<CategoryEntity>();

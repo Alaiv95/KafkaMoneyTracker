@@ -21,12 +21,16 @@ public class TransactionRepository : GenericRepository<Transaction, TransactionE
 
     public async Task<List<Transaction>> GetByIdsAsync(List<Guid> itemIds)
     {
-        return await _dbSet.Where(t => itemIds.Contains(t.Id)).ToListAsync();
+        return await _dbSet
+            .AsNoTracking()
+            .Where(t => itemIds.Contains(t.Id))
+            .ToListAsync();
     }
 
     public async Task<List<Transaction>> SearchWithIncludeAsync(Expression<Func<Transaction, bool>> predicate)
     {
         return await _dbSet
+            .AsNoTracking()
             .Where(predicate)
             .Include(t => t.Category)
             .ToListAsync();
