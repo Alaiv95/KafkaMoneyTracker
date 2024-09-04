@@ -1,7 +1,7 @@
 ﻿using Application.Dtos;
 using Application.mediator.interfaces;
 
-namespace Application.handlers.transactions.queries.GetUserTransactionsSummary;
+namespace Application.handlers.transactions.queries.Transactions.GetUserTransactionsSummary;
 
 public class GetUserTransactionsSummaryQuery : IRequest<List<TransactionSummaryDto>>
 {

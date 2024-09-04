@@ -1,7 +1,7 @@
 ﻿using Application.Dtos;
 using Application.handlers.transactions.commands.CancelTransactions;
 using Application.handlers.transactions.commands.CreateTransaction;
-using Application.handlers.transactions.queries.GetUserTransactions;
+using Application.handlers.transactions.queries.Transactions.GetUserTransactions;
 using AutoMapper;
 using Domain.Entities.Transaction;
 using Infrastructure.Models;

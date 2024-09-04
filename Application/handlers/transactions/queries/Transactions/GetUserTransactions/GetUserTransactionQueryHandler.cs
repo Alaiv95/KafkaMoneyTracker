@@ -1,15 +1,12 @@
 ﻿using Application.Dtos;
 using Application.exceptions;
-using Application.mappers;
 using Application.mediator.interfaces;
 using Application.specs;
 using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using Domain.Entities.Transaction;
-using Infrastructure.Repositories;
 using Infrastructure.Repositories.interfaces;
 
-namespace Application.handlers.transactions.queries.GetUserTransactions;
+namespace Application.handlers.transactions.queries.Transactions.GetUserTransactions;
 
 public class GetUserTransactionQueryHandler :
     IRequestHandler<GetUserTransactionsQuery, List<TransactionInfo>>

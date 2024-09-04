@@ -1,4 +1,5 @@
-﻿using Application.mappers;
+﻿using Application.common.FileInfoConfigurators;
+using Application.mappers;
 using Application.mediator.interfaces;
 using Application.mediator;
 using Application.specs;
@@ -14,8 +15,9 @@ using Application.handlers.category.command.DeleteCategory;
 using Application.handlers.category.queries;
 using Application.handlers.transactions.commands.CancelTransactions;
 using Application.handlers.transactions.commands.CreateTransaction;
-using Application.handlers.transactions.queries.GetUserTransactions;
-using Application.handlers.transactions.queries.GetUserTransactionsSummary;
+using Application.handlers.transactions.queries.Transactions.DownloadTransactionsSummary;
+using Application.handlers.transactions.queries.Transactions.GetUserTransactions;
+using Application.handlers.transactions.queries.Transactions.GetUserTransactionsSummary;
 
 namespace Application.mediator;
 
@@ -39,6 +41,7 @@ public static class DependencyInjection
             var updateBudgetCommandHandler = provider.GetRequiredService<UpdateBudgetCommandHandler>();
             var deleteCategoryCommandHandler = provider.GetRequiredService<DeleteCategoryCommandHandler>();
             var getUserTransactionsSummaryQueryHandler = provider.GetRequiredService<GetUserTransactionsSummaryQueryHandler>();
+            var downloadTransactionsSummaryQueryHandler = provider.GetRequiredService<DownloadTransactionsSummaryQueryHandler>();
 
             mediator.Register(createBudgetCommandHandler);
             mediator.Register(getBudgetQueryHandler);
@@ -53,6 +56,7 @@ public static class DependencyInjection
             mediator.Register(updateBudgetCommandHandler);
             mediator.Register(deleteCategoryCommandHandler);
             mediator.Register(getUserTransactionsSummaryQueryHandler);
+            mediator.Register(downloadTransactionsSummaryQueryHandler);
 
             return mediator;
         });

@@ -2,13 +2,15 @@
 using Application.Dtos;
 using Application.handlers.transactions.commands.CancelTransactions;
 using Application.handlers.transactions.commands.CreateTransaction;
-using Application.handlers.transactions.queries.GetUserTransactions;
-using Application.handlers.transactions.queries.GetUserTransactionsSummary;
+using Application.handlers.transactions.queries.Transactions.DownloadTransactionsSummary;
+using Application.handlers.transactions.queries.Transactions.GetUserTransactions;
+using Application.handlers.transactions.queries.Transactions.GetUserTransactionsSummary;
 using Application.MailClient;
 using Application.mappers;
 using Application.mediator.interfaces;
 using AutoMapper;
 using Domain.Entities.Transaction;
+using Infrastructure.FileUtils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -90,6 +92,30 @@ public class TransactionsController : ControllerBase
         var result = await _mediator.HandleRequest(searchQuery);
     
         return Ok(result);
+    }
+    
+    /// <summary>
+    /// Download summary of transactions in Excel = 1, Pdf = 2
+    /// </summary>
+    /// <returns>Returns excel file</returns>
+    /// <response code="200">Success</response>
+    /// <response code="400">Bad Request</response>
+    [Authorize]
+    [HttpGet("summary-download")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult> DownloadTransactionsSummary([FromQuery] Guid budgetId, [FromQuery] FileType type = FileType.Excel)
+    {
+        var searchQuery = new DownloadUserTransactionsQuery()
+        {
+            UserId = HttpContext.GetUserIdFromToken(),
+            BudgetId = budgetId,
+            FileType = type
+        };
+
+        var result = await _mediator.HandleRequest(searchQuery);
+
+        return result is null ? NoContent() : File(result.Content, result.MimeType, result.FileName);
     }
     
     /// <summary>

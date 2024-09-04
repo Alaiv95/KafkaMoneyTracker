@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
 using Application.Dtos;
-using Application.handlers.transactions.queries.GetUserTransactionsSummary;
+using Application.handlers.transactions.queries.Transactions.GetUserTransactionsSummary;
 using Application.specs;
 using Domain.Entities.Budget;
 using Domain.Entities.Transaction;
@@ -81,8 +81,6 @@ public class GetUserTransactionsSummaryQueryTests : TestBase
 
         var handler = new GetUserTransactionsSummaryQueryHandler(
             _transactionRepository.Object,
-            _budgetRepository.Object,
-            Mapper,
             _spec
         );
 
@@ -99,8 +97,8 @@ public class GetUserTransactionsSummaryQueryTests : TestBase
         // Assert
         result.Should().BeEquivalentTo(expectedResult);
     }
-    
-        [Test]
+
+    [Test]
     public async Task GetSummary_DataNotReturned_EmptyResultSuccess()
     {
         // Arrange
@@ -114,8 +112,6 @@ public class GetUserTransactionsSummaryQueryTests : TestBase
 
         var handler = new GetUserTransactionsSummaryQueryHandler(
             _transactionRepository.Object,
-            _budgetRepository.Object,
-            Mapper,
             _spec
         );
 

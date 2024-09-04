@@ -1,4 +1,7 @@
-﻿using Application.mappers;
+﻿using Application.common.FileInfoConfigurators;
+using Application.Dtos;
+using Application.FileInfoConfigurators;
+using Application.mappers;
 using Application.mediator;
 using Application.specs;
 using Application.kafka.producer;
@@ -15,8 +18,9 @@ using Application.handlers.category.command.DeleteCategory;
 using Application.handlers.category.queries;
 using Application.handlers.transactions.commands.CancelTransactions;
 using Application.handlers.transactions.commands.CreateTransaction;
-using Application.handlers.transactions.queries.GetUserTransactions;
-using Application.handlers.transactions.queries.GetUserTransactionsSummary;
+using Application.handlers.transactions.queries.Transactions.DownloadTransactionsSummary;
+using Application.handlers.transactions.queries.Transactions.GetUserTransactions;
+using Application.handlers.transactions.queries.Transactions.GetUserTransactionsSummary;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Application;
@@ -48,11 +52,17 @@ public static class DependencyInjection
         services.AddScoped<UpdateBudgetCommandHandler>();
         services.AddScoped<DeleteCategoryCommandHandler>();
         services.AddScoped<GetUserTransactionsSummaryQueryHandler>();
+        services.AddScoped<DownloadTransactionsSummaryQueryHandler>();
 
         services.AddScoped<IEventsProducer, EventsProducer>();
         services.AddHostedService<TransactionsConsumer>();
         services.AddHostedService<BudgetExceededConsumer>();
         services.AddScoped<IMailClient, SmtpMailClient>();
+        
+        services.AddScoped<IConfigurator<List<TransactionSummaryDto>>, SummaryInfoConfigurator>();
+        
+        
+        
 
         services.AddMediator();
     }
