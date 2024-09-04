@@ -10,13 +10,11 @@ public class SummaryInfoConfigurator : IConfigurator<List<TransactionSummaryDto>
 {
     public IInputInfo Configure(FileType type, List<TransactionSummaryDto> data)
     {
-        switch (type)
+        return type switch
         {
-            case FileType.Excel:
-                return ConfigureExcelInfo(data);
-            default:
-                throw new ArgumentException($"Тип ${type.ToString()} не поддерживается");
-        }
+            FileType.Excel => ConfigureExcelInfo(data),
+            _ => throw new ArgumentException($"Тип ${type.ToString()} не поддерживается")
+        };
     }
 
     private ExcelInputInputInfo ConfigureExcelInfo(List<TransactionSummaryDto> data)
