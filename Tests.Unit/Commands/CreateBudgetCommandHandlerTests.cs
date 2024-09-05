@@ -1,6 +1,5 @@
 ﻿using Application.exceptions;
 using Application.handlers.budget.commands.CreateBudget;
-using Application.specs;
 using FluentAssertions;
 using Infrastructure.Repositories;
 using Moq;
@@ -11,6 +10,7 @@ using Domain.Entities.User;
 using Domain.Enums;
 using Infrastructure.Models;
 using Infrastructure.Repositories.interfaces;
+using Infrastructure.specs;
 
 namespace Tests.Unit.Commands;
 

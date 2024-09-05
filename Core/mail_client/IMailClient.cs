@@ -1,5 +1,5 @@
 ﻿
-namespace Application.MailClient;
+namespace Core.mail_client;
 
 public interface IMailClient
 {

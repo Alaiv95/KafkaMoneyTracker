@@ -1,9 +1,10 @@
 ﻿using Application.Dtos;
 using Application.handlers.transactions.queries.Transactions.common;
 using Application.mediator.interfaces;
-using Application.specs;
 using Infrastructure.Repositories.interfaces;
+using Infrastructure.specs;
 using Microsoft.IdentityModel.Tokens;
+using Core.common;
 
 namespace Application.handlers.transactions.queries.Transactions.GetUserTransactionsSummary;
 
@@ -25,7 +26,7 @@ public class
 
     public async Task<List<TransactionSummaryDto>> Handle(GetUserTransactionsSummaryQuery command)
     {
-        var filter = new BaseSearchDto
+        var filter = new BaseBudgetSearchFilter
         {
             BudgetId = command.BudgetId,
             UserId = command.UserId

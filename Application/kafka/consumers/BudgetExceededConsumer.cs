@@ -1,16 +1,13 @@
-﻿using Application.exceptions;
+﻿using System.Text.Json;
+using Application.exceptions;
 using Application.handlers.budget.queries.CheckSpentBudget;
-using Application.kafka.consumers;
-using Application.MailClient;
-using Application.mediator.interfaces;
-using Infrastructure.Repositories;
+using Core.mail_client;
+using Infrastructure.Repositories.interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using System.Text.Json;
-using Infrastructure.Repositories.interfaces;
 using Serilog;
 
-namespace Application.kafka.consumer;
+namespace Application.kafka.consumers;
 
 public class BudgetExceededConsumer : ConsumerBackgroundService
 {

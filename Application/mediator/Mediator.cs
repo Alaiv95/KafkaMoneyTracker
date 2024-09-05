@@ -1,4 +1,5 @@
 ﻿using Application.exceptions;
+using Application.mediator.exceptions;
 using Application.mediator.interfaces;
 using Serilog;
 

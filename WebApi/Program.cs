@@ -1,7 +1,7 @@
 using Application;
 using Application.handlers.auth.commands.Login;
 using Application.kafka;
-using Application.MailClient;
+using Core.mail_client;
 using Infrastructure;
 using Infrastructure.authentication;
 using Serilog;

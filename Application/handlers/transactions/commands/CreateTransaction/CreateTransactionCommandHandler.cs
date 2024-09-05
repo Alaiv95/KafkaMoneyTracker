@@ -6,11 +6,11 @@ using Confluent.Kafka;
 using Infrastructure.Repositories;
 using System.Text.Json;
 using Application.handlers.budget.queries.GetBudgetList;
-using Application.specs;
 using Domain.Entities;
 using Domain.Entities.Transaction;
 using Infrastructure.Models;
 using Infrastructure.Repositories.interfaces;
+using Infrastructure.specs;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Application.handlers.transactions.commands.CreateTransaction;

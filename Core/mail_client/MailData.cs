@@ -1,4 +1,4 @@
-﻿namespace Application.MailClient;
+﻿namespace Core.mail_client;
 
 public class MailData
 {

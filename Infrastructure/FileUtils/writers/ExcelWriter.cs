@@ -1,18 +1,19 @@
 ﻿using Infrastructure.FileUtils.dtos;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
+using Core.fileUtils.dtos;
 
 namespace Infrastructure.FileUtils.writers;
 
 internal class ExcelWriter : IFileWriter
 {
-    private readonly ExcelInputInputInfo _inputInputInfo;
+    private readonly ExcelInputInfo _inputInfo;
     private readonly XSSFWorkbook _workbook = new();
     private const string MimeExcelType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
 
-    public ExcelWriter(ExcelInputInputInfo inputInputInfo)
+    public ExcelWriter(ExcelInputInfo inputInfo)
     {
-        _inputInputInfo = inputInputInfo;
+        _inputInfo = inputInfo;
     }
 
     public FileType Type { get; set; } = FileType.Excel;
@@ -20,11 +21,11 @@ internal class ExcelWriter : IFileWriter
     public FileWriteResultDto WriteFile()
     {
         ISheet sheet = _workbook.CreateSheet();
-        AddRow(sheet, 0, _inputInputInfo.Header);
+        AddRow(sheet, 0, _inputInfo.Header);
 
-        for (var rowIndex = 1; rowIndex <= _inputInputInfo.Rows.Count; rowIndex++)
+        for (var rowIndex = 1; rowIndex <= _inputInfo.Rows.Count; rowIndex++)
         {
-            AddRow(sheet, rowIndex, _inputInputInfo.Rows[rowIndex - 1]);
+            AddRow(sheet, rowIndex, _inputInfo.Rows[rowIndex - 1]);
         }
 
         using MemoryStream stream = new MemoryStream();
@@ -35,7 +36,7 @@ internal class ExcelWriter : IFileWriter
         {
             MimeType = MimeExcelType,
             Content = data,
-            FileName = $"{_inputInputInfo.Name}.xlsx"
+            FileName = $"{_inputInfo.Name}.xlsx"
         };
     }
 

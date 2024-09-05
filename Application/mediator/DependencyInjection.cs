@@ -1,15 +1,9 @@
-﻿using Application.common.FileInfoConfigurators;
-using Application.mappers;
-using Application.mediator.interfaces;
-using Application.mediator;
-using Application.specs;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Application.handlers.auth.commands.Login;
+using Application.handlers.auth.commands.Register;
 using Application.handlers.budget.commands.CreateBudget;
+using Application.handlers.budget.commands.UpdateBudget;
 using Application.handlers.budget.queries.CheckSpentBudget;
 using Application.handlers.budget.queries.GetBudgetList;
-using Application.handlers.auth.commands.Login;
-using Application.handlers.auth.commands.Register;
-using Application.handlers.budget.commands.UpdateBudget;
 using Application.handlers.category.command.AddCategory;
 using Application.handlers.category.command.DeleteCategory;
 using Application.handlers.category.queries;
@@ -18,6 +12,8 @@ using Application.handlers.transactions.commands.CreateTransaction;
 using Application.handlers.transactions.queries.Transactions.DownloadTransactionsSummary;
 using Application.handlers.transactions.queries.Transactions.GetUserTransactions;
 using Application.handlers.transactions.queries.Transactions.GetUserTransactionsSummary;
+using Application.mediator.interfaces;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Application.mediator;
 
@@ -25,6 +21,8 @@ public static class DependencyInjection
 {
     public static void AddMediator(this IServiceCollection services)
     {
+        
+        
         services.AddScoped<IMediator>(provider =>
         {
             IMediator mediator = new Mediator();

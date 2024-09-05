@@ -1,10 +1,10 @@
 ﻿using System.Globalization;
-using Application.common.FileInfoConfigurators;
 using Application.Dtos;
 using Infrastructure.FileUtils;
-using Infrastructure.FileUtils.dtos;
+using Core.fileUtils;
+using Core.fileUtils.dtos;
 
-namespace Application.FileInfoConfigurators;
+namespace Application.utils.FileInfoConfigurators;
 
 public class SummaryInfoConfigurator : IConfigurator<List<TransactionSummaryDto>>
 {
@@ -17,7 +17,7 @@ public class SummaryInfoConfigurator : IConfigurator<List<TransactionSummaryDto>
         };
     }
 
-    private ExcelInputInputInfo ConfigureExcelInfo(List<TransactionSummaryDto> data)
+    private ExcelInputInfo ConfigureExcelInfo(List<TransactionSummaryDto> data)
     {
         var header = new List<string> { "CategoryName", "Expenses", "Income" };
 
@@ -28,7 +28,7 @@ public class SummaryInfoConfigurator : IConfigurator<List<TransactionSummaryDto>
             info.Income.ToString(CultureInfo.InvariantCulture)
         }).ToList();
 
-        return new ExcelInputInputInfo
+        return new ExcelInputInfo
         {
             Rows = rowsData,
             Header = header,

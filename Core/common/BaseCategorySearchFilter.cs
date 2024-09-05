@@ -1,6 +1,6 @@
-﻿namespace Application.Dtos;
+﻿namespace Core.common;
 
-public class BaseSearchDto
+public class BaseCategorySearchFilter
 {
     public Guid UserId { get; set; }
 
@@ -8,5 +8,5 @@ public class BaseSearchDto
 
     public DateTime? DateTo { get; set; }
 
-    public Guid? BudgetId { get; set; }
+    public Guid? CategoryId { get; set; }
 }

@@ -1,4 +1,6 @@
 ﻿using Infrastructure.FileUtils.dtos;
+using Core.fileUtils;
+using Core.fileUtils.dtos;
 
 namespace Infrastructure.FileUtils.writers;
 
@@ -10,7 +12,7 @@ public class FileWriterFactory
     {
         _writers = new Dictionary<FileType, Func<IInputInfo, IFileWriter>>
         {
-            { FileType.Excel, info => new ExcelWriter((ExcelInputInputInfo)info) }
+            { FileType.Excel, info => new ExcelWriter((ExcelInputInfo)info) }
         };
     }
 

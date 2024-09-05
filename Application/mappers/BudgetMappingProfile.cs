@@ -5,6 +5,7 @@ using Application.handlers.budget.queries.GetBudgetList;
 using AutoMapper;
 using Domain.Entities.Budget;
 using Infrastructure.Models;
+using Core.common;
 
 namespace Application.mappers;
 
@@ -14,7 +15,7 @@ public class BudgetMappingProfile : Profile
     {
         CreateMap<Budget, BudgetLookUpVm>();
         CreateMap<BudgetCreateDto, CreateBudgetCommand>();
-        CreateMap<BaseFilterSearchDto, GetBudgetListQuery>();
+        CreateMap<BaseSearchDto, GetBudgetListQuery>();
         CreateMap<Budget, BudgetUpdateResponseDto>();
         CreateMap<BudgetUpdateRequestDto, UpdateBudgetCommand>();
         CreateMap<Budget, BudgetLookUpDto>();

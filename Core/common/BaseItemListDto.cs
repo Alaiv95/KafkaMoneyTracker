@@ -1,4 +1,4 @@
-﻿namespace Application.Dtos;
+﻿namespace Core.common;
 
 public class BaseItemListDto
 {

@@ -5,7 +5,6 @@ using Application.handlers.transactions.commands.CreateTransaction;
 using Application.handlers.transactions.queries.Transactions.DownloadTransactionsSummary;
 using Application.handlers.transactions.queries.Transactions.GetUserTransactions;
 using Application.handlers.transactions.queries.Transactions.GetUserTransactionsSummary;
-using Application.MailClient;
 using Application.mappers;
 using Application.mediator.interfaces;
 using AutoMapper;
@@ -15,6 +14,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using WebApi.Extentions;
+using Core.common;
 
 namespace WebApi.Controllers;
 
@@ -61,7 +61,7 @@ public class TransactionsController : ControllerBase
     [HttpGet("search")]
     [ProducesResponseType(typeof(List<TransactionInfo>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<TransactionInfo>> SearchTransactions([FromQuery] BaseFilterSearchDto dto)
+    public async Task<ActionResult<TransactionInfo>> SearchTransactions([FromQuery] BaseSearchDto dto)
     {
         var searchQuery = _transactionMapper.Map<GetUserTransactionsQuery>(dto);
         searchQuery.UserId = HttpContext.GetUserIdFromToken();

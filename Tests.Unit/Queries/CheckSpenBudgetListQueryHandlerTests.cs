@@ -1,13 +1,13 @@
 ﻿using System.Linq.Expressions;
 using Application.handlers.budget.queries.CheckSpentBudget;
 using Application.kafka.producer;
-using Application.specs;
 using Domain.Entities.Budget;
 using Domain.Entities.Transaction;
 using FluentAssertions;
 using Infrastructure.Models;
 using Infrastructure.Repositories;
 using Infrastructure.Repositories.interfaces;
+using Infrastructure.specs;
 using Moq;
 
 namespace Tests.Unit.Queries;

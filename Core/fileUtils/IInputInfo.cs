@@ -1,4 +1,4 @@
-﻿namespace Infrastructure.FileUtils.dtos;
+﻿namespace Core.fileUtils;
 
 public interface IInputInfo
 {

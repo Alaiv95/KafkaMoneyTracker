@@ -1,21 +1,20 @@
 ﻿using System.Linq.Expressions;
-using Application.extentions;
-using Application.Dtos;
+using Core.common;
+using Infrastructure.extentions;
 using Infrastructure.Models;
 
+namespace Infrastructure.specs;
 
-namespace Application.specs;
-
-public class TransactionSpecs : ISpec<Transaction, BaseSearchDto>
+public class TransactionSpecs : ISpec<Transaction, BaseBudgetSearchFilter>
 {
-    public Expression<Func<Transaction, bool>> Build(BaseSearchDto filter)
+    public Expression<Func<Transaction, bool>> Build(BaseBudgetSearchFilter filter)
     {
         return WithUserId(filter.UserId)
             .And(WithDateLtOrEt(filter.DateFrom))
             .And(WithDateGtOrEt(filter.DateTo))
             .And(WithBudgetId(filter.BudgetId));
     }
-    
+
     Expression<Func<Transaction, bool>> WithUserId(Guid userId)
     {
         return (transaction) => transaction.UserId == userId;

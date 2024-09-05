@@ -1,7 +1,6 @@
 ﻿using System.Text.Json;
 using Application.handlers.budget.queries.CheckSpentBudget;
 using Application.handlers.transactions.commands.CreateTransaction;
-using Application.kafka.consumers;
 using Application.mediator.interfaces;
 using Domain.Entities.Transaction;
 using Infrastructure.Models;
@@ -10,7 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Serilog;
 
-namespace Application.kafka.consumer;
+namespace Application.kafka.consumers;
 
 public class TransactionsConsumer : ConsumerBackgroundService
 {

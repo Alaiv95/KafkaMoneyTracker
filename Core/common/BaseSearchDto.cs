@@ -1,6 +1,6 @@
-﻿namespace Application.Dtos;
+﻿namespace Core.common;
 
-public class BaseFilterSearchDto
+public class BaseSearchDto
 {
     public DateTime? DateFrom { get; set; }
 

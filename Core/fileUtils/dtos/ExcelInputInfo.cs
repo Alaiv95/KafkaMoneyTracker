@@ -1,6 +1,6 @@
-﻿namespace Infrastructure.FileUtils.dtos;
+﻿namespace Core.fileUtils.dtos;
 
-public class ExcelInputInputInfo : IInputInfo
+public class ExcelInputInfo : IInputInfo
 {
     public List<string> Header { get; set; }
     

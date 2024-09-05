@@ -1,10 +1,12 @@
 ﻿using Application.Dtos;
+using Application.Dtos.category;
 using Application.handlers.transactions.commands.CancelTransactions;
 using Application.handlers.transactions.commands.CreateTransaction;
 using Application.handlers.transactions.queries.Transactions.GetUserTransactions;
 using AutoMapper;
 using Domain.Entities.Transaction;
 using Infrastructure.Models;
+using Core.common;
 
 namespace Application.mappers;
 
@@ -13,8 +15,8 @@ public class TransactionMappingProfile : Profile
     public TransactionMappingProfile()
     {
         CreateMap<TransactionCreateDto, CreateTransactionCommand>();
-        CreateMap<BaseFilterSearchDto, GetUserTransactionsQuery>();
-        CreateMap<GetUserTransactionsQuery, BaseSearchDto>();
+        CreateMap<BaseSearchDto, GetUserTransactionsQuery>();
+        CreateMap<GetUserTransactionsQuery, BaseBudgetSearchFilter>();
         CreateMap<Category, CategoryLookupDto>();
         CreateMap<BaseItemListDto, CancelTransactionsCommand>()
             .ForMember(dest => dest.TransactionIds, opt => opt.MapFrom(dto => dto.ItemsIds));

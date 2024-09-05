@@ -1,4 +1,4 @@
-﻿namespace Application.exceptions;
+﻿namespace Application.mediator.exceptions;
 
 public class CommandNotRegisteredException : Exception
 {

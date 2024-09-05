@@ -1,10 +1,9 @@
 ﻿using Application.exceptions;
-using Application.mappers;
 using Application.mediator.interfaces;
-using Application.specs;
 using AutoMapper;
-using Infrastructure.Repositories;
+using Core.common;
 using Infrastructure.Repositories.interfaces;
+using Infrastructure.specs;
 
 namespace Application.handlers.budget.queries.GetBudgetList;
 
@@ -25,10 +24,19 @@ public class GetBudgetListQueryHandler : IRequestHandler<GetBudgetListQuery, Bud
     {
         if (query.DateFrom > query.DateTo)
         {
-            throw new DateFromCantBeLessThenDateToException($"DateFrom {query.DateFrom} can't be less then DateTo {query.DateTo}");
+            throw new DateFromCantBeLessThenDateToException(
+                $"DateFrom {query.DateFrom} can't be less then DateTo {query.DateTo}");
         }
 
-        var budgetList = await _budgetRepository.SearchAsync(_budgetSpecs.Build(query));
+        var filter = new BaseCategorySearchFilter
+        {
+            UserId = query.UserId,
+            DateFrom = query.DateFrom,
+            DateTo = query.DateTo,
+            CategoryId = query.CategoryId
+        };
+
+        var budgetList = await _budgetRepository.SearchAsync(_budgetSpecs.Build(filter));
         var budgetLookupList = _budgetMapper.Map<List<BudgetLookUpVm>>(budgetList);
 
         return new BudgetListVm { Budgets = budgetLookupList };

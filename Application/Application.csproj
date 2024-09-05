@@ -28,6 +28,7 @@
 
     <ItemGroup>
       <Folder Include="handlers\transactions\queries\Transactions\" />
+      <Folder Include="utils\" />
     </ItemGroup>
 
 </Project>

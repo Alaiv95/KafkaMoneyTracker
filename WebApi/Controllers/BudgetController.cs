@@ -9,6 +9,7 @@ using Domain.Entities.Budget;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Extentions;
+using Core.common;
 
 namespace WebApi.Controllers;
 
@@ -79,7 +80,7 @@ public class BudgetController : ControllerBase
     [ProducesResponseType(typeof(BudgetListVm), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<BudgetListVm>> SearchBudgets([FromQuery] BaseFilterSearchDto dto)
+    public async Task<ActionResult<BudgetListVm>> SearchBudgets([FromQuery] BaseSearchDto dto)
     {
         var getBudgetQuery = _budgetMapper.Map<GetBudgetListQuery>(dto);
         getBudgetQuery.UserId = HttpContext.GetUserIdFromToken();

@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
 
-namespace Application.specs;
+namespace Infrastructure.specs;
 
 public interface ISpec<TEntity, TFilter>
 {

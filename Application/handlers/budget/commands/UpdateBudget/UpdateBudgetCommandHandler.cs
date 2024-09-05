@@ -2,12 +2,13 @@
 using Application.exceptions;
 using Application.handlers.budget.queries.GetBudgetList;
 using Application.mediator.interfaces;
-using Application.specs;
 using AutoMapper;
+using Core.common;
 using Domain.Entities.Budget;
 using Infrastructure.Models;
 using Infrastructure.Repositories;
 using Infrastructure.Repositories.interfaces;
+using Infrastructure.specs;
 
 namespace Application.handlers.budget.commands.UpdateBudget;
 
@@ -52,7 +53,7 @@ public class UpdateBudgetCommandHandler : IRequestHandler<UpdateBudgetCommand, L
     
     private async Task<BudgetEntity?> FindActiveBudget(Guid userId, Guid categoryId)
     {
-        var filter = new GetBudgetListQuery
+        var filter = new BaseCategorySearchFilter
         {
             UserId = userId,
             DateFrom = DateTime.Now,

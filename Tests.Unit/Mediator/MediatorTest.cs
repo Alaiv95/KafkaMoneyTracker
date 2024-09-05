@@ -1,14 +1,15 @@
 ﻿using Application.exceptions;
 using Application.handlers.budget.commands.CreateBudget;
 using Application.mediator;
+using Application.mediator.exceptions;
 using Application.mediator.interfaces;
-using Application.specs;
 using Domain.Entities;
 using Domain.Entities.User;
 using FluentAssertions;
 using Infrastructure.Models;
 using Infrastructure.Repositories;
 using Infrastructure.Repositories.interfaces;
+using Infrastructure.specs;
 using Moq;
 
 namespace Tests.Unit.Commands;

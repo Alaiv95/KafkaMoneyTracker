@@ -1,5 +1,7 @@
-﻿using Infrastructure.authentication;
+﻿using Core.mail_client;
+using Infrastructure.authentication;
 using Infrastructure.FileUtils.writers;
+using Infrastructure.MailClients;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Infrastructure;
@@ -10,6 +12,7 @@ public static class DependencyInjection
     {
         services.AddScoped<ITokenFactory, JwtTokenFactory>();
         services.AddScoped<IPasswordHasher, PasswordHasher>();
+        services.AddScoped<IMailClient, SmtpMailClient>();
         services.AddSingleton<FileWriterFactory>();
 
         return services;

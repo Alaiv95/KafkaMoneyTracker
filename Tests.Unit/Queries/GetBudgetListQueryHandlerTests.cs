@@ -1,7 +1,6 @@
 ﻿using Application.exceptions;
 using Application.handlers.budget.queries.GetBudgetList;
 using Application.mappers;
-using Application.specs;
 using FluentAssertions;
 using Infrastructure.Repositories;
 using Moq;
@@ -9,6 +8,7 @@ using System.Linq.Expressions;
 using Domain.Entities.Budget;
 using Infrastructure.Models;
 using Infrastructure.Repositories.interfaces;
+using Infrastructure.specs;
 
 namespace Tests.Unit.Queries;
 

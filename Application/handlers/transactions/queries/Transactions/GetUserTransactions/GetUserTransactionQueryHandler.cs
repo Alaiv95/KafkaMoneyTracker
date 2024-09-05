@@ -1,10 +1,11 @@
 ﻿using Application.Dtos;
 using Application.exceptions;
 using Application.mediator.interfaces;
-using Application.specs;
 using AutoMapper;
 using Domain.Entities.Transaction;
 using Infrastructure.Repositories.interfaces;
+using Infrastructure.specs;
+using Core.common;
 
 namespace Application.handlers.transactions.queries.Transactions.GetUserTransactions;
 
@@ -35,7 +36,7 @@ public class GetUserTransactionQueryHandler :
             );
         }
         
-        var baseSearchDto = _transactionsMapper.Map<BaseSearchDto>(query);
+        var baseSearchDto = _transactionsMapper.Map<BaseBudgetSearchFilter>(query);
         
         var transactions = await _transactionRepository
             .SearchWithIncludeAsync(_spec.Build(baseSearchDto));

@@ -1,7 +1,7 @@
 ﻿using Infrastructure.FileUtils;
-using Infrastructure.FileUtils.dtos;
+using Core.fileUtils;
 
-namespace Application.common.FileInfoConfigurators;
+namespace Application.utils.FileInfoConfigurators;
 
 public interface IConfigurator<in T>
 {

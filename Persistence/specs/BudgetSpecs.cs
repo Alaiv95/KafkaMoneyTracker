@@ -1,21 +1,20 @@
 ﻿using System.Linq.Expressions;
-using Application.extentions;
-using Application.handlers.budget.queries.GetBudgetList;
+using Core.common;
+using Infrastructure.extentions;
 using Infrastructure.Models;
 
+namespace Infrastructure.specs;
 
-namespace Application.specs;
-
-public class BudgetSpecs : ISpec<Budget, GetBudgetListQuery>
+public class BudgetSpecs : ISpec<Budget, BaseCategorySearchFilter>
 {
-    public Expression<Func<Budget, bool>> Build(GetBudgetListQuery filter)
+    public Expression<Func<Budget, bool>> Build(BaseCategorySearchFilter filter)
     {
         return WithUserId(filter.UserId)
             .And(WithDateLtOrEt(filter.DateFrom))
             .And(WithDateGtOrEt(filter.DateTo))
             .And(WithCategoryId(filter.CategoryId));
     }
-    
+
     Expression<Func<Budget, bool>> WithUserId(Guid userId)
     {
         return (budget) => budget.UserId == userId;

@@ -1,12 +1,13 @@
-﻿using Application.common.FileInfoConfigurators;
-using Application.Dtos;
+﻿using Application.Dtos;
 using Application.handlers.transactions.queries.Transactions.common;
 using Application.mediator.interfaces;
-using Application.specs;
+using Application.utils.FileInfoConfigurators;
 using Infrastructure.FileUtils.dtos;
 using Infrastructure.FileUtils.writers;
 using Infrastructure.Repositories.interfaces;
+using Infrastructure.specs;
 using Microsoft.IdentityModel.Tokens;
+using Core.common;
 
 namespace Application.handlers.transactions.queries.Transactions.DownloadTransactionsSummary;
 
@@ -34,7 +35,7 @@ public class
 
     public async Task<FileWriteResultDto?> Handle(DownloadUserTransactionsQuery command)
     {
-        var filter = new BaseSearchDto
+        var filter = new BaseBudgetSearchFilter
         {
             BudgetId = command.BudgetId,
             UserId = command.UserId

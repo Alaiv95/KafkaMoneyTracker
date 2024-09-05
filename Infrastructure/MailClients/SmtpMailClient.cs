@@ -1,11 +1,11 @@
-﻿using MailKit.Net.Smtp;
+﻿using Core.mail_client;
+using MailKit.Net.Smtp;
 using MailKit.Security;
 using Microsoft.Extensions.Options;
 using MimeKit;
 using Serilog;
 
-
-namespace Application.MailClient;
+namespace Infrastructure.MailClients;
 
 public class SmtpMailClient : IMailClient
 {
@@ -23,17 +23,18 @@ public class SmtpMailClient : IMailClient
             try
             {
                 Log.Information($"Start sending email for user {data.UserDisplayName}");
-                await smtpClient.ConnectAsync(_options.Value.Host, _options.Value.Port, SecureSocketOptions.SslOnConnect);
+                await smtpClient.ConnectAsync(_options.Value.Host, _options.Value.Port,
+                    SecureSocketOptions.SslOnConnect);
                 await smtpClient.AuthenticateAsync(_options.Value.Email, _options.Value.Password);
                 await smtpClient.SendAsync(ConfigureMessage(data));
-            } 
+            }
             catch (Exception ex)
             {
                 Log.Error($"Error occured trying to send Email {ex.Message} for user {data.UserDisplayName}");
             }
             finally
             {
-               await smtpClient.DisconnectAsync(true);
+                await smtpClient.DisconnectAsync(true);
             }
         }
     }

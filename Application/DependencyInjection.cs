@@ -1,18 +1,10 @@
-﻿using Application.common.FileInfoConfigurators;
-using Application.Dtos;
-using Application.FileInfoConfigurators;
-using Application.mappers;
-using Application.mediator;
-using Application.specs;
-using Application.kafka.producer;
-using Application.kafka.consumer;
-using Application.MailClient;
-using Application.handlers.budget.commands.CreateBudget;
-using Application.handlers.budget.queries.CheckSpentBudget;
-using Application.handlers.budget.queries.GetBudgetList;
+﻿using Application.Dtos;
 using Application.handlers.auth.commands.Login;
 using Application.handlers.auth.commands.Register;
+using Application.handlers.budget.commands.CreateBudget;
 using Application.handlers.budget.commands.UpdateBudget;
+using Application.handlers.budget.queries.CheckSpentBudget;
+using Application.handlers.budget.queries.GetBudgetList;
 using Application.handlers.category.command.AddCategory;
 using Application.handlers.category.command.DeleteCategory;
 using Application.handlers.category.queries;
@@ -21,6 +13,11 @@ using Application.handlers.transactions.commands.CreateTransaction;
 using Application.handlers.transactions.queries.Transactions.DownloadTransactionsSummary;
 using Application.handlers.transactions.queries.Transactions.GetUserTransactions;
 using Application.handlers.transactions.queries.Transactions.GetUserTransactionsSummary;
+using Application.kafka.consumers;
+using Application.kafka.producer;
+using Application.mappers;
+using Application.mediator;
+using Application.utils.FileInfoConfigurators;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Application;
@@ -35,9 +32,6 @@ public static class DependencyInjection
             typeof(TransactionMappingProfile),
             typeof(CategoryMappingProfile)
         );
-        
-        services.AddScoped<BudgetSpecs>();
-        services.AddScoped<TransactionSpecs>();
 
         services.AddScoped<CreateBudgetCommandHandler>();
         services.AddScoped<GetBudgetListQueryHandler>();
@@ -57,12 +51,8 @@ public static class DependencyInjection
         services.AddScoped<IEventsProducer, EventsProducer>();
         services.AddHostedService<TransactionsConsumer>();
         services.AddHostedService<BudgetExceededConsumer>();
-        services.AddScoped<IMailClient, SmtpMailClient>();
-        
+
         services.AddScoped<IConfigurator<List<TransactionSummaryDto>>, SummaryInfoConfigurator>();
-        
-        
-        
 
         services.AddMediator();
     }

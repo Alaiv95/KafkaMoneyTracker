@@ -2,7 +2,6 @@
 using Application.exceptions;
 using Application.handlers.transactions.commands.CreateTransaction;
 using Application.kafka.producer;
-using Application.specs;
 using Domain.Entities;
 using Domain.Entities.Budget;
 using Domain.Enums;
@@ -10,6 +9,7 @@ using FluentAssertions;
 using Infrastructure.Models;
 using Infrastructure.Repositories;
 using Infrastructure.Repositories.interfaces;
+using Infrastructure.specs;
 using Moq;
 
 namespace Tests.Unit.Commands;

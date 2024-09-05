@@ -3,7 +3,6 @@ using Application.handlers.budget.queries.GetBudgetList;
 using Application.kafka;
 using Application.kafka.producer;
 using Application.mediator.interfaces;
-using Application.specs;
 using Confluent.Kafka;
 using Infrastructure.Repositories;
 using System.Text.Json;
@@ -11,6 +10,8 @@ using Domain.Entities.Budget;
 using Domain.Entities.Transaction;
 using Infrastructure.Models;
 using Infrastructure.Repositories.interfaces;
+using Infrastructure.specs;
+using Core.common;
 
 namespace Application.handlers.budget.queries.CheckSpentBudget;
 
@@ -91,7 +92,7 @@ public class CheckSpentBudgetQueryHandler : IRequestHandler<CheckSpentBudgetQuer
         var dateFrom = budget.CreatedAt.ToUniversalTime();
         var dateTo = dateFrom.AddDays(budget.BudgetLimit.Duration);
 
-        var filter = new BaseSearchDto
+        var filter = new BaseBudgetSearchFilter
         {
             BudgetId = command.BudgetId,
             UserId = command.UserId,
