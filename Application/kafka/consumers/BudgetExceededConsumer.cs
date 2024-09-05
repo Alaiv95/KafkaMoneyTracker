@@ -1,6 +1,8 @@
-﻿using System.Text.Json;
+﻿using System.Globalization;
+using System.Text.Json;
 using Application.exceptions;
 using Application.handlers.budget.queries.CheckSpentBudget;
+using Core.fileUtils;
 using Core.mail_client;
 using Infrastructure.Repositories.interfaces;
 using Microsoft.Extensions.DependencyInjection;
@@ -23,11 +25,12 @@ public class BudgetExceededConsumer : ConsumerBackgroundService
             using var scope = _scopeFactory.CreateScope();
             var mailClient = scope.ServiceProvider.GetRequiredService<IMailClient>();
             var authRepository = scope.ServiceProvider.GetRequiredService<IAuthRepository>();
+            var fileReader = scope.ServiceProvider.GetRequiredService<IFileReader>();
 
             var exceededDto = JsonSerializer.Deserialize<BudgetExceededDto>(messageValue, _options);
 
             var email = await GetTransactionUserEmail(exceededDto, authRepository);
-            var message = CreateMailData(exceededDto!, email);
+            var message = await CreateMailDataAsync(exceededDto!, email, fileReader);
 
             await mailClient.SendMailAsync(message);
             
@@ -57,17 +60,28 @@ public class BudgetExceededConsumer : ConsumerBackgroundService
     }
 
 
-    private MailData CreateMailData(BudgetExceededDto dto, string email)
+    private async Task<MailData> CreateMailDataAsync(BudgetExceededDto dto, string email, IFileReader fileReader)
     {
-        var bodyMessage = $"Уважаемый {email}. Бюджет в категории {dto.Category} за период {dto.BudgetPeriod} превышен." +
-            $" Указанный лимит = {dto.BudgetLimit}, расходы составляют {dto.SpentAmount}.";
-
+        var template = await CreateTemplate(dto, email, fileReader);
+        
         return new MailData
         {
             UserDisplayName = email,
             To = email,
             Subject = "Превышение лимита бюджета",
-            Body = bodyMessage
+            Body = template
         };
+    }
+
+    private async Task<string> CreateTemplate(BudgetExceededDto dto, string email, IFileReader fileReader)
+    {
+        var result = await fileReader.GetFileDataAsync("templates/template.html");
+
+        return result
+            .Replace("{email}", email)
+            .Replace("{category}", dto.Category)
+            .Replace("{period}", dto.BudgetPeriod)
+            .Replace("{limit}", dto.BudgetLimit.ToString(CultureInfo.InvariantCulture))
+            .Replace("{spent}", dto.SpentAmount.ToString(CultureInfo.InvariantCulture));
     }
 }

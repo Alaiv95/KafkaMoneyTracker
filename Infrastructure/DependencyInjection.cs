@@ -1,5 +1,7 @@
-﻿using Core.mail_client;
+﻿using Core.fileUtils;
+using Core.mail_client;
 using Infrastructure.authentication;
+using Infrastructure.FileUtils.readers;
 using Infrastructure.FileUtils.writers;
 using Infrastructure.MailClients;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,6 +16,7 @@ public static class DependencyInjection
         services.AddScoped<IPasswordHasher, PasswordHasher>();
         services.AddScoped<IMailClient, SmtpMailClient>();
         services.AddSingleton<FileWriterFactory>();
+        services.AddScoped<IFileReader, BaseFileReader>();
 
         return services;
     }
