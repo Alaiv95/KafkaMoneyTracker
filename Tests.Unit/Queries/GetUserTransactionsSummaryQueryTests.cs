@@ -71,12 +71,25 @@ public class GetUserTransactionsSummaryQueryTests : TestBase
             }
         };
 
+        var container = new PaginationContainer<TransactionSummaryDto>
+        {
+            Data = expectedResult,
+            PageNumber = 1,
+            TotalPages = 10
+        };
+
+
         _budgetRepository
             .Setup(repository => repository.GetByIdAsync(It.IsAny<Guid>()))
             .ReturnsAsync(() => budget);
 
         _transactionRepository
-            .Setup(repository => repository.SearchWithIncludeAsync(It.IsAny<Expression<Func<Transaction, bool>>>()))
+            .Setup(repository => repository.SearchWithIncludeAsync(
+                    It.IsAny<Expression<Func<Transaction, bool>>>(),
+                    It.IsAny<int>(),
+                    It.IsAny<int>()
+                )
+            )
             .ReturnsAsync(() => info);
 
         var handler = new GetUserTransactionsSummaryQueryHandler(
@@ -88,14 +101,16 @@ public class GetUserTransactionsSummaryQueryTests : TestBase
         var query = new GetUserTransactionsSummaryQuery
         {
             BudgetId = Guid.NewGuid(),
-            UserId = Guid.NewGuid()
+            UserId = Guid.NewGuid(),
+            PageNumber = 1,
+            DisplayLimit = 10
         };
 
         // Act
         var result = await handler.Handle(query);
 
         // Assert
-        result.Should().BeEquivalentTo(expectedResult);
+        result.Should().BeEquivalentTo(container);
     }
 
     [Test]
@@ -107,8 +122,12 @@ public class GetUserTransactionsSummaryQueryTests : TestBase
             .ReturnsAsync(() => null);
 
         _transactionRepository
-            .Setup(repository => repository.SearchWithIncludeAsync(It.IsAny<Expression<Func<Transaction, bool>>>()))
-            .ReturnsAsync(() => null);
+            .Setup(repository => repository.SearchWithIncludeAsync(
+                    It.IsAny<Expression<Func<Transaction, bool>>>(),
+                    It.IsAny<int>(),
+                    It.IsAny<int>()
+                )
+            ).ReturnsAsync(() => null);
 
         var handler = new GetUserTransactionsSummaryQueryHandler(
             _transactionRepository.Object,
@@ -119,7 +138,9 @@ public class GetUserTransactionsSummaryQueryTests : TestBase
         var query = new GetUserTransactionsSummaryQuery
         {
             BudgetId = Guid.NewGuid(),
-            UserId = Guid.NewGuid()
+            UserId = Guid.NewGuid(),
+            DisplayLimit = 1,
+            PageNumber = 10
         };
 
         // Act
@@ -127,6 +148,6 @@ public class GetUserTransactionsSummaryQueryTests : TestBase
 
         // Assert
         result.Should().NotBeNull();
-        result.Should().BeEmpty();
+        result.Data.Should().BeEmpty();
     }
 }

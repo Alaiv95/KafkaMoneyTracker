@@ -1,6 +1,5 @@
 ﻿using System.Linq.Expressions;
 using AutoMapper;
-using Domain.Entities.Budget;
 using Domain.Entities.Transaction;
 using Infrastructure.Models;
 using Infrastructure.Repositories.interfaces;
@@ -28,15 +27,36 @@ public class TransactionRepository : GenericRepository<Transaction, TransactionE
             .AsNoTracking()
             .Where(t => itemIds.Contains(t.Id))
             .ToListAsync();
-        
+
         return Mapper.Map<List<TransactionEntity>>(transactions);
     }
 
-    public async Task<List<TransactionInfo>> SearchWithIncludeAsync(Expression<Func<Transaction, bool>> predicate)
+    public async Task<List<TransactionInfo>> SearchWithIncludeAsync(
+        Expression<Func<Transaction, bool>> predicate
+    )
     {
         var transactions = await _dbSet
             .AsNoTracking()
             .Where(predicate)
+            .Include(t => t.Budget)
+            .ThenInclude(b => b.Category)
+            .ToListAsync();
+        
+        return Mapper.Map<List<TransactionInfo>>(transactions);
+    }
+
+    public async Task<List<TransactionInfo>> SearchWithIncludeAsync(
+        Expression<Func<Transaction, bool>> predicate,
+        int page,
+        int limit
+    )
+    {
+        var transactions = await _dbSet
+            .AsNoTracking()
+            .Where(predicate)
+            .Skip(page)
+            .Take(limit)
+            .OrderBy(t => t.Amount)
             .Include(t => t.Budget)
             .ThenInclude(b => b.Category)
             .ToListAsync();

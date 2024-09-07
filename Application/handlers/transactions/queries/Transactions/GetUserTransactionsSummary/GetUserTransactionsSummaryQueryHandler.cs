@@ -1,16 +1,15 @@
 ﻿using Application.Dtos;
 using Application.handlers.transactions.queries.Transactions.common;
 using Application.mediator.interfaces;
+using Core.common;
 using Infrastructure.Repositories.interfaces;
 using Infrastructure.specs;
-using Microsoft.IdentityModel.Tokens;
-using Core.common;
 
 namespace Application.handlers.transactions.queries.Transactions.GetUserTransactionsSummary;
 
 public class
     GetUserTransactionsSummaryQueryHandler : IRequestHandler<GetUserTransactionsSummaryQuery,
-    List<TransactionSummaryDto>>
+    PaginationContainer<TransactionSummaryDto>>
 {
     private readonly ITransactionRepository _transactionRepository;
     private readonly TransactionSpecs _spec;
@@ -24,7 +23,7 @@ public class
         _spec = spec;
     }
 
-    public async Task<List<TransactionSummaryDto>> Handle(GetUserTransactionsSummaryQuery command)
+    public async Task<PaginationContainer<TransactionSummaryDto>> Handle(GetUserTransactionsSummaryQuery command)
     {
         var filter = new BaseBudgetSearchFilter
         {
@@ -32,13 +31,14 @@ public class
             UserId = command.UserId
         };
 
-        var transactions = await _transactionRepository.SearchWithIncludeAsync(_spec.Build(filter));
+        var transactions = await _transactionRepository.SearchWithIncludeAsync(
+            _spec.Build(filter), page: command.PageNumber, limit: command.DisplayLimit);
 
-        if (transactions.IsNullOrEmpty())
+        return new PaginationContainer<TransactionSummaryDto>
         {
-            return new List<TransactionSummaryDto>();
-        }
-
-        return TransactionsUtils.GetTransactionsSummaryInfo(transactions);
+            PageNumber = command.PageNumber,
+            TotalPages = command.DisplayLimit,
+            Data = TransactionsUtils.GetTransactionsSummaryInfo(transactions)
+        };
     }
 }

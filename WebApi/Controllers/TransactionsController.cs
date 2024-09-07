@@ -1,20 +1,17 @@
-﻿
-using Application.Dtos;
+﻿using Application.Dtos;
 using Application.handlers.transactions.commands.CancelTransactions;
 using Application.handlers.transactions.commands.CreateTransaction;
 using Application.handlers.transactions.queries.Transactions.DownloadTransactionsSummary;
 using Application.handlers.transactions.queries.Transactions.GetUserTransactions;
 using Application.handlers.transactions.queries.Transactions.GetUserTransactionsSummary;
-using Application.mappers;
 using Application.mediator.interfaces;
 using AutoMapper;
+using Core.common;
 using Domain.Entities.Transaction;
 using Infrastructure.FileUtils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 using WebApi.Extentions;
-using Core.common;
 
 namespace WebApi.Controllers;
 
@@ -45,12 +42,12 @@ public class TransactionsController : ControllerBase
     {
         var createTransactionCommand = _transactionMapper.Map<CreateTransactionCommand>(dto);
         createTransactionCommand.UserId = HttpContext.GetUserIdFromToken();
-        
+
         var result = await _mediator.HandleRequest(createTransactionCommand);
 
         return Ok(result);
     }
-    
+
     /// <summary>
     /// Get list of transactions
     /// </summary>
@@ -64,36 +61,43 @@ public class TransactionsController : ControllerBase
     public async Task<ActionResult<TransactionInfo>> SearchTransactions([FromQuery] BaseSearchDto dto)
     {
         var searchQuery = _transactionMapper.Map<GetUserTransactionsQuery>(dto);
-        searchQuery.UserId = HttpContext.GetUserIdFromToken();
 
         var result = await _mediator.HandleRequest(searchQuery);
-    
+
         return Ok(result);
     }
-    
+
     /// <summary>
-    /// Get summary of transactions
+    /// Get summary of transactions with pagination
     /// </summary>
-    /// <returns>Returns TransactionSummaryDto</returns>
+    /// <returns>Returns PaginationContainer with TransactionSummaryDto</returns>
     /// <response code="200">Success</response>
     /// <response code="400">Bad Request</response>
     [Authorize]
     [HttpGet("summary")]
-    [ProducesResponseType(typeof(List<TransactionSummaryDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(PaginationContainer<TransactionSummaryDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<TransactionSummaryDto>> GetTransactionsSummary([FromQuery] Guid budgetId)
+    public async Task<ActionResult<PaginationContainer<TransactionSummaryDto>>> GetTransactionsSummary(
+        [FromQuery] Guid budgetId,
+        [FromQuery] int page = 1,
+        [FromQuery] int limit = 10
+    )
     {
         var searchQuery = new GetUserTransactionsSummaryQuery
         {
             UserId = HttpContext.GetUserIdFromToken(),
-            BudgetId = budgetId
+            BudgetId = budgetId,
+            PageNumber = page,
+            DisplayLimit = limit
         };
 
+        searchQuery.UserId = HttpContext.GetUserIdFromToken();
+
         var result = await _mediator.HandleRequest(searchQuery);
-    
+
         return Ok(result);
     }
-    
+
     /// <summary>
     /// Download summary of transactions in Excel = 1, Pdf = 2
     /// </summary>
@@ -104,7 +108,8 @@ public class TransactionsController : ControllerBase
     [HttpGet("summary-download")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult> DownloadTransactionsSummary([FromQuery] Guid budgetId, [FromQuery] FileType type = FileType.Excel)
+    public async Task<ActionResult> DownloadTransactionsSummary([FromQuery] Guid budgetId,
+        [FromQuery] FileType type = FileType.Excel)
     {
         var searchQuery = new DownloadUserTransactionsQuery()
         {
@@ -117,7 +122,7 @@ public class TransactionsController : ControllerBase
 
         return result is null ? NoContent() : File(result.Content, result.MimeType, result.FileName);
     }
-    
+
     /// <summary>
     /// Cancel transactions of current user, transaction ids of other users are ignored
     /// </summary>
@@ -132,9 +137,9 @@ public class TransactionsController : ControllerBase
     {
         var cancelTransactionCommand = _transactionMapper.Map<CancelTransactionsCommand>(dto);
         cancelTransactionCommand.UserId = HttpContext.GetUserIdFromToken();
-        
+
         var result = await _mediator.HandleRequest(cancelTransactionCommand);
-    
+
         return Ok(result);
     }
 }
