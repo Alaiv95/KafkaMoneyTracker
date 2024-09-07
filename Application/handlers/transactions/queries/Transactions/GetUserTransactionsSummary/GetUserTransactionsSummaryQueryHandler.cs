@@ -31,14 +31,20 @@ public class
             UserId = command.UserId
         };
 
-        var transactions = await _transactionRepository.SearchWithIncludeAsync(
-            _spec.Build(filter), page: command.PageNumber, limit: command.DisplayLimit);
+        var spec = _spec.Build(filter);
+        var transactionsCount = await _transactionRepository.CountTransactionsAsync(spec);
+        var totalPages = (int)Math.Ceiling(transactionsCount / (double)command.DisplayLimit);
+        var paginatedTransactions = await _transactionRepository.SearchWithIncludeAsync(
+            spec,
+            page: command.PageNumber,
+            limit: command.DisplayLimit
+        );
 
         return new PaginationContainer<TransactionSummaryDto>
         {
             PageNumber = command.PageNumber,
-            TotalPages = command.DisplayLimit,
-            Data = TransactionsUtils.GetTransactionsSummaryInfo(transactions)
+            TotalPages = totalPages,
+            Data = TransactionsUtils.GetTransactionsSummaryInfo(paginatedTransactions)
         };
     }
 }

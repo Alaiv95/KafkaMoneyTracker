@@ -16,4 +16,6 @@ public interface ITransactionRepository : IGenericRepository<Transaction, Transa
         Expression<Func<Transaction, bool>> predicate,
         int page,
         int limit);
+
+    Task<int> CountTransactionsAsync(Expression<Func<Transaction, bool>> predicate);
 }

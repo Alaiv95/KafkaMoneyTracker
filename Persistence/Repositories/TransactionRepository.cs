@@ -51,10 +51,12 @@ public class TransactionRepository : GenericRepository<Transaction, TransactionE
         int limit
     )
     {
+        var skipAmount = (page - 1) * limit;
+        
         var transactions = await _dbSet
             .AsNoTracking()
             .Where(predicate)
-            .Skip(page)
+            .Skip(skipAmount)
             .Take(limit)
             .OrderBy(t => t.Amount)
             .Include(t => t.Budget)
@@ -62,5 +64,13 @@ public class TransactionRepository : GenericRepository<Transaction, TransactionE
             .ToListAsync();
 
         return Mapper.Map<List<TransactionInfo>>(transactions);
+    }
+
+    public async Task<int> CountTransactionsAsync(Expression<Func<Transaction, bool>> predicate)
+    {
+        return await _dbSet
+            .AsNoTracking()
+            .Where(predicate)
+            .CountAsync();
     }
 }

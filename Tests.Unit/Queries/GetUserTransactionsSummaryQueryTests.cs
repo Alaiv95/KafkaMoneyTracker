@@ -1,6 +1,7 @@
 ﻿using System.Linq.Expressions;
 using Application.Dtos;
 using Application.handlers.transactions.queries.Transactions.GetUserTransactionsSummary;
+using Core.common;
 using Domain.Entities.Budget;
 using Domain.Entities.Transaction;
 using FluentAssertions;

@@ -1,5 +1,6 @@
 ﻿using Application.Dtos;
 using Application.mediator.interfaces;
+using Core.common;
 
 namespace Application.handlers.transactions.queries.Transactions.GetUserTransactionsSummary;
 
