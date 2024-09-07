@@ -32,37 +32,27 @@ public class TransactionRepository : GenericRepository<Transaction, TransactionE
     }
 
     public async Task<List<TransactionInfo>> SearchWithIncludeAsync(
-        Expression<Func<Transaction, bool>> predicate
-    )
-    {
-        var transactions = await _dbSet
-            .AsNoTracking()
-            .Where(predicate)
-            .Include(t => t.Budget)
-            .ThenInclude(b => b.Category)
-            .ToListAsync();
-        
-        return Mapper.Map<List<TransactionInfo>>(transactions);
-    }
-
-    public async Task<List<TransactionInfo>> SearchWithIncludeAsync(
         Expression<Func<Transaction, bool>> predicate,
-        int page,
-        int limit
+        int? page = null,
+        int? limit = null
     )
     {
-        var skipAmount = (page - 1) * limit;
-        
-        var transactions = await _dbSet
+        var query = _dbSet
             .AsNoTracking()
-            .Where(predicate)
-            .Skip(skipAmount)
-            .Take(limit)
+            .Where(predicate);
+
+        if (page.HasValue && limit.HasValue)
+        {
+            var skipAmount = (page.Value - 1) * limit.Value;
+            query = query.Skip(skipAmount).Take(limit.Value);
+        }
+        
+        query = query
             .OrderBy(t => t.Amount)
             .Include(t => t.Budget)
-            .ThenInclude(b => b.Category)
-            .ToListAsync();
+            .ThenInclude(b => b.Category);
 
+        var transactions =  await query.ToListAsync();
         return Mapper.Map<List<TransactionInfo>>(transactions);
     }
 

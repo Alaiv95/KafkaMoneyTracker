@@ -76,7 +76,7 @@ public class GetUserTransactionsSummaryQueryTests : TestBase
         {
             Data = expectedResult,
             PageNumber = 1,
-            TotalPages = 10
+            TotalPages = 1
         };
 
 
@@ -92,6 +92,11 @@ public class GetUserTransactionsSummaryQueryTests : TestBase
                 )
             )
             .ReturnsAsync(() => info);
+        
+        _transactionRepository
+            .Setup(repository => repository.CountTransactionsAsync(It.IsAny<Expression<Func<Transaction, bool>>>())
+            )
+            .ReturnsAsync(() => 10);
 
         var handler = new GetUserTransactionsSummaryQueryHandler(
             _transactionRepository.Object,

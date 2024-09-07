@@ -9,13 +9,11 @@ public interface ITransactionRepository : IGenericRepository<Transaction, Transa
     Task UpdateRangeAsync(List<TransactionEntity> transactions);
 
     Task<List<TransactionEntity>> GetByIdsAsync(List<Guid> itemIds);
-
-    Task<List<TransactionInfo>> SearchWithIncludeAsync(Expression<Func<Transaction, bool>> predicate);
-
+    
     Task<List<TransactionInfo>> SearchWithIncludeAsync(
         Expression<Func<Transaction, bool>> predicate,
-        int page,
-        int limit);
+        int? page = null,
+        int? limit = null);
 
     Task<int> CountTransactionsAsync(Expression<Func<Transaction, bool>> predicate);
 }
