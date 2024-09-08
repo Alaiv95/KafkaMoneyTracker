@@ -28,6 +28,7 @@ public static class DependencyInjection
         collection.AddScoped<ITransactionRepository, TransactionRepository>();
         collection.AddScoped<CategoryRepository>();
         collection.AddScoped<ICategoryRepository, CachedCategoryRepository>();
+        collection.AddScoped<IExchangeRatesRepository, ExchangeRatesRepository>();
 
         collection.AddScoped<ICacheClient, RedisCacheClient>();
 

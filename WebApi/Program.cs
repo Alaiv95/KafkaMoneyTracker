@@ -65,6 +65,7 @@ public class Program
 
             options.IncludeXmlComments(xmlPath);
         });
+        services.AddHttpClient();
         services
             .AddInfrastructure()
             .AddPersistence(configuration)

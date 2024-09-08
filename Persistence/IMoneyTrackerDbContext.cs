@@ -9,6 +9,7 @@ public interface IMoneyTrackerDbContext
     DbSet<Budget> Budgets { get; set; }
     DbSet<Category> Categories { get; set; }
     DbSet<User> Users { get; set; }
+    DbSet<ExchangeRate> ExchangeRates { get; set; }
 
     Task<int> SaveChangesAsync(CancellationToken token);
     DbSet<TEntity> Set<TEntity>() where TEntity : class;

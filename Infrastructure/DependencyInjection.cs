@@ -3,6 +3,7 @@ using Core.mail_client;
 using Infrastructure.authentication;
 using Infrastructure.FileUtils.readers;
 using Infrastructure.FileUtils.writers;
+using Infrastructure.HttpClientS;
 using Infrastructure.MailClients;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -17,6 +18,7 @@ public static class DependencyInjection
         services.AddScoped<IMailClient, SmtpMailClient>();
         services.AddSingleton<FileWriterFactory>();
         services.AddScoped<IFileReader, BaseFileReader>();
+        services.AddSingleton<IAppHttpClient, ExchangeRatesAppHttpClient>();
 
         return services;
     }

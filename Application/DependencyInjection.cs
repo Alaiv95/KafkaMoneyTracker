@@ -13,6 +13,7 @@ using Application.handlers.transactions.commands.CreateTransaction;
 using Application.handlers.transactions.queries.Transactions.DownloadTransactionsSummary;
 using Application.handlers.transactions.queries.Transactions.GetUserTransactions;
 using Application.handlers.transactions.queries.Transactions.GetUserTransactionsSummary;
+using Application.Jobs;
 using Application.kafka.consumers;
 using Application.kafka.producer;
 using Application.mappers;
@@ -51,6 +52,7 @@ public static class DependencyInjection
         services.AddScoped<IEventsProducer, EventsProducer>();
         services.AddHostedService<TransactionsConsumer>();
         services.AddHostedService<BudgetExceededConsumer>();
+        services.AddHostedService<UpdateExchangeRatesJob>();
 
         services.AddScoped<IConfigurator<List<TransactionSummaryDto>>, SummaryInfoConfigurator>();
 

@@ -10,6 +10,8 @@ public class MoneyTrackerDbContext : DbContext, IMoneyTrackerDbContext
     public DbSet<Budget> Budgets { get; set; }
     public DbSet<Category> Categories { get; set; }
     public DbSet<User> Users { get; set; }
+    
+    public DbSet<ExchangeRate> ExchangeRates { get; set; }
 
     public MoneyTrackerDbContext(DbContextOptions<MoneyTrackerDbContext> options)
         : base(options)
@@ -22,7 +24,8 @@ public class MoneyTrackerDbContext : DbContext, IMoneyTrackerDbContext
             .ApplyConfiguration(new UserConfiguration())
             .ApplyConfiguration(new CategoryConfiguration())
             .ApplyConfiguration(new TransactionConfiguration())
-            .ApplyConfiguration(new BudgetConfiguration());
+            .ApplyConfiguration(new BudgetConfiguration())
+            .ApplyConfiguration(new ExchangeRateConfigurations());
 
         base.OnModelCreating(modelBuilder);
     }
