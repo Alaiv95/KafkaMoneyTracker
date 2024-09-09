@@ -14,12 +14,14 @@ public class TransactionEntity : TimeBasedEntity
     public Guid UserId { get; private set; }
 
     public Money Money { get; private set; }
+    
+    public double BaseUserCurrencyAmount { get; private set; }
 
     public bool IsActive { get; private set; }
 
     public Guid BudgetId { get; private set; }
 
-    public static TransactionEntity Create(Guid userId, Money money, Guid budgetId)
+    public static TransactionEntity Create(Guid userId, Money money, Guid budgetId, double baseCurrencyAmount)
     {
         if (budgetId == Guid.Empty || userId == Guid.Empty)
         {
@@ -34,6 +36,7 @@ public class TransactionEntity : TimeBasedEntity
             UserId = userId,
             CreatedAt = DateTime.Now,
             UpdatedAt = null,
+            BaseUserCurrencyAmount = baseCurrencyAmount,
             Id = Guid.NewGuid()
         };
     }

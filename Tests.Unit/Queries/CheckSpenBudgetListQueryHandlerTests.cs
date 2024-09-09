@@ -59,7 +59,8 @@ public class CheckSpenBudgetListQueryHandlerTests
             TransactionEntity.Create(
                 Guid.NewGuid(),
                 Money.Create(123.23, "RUB"),
-                Guid.NewGuid()
+                Guid.NewGuid(),
+                123.23
             )
         };
 
@@ -90,7 +91,8 @@ public class CheckSpenBudgetListQueryHandlerTests
             TransactionEntity.Create(
                 Guid.NewGuid(),
                 Money.Create(-1500, "RUB"),
-                Guid.NewGuid()
+                Guid.NewGuid(),
+                -1500
             )
         };
 

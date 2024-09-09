@@ -10,6 +10,8 @@ public class Transaction : BaseModel
 
     public string Currency { get; set; } = "RUB";
     
+    public double BaseUserCurrencyAmount { get; set; }
+    
     public bool IsActive { get; set; }
 
     public Guid BudgetId { get; set; }

@@ -12,16 +12,16 @@ public class MoneyConverter : IConverter<Money>
         _exchangeRatesRepository = exchangeRatesRepository;
     }
 
-    public async Task<Money> ConvertOne(Money money, string targetCurrency = "RUB")
+    public async Task<double> ConvertOne(string baseCurrency, double amount, string targetCurrency = "RUB")
     {
-        var exchangeRate = await _exchangeRatesRepository.GetByBaseAndTargetCurrency(money.Currency, targetCurrency);
+        var exchangeRate = await _exchangeRatesRepository.GetByBaseAndTargetCurrency(baseCurrency, targetCurrency);
 
         if (exchangeRate is null)
         {
-            return money;
+            return amount;
         }
 
-        return Money.Create(money.Amount * exchangeRate.Rates, targetCurrency);
+        return amount * exchangeRate.Rates;
     }
     
     public async Task<List<Money>> ConvertAll(IEnumerable<Money> money, string targetCurrency = "RUB")

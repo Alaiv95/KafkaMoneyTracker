@@ -2,6 +2,8 @@
 using Application.handlers.budget.queries.CheckSpentBudget;
 using Application.handlers.transactions.commands.CreateTransaction;
 using Application.mediator.interfaces;
+using Application.utils.CurrencyConverter;
+using Core.common;
 using Domain.Entities.Transaction;
 using Infrastructure.Models;
 using Infrastructure.Repositories.interfaces;
@@ -29,14 +31,15 @@ public class TransactionsConsumer : ConsumerBackgroundService
                 .GetRequiredService<IGenericRepository<Transaction, TransactionEntity>>();
             var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
 
-            var command = JsonSerializer.Deserialize<CreateTransactionCommand>(messageValue, _options);
+            var message = JsonSerializer.Deserialize<CreateTransactionMessage>(messageValue, _options);
 
-            if (command != null)
+            if (message != null)
             {
                 var transaction = TransactionEntity.Create(
-                    command.UserId,
-                    Money.Create(command.Amount, command.Currency),
-                    command.BudgetId
+                    message.UserId,
+                    Money.Create(message.Amount, message.Currency),
+                    message.BudgetId,
+                    message.BaseUserCurrencyAmount
                 );
 
                 await transactionRepository.AddAsync(transaction);

@@ -1,13 +1,10 @@
-﻿using System.Linq.Expressions;
-using Application.exceptions;
+﻿using Application.exceptions;
 using Application.handlers.transactions.commands.CreateTransaction;
 using Application.kafka.producer;
-using Domain.Entities;
+using Application.utils.CurrencyConverter;
 using Domain.Entities.Budget;
-using Domain.Enums;
+using Domain.Entities.Transaction;
 using FluentAssertions;
-using Infrastructure.Models;
-using Infrastructure.Repositories;
 using Infrastructure.Repositories.interfaces;
 using Infrastructure.specs;
 using Moq;
@@ -18,14 +15,17 @@ public class CreateTransactionCommandHandlerTests
 {
     private Mock<IBudgetRepository> _budgetRepository;
     private Mock<IEventsProducer> _eventsProducer;
+    private Mock<IAuthRepository> _authRepository;
+    private Mock<IConverter<Money>> _converter;
     private BudgetSpecs _budgetSpecs;
 
     [SetUp]
     public void Setup()
     {
-        ;
         _budgetRepository = new Mock<IBudgetRepository>();
         _eventsProducer = new Mock<IEventsProducer>();
+        _authRepository = new Mock<IAuthRepository>();
+        _converter = new Mock<IConverter<Money>>();
         _budgetSpecs = new BudgetSpecs();
     }
 
@@ -45,8 +45,12 @@ public class CreateTransactionCommandHandlerTests
             UserId = Guid.NewGuid(),
         };
 
-        var handler =
-            new CreateTransactionCommandHandler(_budgetRepository.Object, _eventsProducer.Object, _budgetSpecs);
+        var handler = new CreateTransactionCommandHandler(
+            _budgetRepository.Object,
+            _eventsProducer.Object,
+            _authRepository.Object,
+            _converter.Object
+        );
 
         // Act
         var result = await handler.Handle(command);
@@ -71,7 +75,12 @@ public class CreateTransactionCommandHandlerTests
         };
 
         var handler =
-            new CreateTransactionCommandHandler(_budgetRepository.Object, _eventsProducer.Object, _budgetSpecs);
+            new CreateTransactionCommandHandler(
+                _budgetRepository.Object,
+                _eventsProducer.Object,
+                _authRepository.Object,
+                _converter.Object
+            );
 
         // Act
         // Assert

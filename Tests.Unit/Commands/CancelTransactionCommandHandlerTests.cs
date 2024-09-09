@@ -26,9 +26,9 @@ public class CancelTransactionCommandHandlerTests
         var userId = Guid.NewGuid();
         var transactionsResponse = new List<TransactionEntity>
         {
-            TransactionEntity.Create(userId, Money.Create(100, "eur"), Guid.NewGuid()),
-            TransactionEntity.Create(userId, Money.Create(100, "eur"), Guid.NewGuid()),
-            TransactionEntity.Create(Guid.NewGuid(), Money.Create(100, "eur"), Guid.NewGuid()),
+            TransactionEntity.Create(userId, Money.Create(100, "eur"), Guid.NewGuid(), 100),
+            TransactionEntity.Create(userId, Money.Create(100, "eur"), Guid.NewGuid(), 100),
+            TransactionEntity.Create(Guid.NewGuid(), Money.Create(100, "eur"), Guid.NewGuid(), 100),
         };
 
         var expectedResult = transactionsResponse

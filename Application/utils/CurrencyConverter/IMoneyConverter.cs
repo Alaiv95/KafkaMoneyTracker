@@ -2,7 +2,7 @@
 
 public interface IConverter<T>
 {
-    Task<T> ConvertOne(T money, string targetCurrency = "RUB");
+    Task<double> ConvertOne(string baseCurrency, double amount, string targetCurrency = "RUB");
     
     Task<List<T>> ConvertAll(IEnumerable<T> money, string? target = "RUB");
 }
