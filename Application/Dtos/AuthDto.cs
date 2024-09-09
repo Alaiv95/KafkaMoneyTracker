@@ -10,4 +10,8 @@ public class AuthDto
     [Required]
     [MinLength(4)]
     public string Password { get; set; }
+    
+    [MaxLength(3)]
+    [MinLength(3)]
+    public string MainCurrency { get; set; }
 }

@@ -9,4 +9,6 @@ public class User : BaseModel
     public ICollection<Transaction> Transactions { get; set; }
 
     public ICollection<Budget> Budgets { get; set; }
+    
+    public string MainCurrency { get; set; }
 }

@@ -10,6 +10,12 @@ public class ExchangeRatesRepository : GenericRepository<ExchangeRate, ExchangeR
     public ExchangeRatesRepository(IMoneyTrackerDbContext context, IMapper mapper) 
         : base(context, mapper) { }
 
+    public async Task<ExchangeRate?> GetByBaseAndTargetCurrency(string baseCurrency, string targetCurrency)
+    {
+        return await _dbSet.AsNoTracking()
+            .FirstOrDefaultAsync(r => r.BaseCurrency == baseCurrency && r.TargetCurrency == targetCurrency);
+    }
+    
     public async Task UpdateRangeAsync(List<ExchangeRate> exchangeRates)
     {
         if (!exchangeRates.Any())

@@ -11,8 +11,10 @@ public class UserEntity : TimeBasedEntity
     public string Email { get; private set; }
 
     public string PasswordHash { get; private set; }
+    
+    public string MainCurrency { get; private set; }
 
-    public static UserEntity Create(string email, string password)
+    public static UserEntity Create(string email, string password, string currency = "RUB")
     {
         if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
         {
@@ -23,6 +25,11 @@ public class UserEntity : TimeBasedEntity
         {
             throw new ArgumentException($"Password length can't be less then 4 symbols");
         }
+
+        if (currency.Length != 3)
+        {
+            throw new ArgumentException($"Currency length should be 3 symbols.");
+        }
         
         return new()
         {
@@ -30,6 +37,7 @@ public class UserEntity : TimeBasedEntity
             PasswordHash = password,
             Email = email,
             CreatedAt = DateTime.Now,
+            MainCurrency = currency,
             UpdatedAt = null
         };
     }

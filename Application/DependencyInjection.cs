@@ -18,7 +18,9 @@ using Application.kafka.consumers;
 using Application.kafka.producer;
 using Application.mappers;
 using Application.mediator;
+using Application.utils.CurrencyConverter;
 using Application.utils.FileInfoConfigurators;
+using Domain.Entities.Transaction;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Application;
@@ -55,6 +57,7 @@ public static class DependencyInjection
         services.AddHostedService<UpdateExchangeRatesJob>();
 
         services.AddScoped<IConfigurator<List<TransactionSummaryDto>>, SummaryInfoConfigurator>();
+        services.AddScoped<IConverter<Money>, MoneyConverter>();
 
         services.AddMediator();
     }
