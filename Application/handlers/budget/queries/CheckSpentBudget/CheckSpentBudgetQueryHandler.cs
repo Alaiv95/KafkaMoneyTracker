@@ -1,29 +1,25 @@
-﻿using Application.Dtos;
-using Application.handlers.budget.queries.GetBudgetList;
+﻿using System.Text.Json;
 using Application.kafka;
 using Application.kafka.producer;
 using Application.mediator.interfaces;
 using Confluent.Kafka;
-using Infrastructure.Repositories;
-using System.Text.Json;
+using Core.common;
 using Domain.Entities.Budget;
 using Domain.Entities.Transaction;
-using Infrastructure.Models;
 using Infrastructure.Repositories.interfaces;
 using Infrastructure.specs;
-using Core.common;
 
 namespace Application.handlers.budget.queries.CheckSpentBudget;
 
 public class CheckSpentBudgetQueryHandler : IRequestHandler<CheckSpentBudgetQuery, bool>
 {
-    private readonly IGenericRepository<Transaction, TransactionEntity> _transactionRepository;
+    private readonly ITransactionRepository _transactionRepository;
     private readonly IBudgetRepository _budgetRepository;
     private readonly IEventsProducer _eventsProducer;
     private readonly TransactionSpecs _transactionSpec;
 
     public CheckSpentBudgetQueryHandler(
-        IGenericRepository<Transaction, TransactionEntity> transactionRepository,
+        ITransactionRepository transactionRepository,
         IBudgetRepository budgetRepository,
         IEventsProducer eventsProducer,
         TransactionSpecs transactionSpecs
@@ -58,7 +54,7 @@ public class CheckSpentBudgetQueryHandler : IRequestHandler<CheckSpentBudgetQuer
 
     private async Task ProduceMessage(CheckSpentBudgetQuery query, BudgetEntity budget, double spentAmount)
     {
-        var messageData = new BudgetExceededDto
+        var messageData = new BudgetExceededMessage
         {
             BudgetLimit = budget.BudgetLimit.Amount,
             BudgetPeriod = $"{budget.CreatedAt} - {budget.CreatedAt.AddDays(budget.BudgetLimit.Duration)}",
@@ -83,21 +79,15 @@ public class CheckSpentBudgetQueryHandler : IRequestHandler<CheckSpentBudgetQuer
 
     private double GetSpentAmount(List<TransactionEntity> transactions)
     {
-        return transactions.Where(t => t.Money.Amount < 0).Sum(t => t.Money.Amount);
+        return transactions.Where(t => t.BaseUserCurrencyAmount < 0).Sum(t => t.BaseUserCurrencyAmount);
     }
     
-    //todo refactor to find transactions by budgetId
     private async Task<List<TransactionEntity>> GetTransactionsFromBudgetPeriod(BudgetEntity budget, CheckSpentBudgetQuery command)
     {
-        var dateFrom = budget.CreatedAt.ToUniversalTime();
-        var dateTo = dateFrom.AddDays(budget.BudgetLimit.Duration);
-
         var filter = new BaseBudgetSearchFilter
         {
             BudgetId = command.BudgetId,
-            UserId = command.UserId,
-            DateFrom = dateFrom,
-            DateTo = dateTo,
+            UserId = command.UserId
         };
 
         var transactions = await _transactionRepository.SearchAsync(_transactionSpec.Build(filter));

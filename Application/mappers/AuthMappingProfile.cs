@@ -11,8 +11,9 @@ public class AuthMappingProfile : Profile
 {
     public AuthMappingProfile()
     {
+        CreateMap<RegisterDto, LoginCommand>();
+        CreateMap<RegisterDto, RegisterUserCommand>();
         CreateMap<AuthDto, LoginCommand>();
-        CreateMap<AuthDto, RegisterUserCommand>();
 
         CreateMap<UserEntity, User>();
         CreateMap<User, UserEntity>();

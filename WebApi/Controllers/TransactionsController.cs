@@ -61,7 +61,7 @@ public class TransactionsController : ControllerBase
     public async Task<ActionResult<TransactionInfo>> SearchTransactions([FromQuery] BaseSearchDto dto)
     {
         var searchQuery = _transactionMapper.Map<GetUserTransactionsQuery>(dto);
-
+        searchQuery.UserId = HttpContext.GetUserIdFromToken();
         var result = await _mediator.HandleRequest(searchQuery);
 
         return Ok(result);

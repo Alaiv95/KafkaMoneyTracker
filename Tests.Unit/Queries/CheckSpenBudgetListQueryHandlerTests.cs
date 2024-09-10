@@ -15,7 +15,7 @@ namespace Tests.Unit.Queries;
 public class CheckSpenBudgetListQueryHandlerTests
 {
     private Mock<IBudgetRepository> _budgetRepository;
-    private Mock<IGenericRepository<Transaction, TransactionEntity>> _transactionRepository;
+    private Mock<ITransactionRepository> _transactionRepository;
     private Mock<IEventsProducer> _eventsProducer;
     private BudgetSpecs _spec;
     private TransactionSpecs _transactionSpec;
@@ -25,7 +25,7 @@ public class CheckSpenBudgetListQueryHandlerTests
     public void Setup()
     {
         _budgetRepository = new Mock<IBudgetRepository>();
-        _transactionRepository = new Mock<IGenericRepository<Transaction, TransactionEntity>>();
+        _transactionRepository = new Mock<ITransactionRepository>();
         _eventsProducer = new Mock<IEventsProducer>();
         _spec = new BudgetSpecs();
         _transactionSpec = new TransactionSpecs();

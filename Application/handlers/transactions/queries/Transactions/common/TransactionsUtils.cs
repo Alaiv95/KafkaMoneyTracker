@@ -17,8 +17,8 @@ internal static class TransactionsUtils
             .Select(g => new TransactionSummaryDto
             {
                 CategoryName = g.Key,
-                Income = g.Where(t => t.Amount > 0).Sum(t => t.Amount),
-                Expenses = g.Where(t => t.Amount < 0).Sum(t => t.Amount)
+                Income = g.Where(t => t.BaseUserCurrencyAmount > 0).Sum(t => t.BaseUserCurrencyAmount),
+                Expenses = g.Where(t => t.BaseUserCurrencyAmount < 0).Sum(t => t.BaseUserCurrencyAmount)
             }).ToList();
     }
 }

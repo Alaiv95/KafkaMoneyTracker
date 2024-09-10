@@ -2,7 +2,7 @@
 
 namespace Application.handlers.budget.queries.CheckSpentBudget;
 
-public class BudgetExceededDto
+public class BudgetExceededMessage
 {
     public string Category { get; set; }
 

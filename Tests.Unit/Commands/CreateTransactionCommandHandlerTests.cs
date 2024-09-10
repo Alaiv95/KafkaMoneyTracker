@@ -71,7 +71,7 @@ public class CreateTransactionCommandHandlerTests
         {
             Amount = 100,
             BudgetId = Guid.NewGuid(),
-            UserId = Guid.NewGuid(),
+            UserId = Guid.NewGuid()
         };
 
         var handler =

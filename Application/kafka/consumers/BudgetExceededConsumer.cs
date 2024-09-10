@@ -27,7 +27,7 @@ public class BudgetExceededConsumer : ConsumerBackgroundService
             var authRepository = scope.ServiceProvider.GetRequiredService<IAuthRepository>();
             var fileReader = scope.ServiceProvider.GetRequiredService<IFileReader>();
 
-            var exceededDto = JsonSerializer.Deserialize<BudgetExceededDto>(messageValue, _options);
+            var exceededDto = JsonSerializer.Deserialize<BudgetExceededMessage>(messageValue, _options);
 
             var email = await GetTransactionUserEmail(exceededDto, authRepository);
             var message = await CreateMailDataAsync(exceededDto!, email, fileReader);
@@ -42,7 +42,7 @@ public class BudgetExceededConsumer : ConsumerBackgroundService
         }
     }
 
-    private async Task<string> GetTransactionUserEmail(BudgetExceededDto? dto, IAuthRepository authRepository)
+    private async Task<string> GetTransactionUserEmail(BudgetExceededMessage? dto, IAuthRepository authRepository)
     {
         if (dto is null || dto.UserId == Guid.Empty)
         {
@@ -60,9 +60,9 @@ public class BudgetExceededConsumer : ConsumerBackgroundService
     }
 
 
-    private async Task<MailData> CreateMailDataAsync(BudgetExceededDto dto, string email, IFileReader fileReader)
+    private async Task<MailData> CreateMailDataAsync(BudgetExceededMessage message, string email, IFileReader fileReader)
     {
-        var template = await CreateTemplate(dto, email, fileReader);
+        var template = await CreateTemplate(message, email, fileReader);
         
         return new MailData
         {
@@ -73,15 +73,15 @@ public class BudgetExceededConsumer : ConsumerBackgroundService
         };
     }
 
-    private async Task<string> CreateTemplate(BudgetExceededDto dto, string email, IFileReader fileReader)
+    private async Task<string> CreateTemplate(BudgetExceededMessage message, string email, IFileReader fileReader)
     {
         var result = await fileReader.GetFileDataAsync("templates/template.html");
 
         return result
             .Replace("{email}", email)
-            .Replace("{category}", dto.Category)
-            .Replace("{period}", dto.BudgetPeriod)
-            .Replace("{limit}", dto.BudgetLimit.ToString(CultureInfo.InvariantCulture))
-            .Replace("{spent}", dto.SpentAmount.ToString(CultureInfo.InvariantCulture));
+            .Replace("{category}", message.Category)
+            .Replace("{period}", message.BudgetPeriod)
+            .Replace("{limit}", message.BudgetLimit.ToString(CultureInfo.InvariantCulture))
+            .Replace("{spent}", message.SpentAmount.ToString(CultureInfo.InvariantCulture));
     }
 }

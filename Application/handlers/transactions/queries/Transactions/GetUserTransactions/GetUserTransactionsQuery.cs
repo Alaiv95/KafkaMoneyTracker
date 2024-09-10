@@ -7,7 +7,7 @@ public class GetUserTransactionsQuery : IRequest<List<TransactionInfo>>
 {
     public Guid UserId { get; set; }
 
-    public Guid? CategoryId { get; set; }
+    public Guid? BudgetId { get; set; }
 
     public DateTime? DateFrom { get; set; }
 

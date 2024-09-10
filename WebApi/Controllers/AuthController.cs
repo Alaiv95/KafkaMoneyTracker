@@ -30,7 +30,7 @@ public class AuthController : ControllerBase
     [HttpPost("register")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<bool>> Register([FromBody] AuthDto dto)
+    public async Task<ActionResult<bool>> Register([FromBody] RegisterDto dto)
     {
         var registerUserCommand = _mapper.Map<RegisterUserCommand>(dto);
         var result = await _mediator.HandleRequest(registerUserCommand);

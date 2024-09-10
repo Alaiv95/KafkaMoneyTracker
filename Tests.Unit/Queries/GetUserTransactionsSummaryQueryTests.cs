@@ -39,19 +39,19 @@ public class GetUserTransactionsSummaryQueryTests : TestBase
         var info = new List<TransactionInfo>
         {
             new(
-                100, true, "eur",
+                100, 100, true, "eur",
                 new BudgetInfo { BudgetLimit = 200, CategoryName = "First", DurationInDays = 90 }
             ),
             new(
-                -200, true, "eur",
+                -200, -200,true, "eur",
                 new BudgetInfo { BudgetLimit = 200, CategoryName = "First", DurationInDays = 90 }
             ),
             new(
-                200, true, "eur",
+                200, 200, true, "eur",
                 new BudgetInfo { BudgetLimit = 200, CategoryName = "First", DurationInDays = 90 }
             ),
             new(
-                -500, true, "eur",
+                -500, -500, true, "eur",
                 new BudgetInfo { BudgetLimit = 200, CategoryName = "Second", DurationInDays = 90 }
             ),
         };

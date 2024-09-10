@@ -13,7 +13,7 @@ public class TransactionRepository : GenericRepository<Transaction, TransactionE
         : base(context, mapper)
     {
     }
-
+    
     public async Task UpdateRangeAsync(List<TransactionEntity> transactions)
     {
         var transactionsList = Mapper.Map<List<Transaction>>(transactions);
