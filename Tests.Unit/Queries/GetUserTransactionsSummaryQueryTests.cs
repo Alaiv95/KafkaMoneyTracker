@@ -1,7 +1,6 @@
 ﻿using System.Linq.Expressions;
 using Application.Dtos;
 using Application.handlers.transactions.queries.Transactions.GetUserTransactionsSummary;
-using Core.common;
 using Domain.Entities.Budget;
 using Domain.Entities.Transaction;
 using FluentAssertions;
@@ -43,7 +42,7 @@ public class GetUserTransactionsSummaryQueryTests : TestBase
                 new BudgetInfo { BudgetLimit = 200, CategoryName = "First", DurationInDays = 90 }
             ),
             new(
-                -200, -200,true, "eur",
+                -200, -200, true, "eur",
                 new BudgetInfo { BudgetLimit = 200, CategoryName = "First", DurationInDays = 90 }
             ),
             new(
@@ -72,13 +71,6 @@ public class GetUserTransactionsSummaryQueryTests : TestBase
             }
         };
 
-        var container = new PaginationContainer<TransactionSummaryDto>
-        {
-            Data = expectedResult,
-            PageNumber = 1,
-            TotalPages = 1
-        };
-
 
         _budgetRepository
             .Setup(repository => repository.GetByIdAsync(It.IsAny<Guid>()))
@@ -87,12 +79,12 @@ public class GetUserTransactionsSummaryQueryTests : TestBase
         _transactionRepository
             .Setup(repository => repository.SearchWithIncludeAsync(
                     It.IsAny<Expression<Func<Transaction, bool>>>(),
-                    It.IsAny<int>(),
-                    It.IsAny<int>()
+                    null,
+                    null
                 )
             )
             .ReturnsAsync(() => info);
-        
+
         _transactionRepository
             .Setup(repository => repository.CountTransactionsAsync(It.IsAny<Expression<Func<Transaction, bool>>>())
             )
@@ -108,15 +100,13 @@ public class GetUserTransactionsSummaryQueryTests : TestBase
         {
             BudgetId = Guid.NewGuid(),
             UserId = Guid.NewGuid(),
-            PageNumber = 1,
-            DisplayLimit = 10
         };
 
         // Act
         var result = await handler.Handle(query);
 
         // Assert
-        result.Should().BeEquivalentTo(container);
+        result.Should().BeEquivalentTo(expectedResult);
     }
 
     [Test]
@@ -154,6 +144,6 @@ public class GetUserTransactionsSummaryQueryTests : TestBase
 
         // Assert
         result.Should().NotBeNull();
-        result.Data.Should().BeEmpty();
+        result.Should().BeEmpty();
     }
 }

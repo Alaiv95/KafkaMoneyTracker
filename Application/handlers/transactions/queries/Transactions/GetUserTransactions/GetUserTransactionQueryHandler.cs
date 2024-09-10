@@ -1,16 +1,15 @@
-﻿using Application.Dtos;
-using Application.exceptions;
+﻿using Application.exceptions;
 using Application.mediator.interfaces;
 using AutoMapper;
+using Core.common;
 using Domain.Entities.Transaction;
 using Infrastructure.Repositories.interfaces;
 using Infrastructure.specs;
-using Core.common;
 
 namespace Application.handlers.transactions.queries.Transactions.GetUserTransactions;
 
 public class GetUserTransactionQueryHandler :
-    IRequestHandler<GetUserTransactionsQuery, List<TransactionInfo>>
+    IRequestHandler<GetUserTransactionsQuery, PaginationContainer<TransactionInfo>>
 {
     private readonly ITransactionRepository _transactionRepository;
     private readonly IMapper _transactionsMapper;
@@ -27,7 +26,7 @@ public class GetUserTransactionQueryHandler :
         _spec = spec;
     }
 
-    public async Task<List<TransactionInfo>> Handle(GetUserTransactionsQuery query)
+    public async Task<PaginationContainer<TransactionInfo>> Handle(GetUserTransactionsQuery query)
     {
         if (query.DateFrom > query.DateTo)
         {
@@ -35,12 +34,22 @@ public class GetUserTransactionQueryHandler :
                 $"DateFrom {query.DateFrom} can't be less then DateTo {query.DateTo}"
             );
         }
-        
-        var baseSearchDto = _transactionsMapper.Map<BaseBudgetSearchFilter>(query);
-        
-        var transactions = await _transactionRepository
-            .SearchWithIncludeAsync(_spec.Build(baseSearchDto));
 
-        return transactions;
+        var baseSearchDto = _transactionsMapper.Map<BaseBudgetSearchFilter>(query);
+        var transactionsCount = await _transactionRepository.CountTransactionsAsync(_spec.Build(baseSearchDto));
+        var totalPages = (int)Math.Ceiling(transactionsCount / (double)query.DisplayLimit);
+        var transactions = await _transactionRepository
+            .SearchWithIncludeAsync(
+                _spec.Build(baseSearchDto),
+                limit: query.DisplayLimit,
+                page: query.PageNumber
+            );
+
+        return new PaginationContainer<TransactionInfo>
+        {
+            PageNumber = query.PageNumber,
+            TotalPages = totalPages,
+            Data = transactions
+        };
     }
 }

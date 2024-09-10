@@ -9,7 +9,7 @@ namespace Application.handlers.transactions.queries.Transactions.GetUserTransact
 
 public class
     GetUserTransactionsSummaryQueryHandler : IRequestHandler<GetUserTransactionsSummaryQuery,
-    PaginationContainer<TransactionSummaryDto>>
+    List<TransactionSummaryDto>>
 {
     private readonly ITransactionRepository _transactionRepository;
     private readonly TransactionSpecs _spec;
@@ -23,7 +23,7 @@ public class
         _spec = spec;
     }
 
-    public async Task<PaginationContainer<TransactionSummaryDto>> Handle(GetUserTransactionsSummaryQuery command)
+    public async Task<List<TransactionSummaryDto>> Handle(GetUserTransactionsSummaryQuery command)
     {
         var filter = new BaseBudgetSearchFilter
         {
@@ -31,20 +31,9 @@ public class
             UserId = command.UserId
         };
 
-        var spec = _spec.Build(filter);
-        var transactionsCount = await _transactionRepository.CountTransactionsAsync(spec);
-        var totalPages = (int)Math.Ceiling(transactionsCount / (double)command.DisplayLimit);
-        var paginatedTransactions = await _transactionRepository.SearchWithIncludeAsync(
-            spec,
-            page: command.PageNumber,
-            limit: command.DisplayLimit
-        );
+        var paginatedTransactions = await _transactionRepository
+            .SearchWithIncludeAsync(_spec.Build(filter));
 
-        return new PaginationContainer<TransactionSummaryDto>
-        {
-            PageNumber = command.PageNumber,
-            TotalPages = totalPages,
-            Data = TransactionsUtils.GetTransactionsSummaryInfo(paginatedTransactions)
-        };
+        return TransactionsUtils.GetTransactionsSummaryInfo(paginatedTransactions);
     }
 }

@@ -4,7 +4,7 @@ using Core.common;
 
 namespace Application.handlers.transactions.queries.Transactions.GetUserTransactionsSummary;
 
-public class GetUserTransactionsSummaryQuery : IRequest<PaginationContainer<TransactionSummaryDto>>
+public class GetUserTransactionsSummaryQuery : IRequest<List<TransactionSummaryDto>>
 {
     public Guid UserId { get; set; }
     

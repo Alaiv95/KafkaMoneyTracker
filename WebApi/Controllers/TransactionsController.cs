@@ -51,17 +51,24 @@ public class TransactionsController : ControllerBase
     /// <summary>
     /// Get list of transactions
     /// </summary>
-    /// <returns>Returns list of TransactionLookupExtendedDto</returns>
+    /// <returns>Returns list of TransactionLookupExtendedDto with pagination</returns>
     /// <response code="200">Success</response>
     /// <response code="400">Bad Request</response>
     [Authorize]
     [HttpGet("search")]
-    [ProducesResponseType(typeof(List<TransactionInfo>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(PaginationContainer<TransactionInfo>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<TransactionInfo>> SearchTransactions([FromQuery] BaseSearchDto dto)
+    public async Task<ActionResult<PaginationContainer<TransactionInfo>>> SearchTransactions(
+        [FromQuery] BaseSearchDto dto,
+        [FromQuery] int page = 1,
+        [FromQuery] int limit = 10
+    )
     {
         var searchQuery = _transactionMapper.Map<GetUserTransactionsQuery>(dto);
         searchQuery.UserId = HttpContext.GetUserIdFromToken();
+        searchQuery.PageNumber = page;
+        searchQuery.DisplayLimit = limit;
+
         var result = await _mediator.HandleRequest(searchQuery);
 
         return Ok(result);
@@ -75,20 +82,14 @@ public class TransactionsController : ControllerBase
     /// <response code="400">Bad Request</response>
     [Authorize]
     [HttpGet("summary")]
-    [ProducesResponseType(typeof(PaginationContainer<TransactionSummaryDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(List<TransactionSummaryDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<PaginationContainer<TransactionSummaryDto>>> GetTransactionsSummary(
-        [FromQuery] Guid budgetId,
-        [FromQuery] int page = 1,
-        [FromQuery] int limit = 10
-    )
+    public async Task<ActionResult<List<TransactionSummaryDto>>> GetTransactionsSummary([FromQuery] Guid budgetId)
     {
         var searchQuery = new GetUserTransactionsSummaryQuery
         {
             UserId = HttpContext.GetUserIdFromToken(),
-            BudgetId = budgetId,
-            PageNumber = page,
-            DisplayLimit = limit
+            BudgetId = budgetId
         };
 
         searchQuery.UserId = HttpContext.GetUserIdFromToken();
